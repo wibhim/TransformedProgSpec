@@ -14,7 +14,7 @@ env/
 .venv/
 
 # Output data files
-output/
+# Removing output/ exclusion to include these files in the repository
 
 # Jupyter/IPython
 .ipynb_checkpoints/
@@ -32,7 +32,10 @@ Thumbs.db
 *.tmp
 
 # JSON artifacts
-*.json
+# Allow JSON files in the output directory
+output/*.json
+# For all other directories, ignore JSONs except datasets
+!output/*.json
 !*.dataset.json   # <- optional: ignore all JSONs except your datasets
 
 # Pipenv/poetry lock files
