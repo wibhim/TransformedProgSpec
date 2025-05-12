@@ -1,0 +1,41 @@
+/token.txt
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Virtual environment
+venv/
+proto/
+env/
+.venv/
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+
+# VS Code settings
+.vscode/
+
+# macOS & Windows system files
+.DS_Store
+Thumbs.db
+
+# Log or output files
+*.log
+*.out
+*.tmp
+
+# JSON artifacts
+*.json
+!*.dataset.json   # <- optional: ignore all JSONs except your datasets
+
+# Pipenv/poetry lock files
+Pipfile.lock
+poetry.lock
+
+# ChatGPT API output logs
+chatgpt_spec_errors.txt
+
