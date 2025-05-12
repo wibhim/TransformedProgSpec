@@ -3,9 +3,20 @@ import json
 import time
 
 # === CONFIG ===
-INPUT_JSON = "transformed_code_dataset.json"
-OUTPUT_JSON = "chatgpt_specifications.json"
-API_KEY = "your-api-key-here"  # 🔐 Replace this
+INPUT_JSON = "output/transformed_code_dataset.json"
+OUTPUT_JSON = "output/chatgpt_specifications.json"
+# Load API key from token.txt file for security
+try:
+    with open("token.txt", "r") as f:
+        lines = f.readlines()
+        if len(lines) >= 3:  # Assuming API key is on the third line
+            API_KEY = lines[2].strip()
+        else:
+            print("⚠️ API key not found in token.txt. Please provide an API key.")
+            API_KEY = input("Enter your OpenAI API key: ")
+except FileNotFoundError:
+    print("⚠️ token.txt file not found.")
+    API_KEY = input("Enter your OpenAI API key: ")
 MODEL = "gpt-4"  # Or "gpt-3.5-turbo"
 DELAY = 2  # Seconds between requests
 MAX_REQUESTS = 100  # Limit for safety/testing
@@ -46,33 +57,33 @@ for i, item in enumerate(dataset[:MAX_REQUESTS]):
     prompt = build_prompt(code)
     print(f"[{i+1}/{min(MAX_REQUESTS, len(dataset))}] Generating spec for: {file_path}")
 
-try:
-    response = openai.ChatCompletion.create(
-        model=MODEL,
-        messages=[
-            {"role": "system", "content": "You are an expert Python developer."},
-            {"role": "user", "content": prompt}
-        ],
-        temperature=0.2
-    )
+    try:
+        response = openai.ChatCompletion.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": "You are an expert Python developer."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.2
+        )
 
-    spec = response["choices"][0]["message"]["content"]
+        spec = response["choices"][0]["message"]["content"]
 
-    results.append({
-        "file_path": file_path,
-        "transformed_code": code,
-        "program_specification": spec
-    })
+        results.append({
+            "file_path": file_path,
+            "transformed_code": code,
+            "program_specification": spec
+        })
 
-    time.sleep(DELAY)
+        time.sleep(DELAY)
 
-except Exception as e:
-    print(f"❌ Error on {file_path}: {e}")
-    errors.append({
-        "file_path": file_path,
-        "error": str(e)
-    })
-    time.sleep(5)
+    except Exception as e:
+        print(f"❌ Error on {file_path}: {e}")
+        errors.append({
+            "file_path": file_path,
+            "error": str(e)
+        })
+        time.sleep(5)
 
 # === Save results ===
 with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
