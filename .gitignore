@@ -13,6 +13,9 @@ proto/
 env/
 .venv/
 
+# Output data files
+output/
+
 # Jupyter/IPython
 .ipynb_checkpoints/
 
