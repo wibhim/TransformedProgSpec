@@ -1,0 +1,22 @@
+[
+  {
+    "file_path": "1091.py",
+    "verified": true,
+    "dafny_output": "Warning: this way of using the CLI is deprecated. Use 'dafny --help' to see help for the new Dafny CLI format\n\nDafny program verifier finished with 0 verified, 0 errors\nFailed to compile C# source code using 'dotnet build C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp\\tmphi3mabqm.csproj -o C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp'. Command output was:\nThe command could not be loaded, possibly because:\n  * You intended to execute a .NET application:\n      The application 'build' does not exist.\n  * You intended to execute a .NET SDK command:\n      No .NET SDKs were found.\n\nDownload a .NET SDK:\nhttps://aka.ms/dotnet/download\n\nLearn about SDK resolution:\nhttps://aka.ms/dotnet/sdk-not-found\n"
+  },
+  {
+    "file_path": "1-100q/03.py",
+    "verified": true,
+    "dafny_output": "Warning: this way of using the CLI is deprecated. Use 'dafny --help' to see help for the new Dafny CLI format\n\nDafny program verifier finished with 0 verified, 0 errors\nFailed to compile C# source code using 'dotnet build C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp\\tmptvgu12oc.csproj -o C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp'. Command output was:\nThe command could not be loaded, possibly because:\n  * You intended to execute a .NET application:\n      The application 'build' does not exist.\n  * You intended to execute a .NET SDK command:\n      No .NET SDKs were found.\n\nDownload a .NET SDK:\nhttps://aka.ms/dotnet/download\n\nLearn about SDK resolution:\nhttps://aka.ms/dotnet/sdk-not-found\n"
+  },
+  {
+    "file_path": "1-100q/05.py",
+    "verified": true,
+    "dafny_output": "Warning: this way of using the CLI is deprecated. Use 'dafny --help' to see help for the new Dafny CLI format\n\nDafny program verifier finished with 0 verified, 0 errors\nFailed to compile C# source code using 'dotnet build C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp\\tmpffe5kqkj.csproj -o C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp'. Command output was:\nThe command could not be loaded, possibly because:\n  * You intended to execute a .NET application:\n      The application 'build' does not exist.\n  * You intended to execute a .NET SDK command:\n      No .NET SDKs were found.\n\nDownload a .NET SDK:\nhttps://aka.ms/dotnet/download\n\nLearn about SDK resolution:\nhttps://aka.ms/dotnet/sdk-not-found\n"
+  },
+  {
+    "file_path": "1-100q/06.py",
+    "verified": true,
+    "dafny_output": "Warning: this way of using the CLI is deprecated. Use 'dafny --help' to see help for the new Dafny CLI format\n\nDafny program verifier finished with 0 verified, 0 errors\nFailed to compile C# source code using 'dotnet build C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp\\tmp4npou5ya.csproj -o C:\\Users\\Wibhi Miasa\\AppData\\Local\\Temp'. Command output was:\nThe command could not be loaded, possibly because:\n  * You intended to execute a .NET application:\n      The application 'build' does not exist.\n  * You intended to execute a .NET SDK command:\n      No .NET SDKs were found.\n\nDownload a .NET SDK:\nhttps://aka.ms/dotnet/download\n\nLearn about SDK resolution:\nhttps://aka.ms/dotnet/sdk-not-found\n"
+  }
+]
