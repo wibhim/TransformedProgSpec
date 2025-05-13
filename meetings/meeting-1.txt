@@ -1,0 +1,19 @@
+test_github_token.py: this scrapes programs from GitHub
+
+cleanup.py: this script cleans docstring comments
+
+transform.py: performs program transformation
+
+chatgpt.py: this is for generating specifications
+
+outputs are in the output folder
+
+----------------------------------
+
+dafny_check.py: checks if the generated code is correct
+
+---------------------------------------------
+
+json → dafny
+
+----------------------
