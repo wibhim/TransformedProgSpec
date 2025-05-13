@@ -1,6 +1,14 @@
 import ast
 import json
 from github import Github
+"""
+PyGithub is a Python library that provides a convenient interface to work with GitHub. It allows you to:
+  • Authenticate with GitHub using tokens.
+  • Access user profiles, repositories, issues, pull requests, and gists.
+  • Create, update, or delete GitHub content programmatically.
+  • Automate GitHub workflows (e.g., managing issues, adding labels, commenting).
+"""
+
 
 # --- CONFIG ---
 GITHUB_TOKEN = "Token Github"  # 🔐 Replace with your real token
