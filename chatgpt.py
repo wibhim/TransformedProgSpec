@@ -17,7 +17,7 @@ try:
 except FileNotFoundError:
     print("⚠️ token.txt file not found.")
     API_KEY = input("Enter your OpenAI API key: ")
-MODEL = "gpt-4"  # Or "gpt-3.5-turbo"
+MODEL = "gpt-4.1"  # Or "gpt-3.5-turbo"
 DELAY = 2  # Seconds between requests
 MAX_REQUESTS = 100  # Limit for safety/testing
 
