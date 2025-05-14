@@ -4,8 +4,8 @@ import textwrap
 import re
 
 # --- CONFIG ---
-INPUT_JSON = "python_code_dataset_with_metadata.json"
-OUTPUT_JSON = "cleaned_code_dataset_ast.json"
+INPUT_JSON = "output/python_code_dataset_with_metadata.json"
+OUTPUT_JSON = "output/cleaned_code_dataset_ast.json"
 ERROR_LOG = "cleanup_errors_ast.txt"
 
 # --- AST Transformer to Remove Docstrings ---

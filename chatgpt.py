@@ -26,9 +26,11 @@ openai.api_key = API_KEY
 
 # === Prompt builder ===
 def build_prompt(code):
-    return f"""You are an expert in Dafny Language. Your task is to generate a formal specification and Dafny prograam for the following Python program. The specification should include postconditions, preconditions, and a description of the function's purpose.
+    return f"""Here is the Python code snippet:
 ```python
 {code}
+
+You should only generate the specification and Dafny program for the above Python code withoutany additional context or explanation.
 """
 
 # === Load the input JSON ===
@@ -46,16 +48,19 @@ for i, item in enumerate(dataset[:MAX_REQUESTS]):
     print(f"[{i+1}/{min(MAX_REQUESTS, len(dataset))}] Generating spec for: {file_path}")
 
     try:
-        response = openai.ChatCompletion.create(
+        # New OpenAI API format (v1.0.0+)
+        client = openai.OpenAI(api_key=API_KEY)
+        response = client.chat.completions.create(
             model=MODEL,
             messages=[
-                {"role": "system", "content": "You are an expert Python developer."},
+                {"role": "system", "content": "You are an expert in Dafny Language. Your task is to generate a formal specification and Dafny prograam for the following Python program. The specification should include postconditions and preconditions."},
                 {"role": "user", "content": prompt}
             ],
             temperature=0.2
         )
 
-        spec = response["choices"][0]["message"]["content"]
+        # And access the content differently
+        spec = response.choices[0].message.content
 
         results.append({
             "file_path": file_path,
