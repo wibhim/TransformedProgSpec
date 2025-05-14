@@ -26,21 +26,9 @@ openai.api_key = API_KEY
 
 # === Prompt builder ===
 def build_prompt(code):
-    return f"""You are a software engineer. Your task is to write a precise and concise specification for the following Python function.
-
+    return f"""You are an expert in Dafny Language. Your task is to generate a formal specification and Dafny prograam for the following Python program. The specification should include postconditions, preconditions, and a description of the function's purpose.
 ```python
 {code}
-Please describe:
-
-The purpose of the function
-
-Its input parameters and types
-
-Its output
-
-Preconditions and postconditions (if applicable)
-
-Be formal and clear, as if writing documentation or a verification contract.
 """
 
 # === Load the input JSON ===
