@@ -1,0 +1,56 @@
+Dafny Verification Summary
+==============================
+
+Total files processed: 4
+Files verified successfully: 0
+Files with verification errors: 4
+
+
+--------------------------------------------------
+File: 1091.py
+Status: ❌ Not Verified
+Parse errors: 2
+
+ERRORS:
+  Line 47, Col 8: missing semicolon at end of statement
+  Line 47, Col 18: invalid AssignStatement
+
+--------------------------------------------------
+File: 1-100q/03.py
+Status: ❌ Not Verified
+Verification details: 1 verified, 1 errors
+
+ERRORS:
+  Line 20, Col 18: this loop invariant could not be proved on entry
+ Related message: loop invariant violation
+
+WARNINGS:
+  Line 6, Col 12: unusual indentation in body of exists (which ends at line 7, column 67); do you perhaps need parentheses?
+  Line 20, Col 18: unusual indentation in body of exists (which ends at line 21, column 71); do you perhaps need parentheses?
+  Line 4, Col 12: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
+  Line 6, Col 12: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
+  Line 18, Col 18: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
+  Line 20, Col 18: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
+
+--------------------------------------------------
+File: 1-100q/05.py
+Status: ❌ Not Verified
+Parse errors: 3
+
+ERRORS:
+  Line 36, Col 4: rbrace expected
+  Line 39, Col 74: invalid UnaryExpression
+  Line 36, Col 4: the phrase 'function method' is not allowed when using --function-syntax:4; to declare a compiled function, use just 'function'
+
+--------------------------------------------------
+File: 1-100q/06.py
+Status: ❌ Not Verified
+Parse errors: 2
+
+ERRORS:
+  Line 55, Col 40: missing semicolon at end of statement
+  Line 55, Col 55: verticalbar expected
+
+--------------------------------------------------
+
+Report generated on 2025-05-15 09:15:11

@@ -1,0 +1,38 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Dafny Verification: 1-100q/05.py</title>
+        <link rel="stylesheet" href="../style.css">
+    </head>
+    <body>
+        <h1>Dafny Verification: 1-100q/05.py</h1>
+        
+        <div class="not-verified">
+            ❌ Not Verified
+        </div>
+    <p><strong>Parse errors:</strong> 3</p><div class='error-list'><h3>Errors</h3>
+            <div class="error-item">
+                <div class="location">Line 36, Column 4</div>
+                <div class="message">rbrace expected</div>
+            </div>
+            
+            <div class="error-item">
+                <div class="location">Line 39, Column 74</div>
+                <div class="message">invalid UnaryExpression</div>
+            </div>
+            
+            <div class="error-item">
+                <div class="location">Line 36, Column 4</div>
+                <div class="message">the phrase 'function method' is not allowed when using --function-syntax:4; to declare a compiled function, use just 'function'</div>
+            </div>
+            </div>
+    <h3>Full Dafny Output</h3>
+    <div class="dafny-output">
+    C:\Users\Wibhi&nbsp;Miasa\AppData\Local\Temp\tmpcwduki_o.dfy(36,4):&nbsp;Error:&nbsp;rbrace&nbsp;expected<br>&nbsp;&nbsp;&nbsp;|<br>36&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;method&nbsp;Expand(s:&nbsp;seq<char>,&nbsp;left:&nbsp;int,&nbsp;right:&nbsp;int):&nbsp;int<br>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br><br>C:\Users\Wibhi&nbsp;Miasa\AppData\Local\Temp\tmpcwduki_o.dfy(39,74):&nbsp;Error:&nbsp;invalid&nbsp;UnaryExpression<br>&nbsp;&nbsp;&nbsp;|<br>39&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ensures&nbsp;Expand(s,&nbsp;left,&nbsp;right)&nbsp;==&nbsp;(var&nbsp;l&nbsp;:=&nbsp;left;&nbsp;var&nbsp;r&nbsp;:=&nbsp;right;&nbsp;while&nbsp;l&nbsp;>=&nbsp;0&nbsp;&&&nbsp;r&nbsp;<&nbsp;n&nbsp;&&&nbsp;s[l]&nbsp;==&nbsp;s[r]&nbsp;{&nbsp;l&nbsp;:=&nbsp;l&nbsp;-&nbsp;1;&nbsp;r&nbsp;:=&nbsp;r&nbsp;+&nbsp;1;&nbsp;};&nbsp;r&nbsp;-&nbsp;l&nbsp;-&nbsp;1)<br>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^<br><br>C:\Users\Wibhi&nbsp;Miasa\AppData\Local\Temp\tmpcwduki_o.dfy(36,4):&nbsp;Error:&nbsp;the&nbsp;phrase&nbsp;'function&nbsp;method'&nbsp;is&nbsp;not&nbsp;allowed&nbsp;when&nbsp;using&nbsp;--function-syntax:4;&nbsp;to&nbsp;declare&nbsp;a&nbsp;compiled&nbsp;function,&nbsp;use&nbsp;just&nbsp;'function'<br>&nbsp;&nbsp;&nbsp;|<br>36&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;function&nbsp;method&nbsp;Expand(s:&nbsp;seq<char>,&nbsp;left:&nbsp;int,&nbsp;right:&nbsp;int):&nbsp;int<br>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;^^^^^^^^^^^^^^^<br><br>3&nbsp;parse&nbsp;errors&nbsp;detected&nbsp;in&nbsp;tmpcwduki_o.dfy<br>
+    </div>
+    
+        <div class="timestamp">Report generated on 2025-05-15 09:15:11</div>
+    </body>
+    </html>
+    
