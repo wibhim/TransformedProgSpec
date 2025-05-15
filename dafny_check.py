@@ -24,11 +24,11 @@ def verify_with_dafny(code):
         tmp_file.write(code)
         tmp_path = tmp_file.name
 
-    # Run Dafny verification with modern syntax
+    # Run Dafny verification with modern syntax, without time limit
     try:
         # Try modern syntax first
         result = subprocess.run(
-            ["dafny", "verify", tmp_path, "/timeLimit:60"], 
+            ["dafny", "verify", tmp_path], 
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE, 
             encoding="utf-8"
@@ -36,7 +36,7 @@ def verify_with_dafny(code):
     except subprocess.CalledProcessError:
         # Fall back to legacy syntax if needed
         result = subprocess.run(
-            ["dafny", "/timeLimit:60", tmp_path], 
+            ["dafny", tmp_path], 
             stdout=subprocess.PIPE, 
             stderr=subprocess.PIPE, 
             encoding="utf-8"
