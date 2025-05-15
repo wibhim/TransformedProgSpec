@@ -8,6 +8,10 @@
 
 - **chatgpt.py**: Generates formal specifications for transformed code using OpenAI's API. Need to create your own OpenAI's API and save it as .txt file. Generated result will be saved as JSON.
 
-- **dafny.py**: Autimatically check the generated specification into Dafny. Result is saved in output/dafny_verification_results.json
+- **dafny_check.py**: Autimatically check the generated specification into Dafny. Result is saved in output/dafny_verification_results.json
 
 The ouput file name and location can be renamed according to your needs.
+
+- **extract_dafny.py**: Convert JSON output into .dfy
+
+- **format_dafny_results.py**: Visualize the dafny output
