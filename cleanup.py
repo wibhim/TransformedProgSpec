@@ -1,7 +1,17 @@
 import ast
+# ast is used to process and analyze Python source code by converting it into
+# a tree-like structure that represents the syntactic structure of the code.
 import json
 import textwrap
+# textwrap is a built-in Python module for formatting and adjusting text
+# It is often used to: Remove common leading whitespace, Wrap text to a certain line width,
+# Fill or indent blocks of text, etc
 import re
+# re is Python’s built-in regular expression module.
+# It allows you to:
+# - Search, match, and extract patterns from strings
+# - Replace parts of strings using patterns
+# - Perform complex text manipulations
 
 # --- CONFIG ---
 INPUT_JSON = "python_code_dataset_with_metadata.json"
@@ -9,6 +19,10 @@ OUTPUT_JSON = "cleaned_code_dataset_ast.json"
 ERROR_LOG = "cleanup_errors_ast.txt"
 
 # --- AST Transformer to Remove Docstrings ---
+# --- AST Transformer to Remove Docstrings ---
+# This class defines a custom AST transformer that removes docstrings from Python code.
+# It overrides the visit methods for Function, Class, and Module definitions,
+# and removes the first statement if it is a string expression (i.e., a docstring).
 class DocstringStripper(ast.NodeTransformer):
     def visit_FunctionDef(self, node):
         self.generic_visit(node)
@@ -29,6 +43,12 @@ class DocstringStripper(ast.NodeTransformer):
         return node
 
 # --- Cleanup Function ---
+# This function takes raw Python source code and performs cleanup:
+# - Normalizes tabs to spaces
+# - Converts old Python 2-style print and except statements to Python 3
+# - Removes docstrings via AST
+# - Unparses the cleaned AST back to source code
+# Returns the cleaned code string (if successful), or an error message.
 def clean_code(code):
     try:
         # Step 1: Normalize tabs → spaces
@@ -80,6 +100,9 @@ def clean_code(code):
 
 # --- Load and Process Dataset ---
 with open(INPUT_JSON, "r", encoding="utf-8") as f:
+    # List of dictionaies where keys are of type string,
+    #alue can be of any type at all (Any)
+    # List[Dict[str, Any]]
     data = json.load(f)
 
 cleaned_data = []
