@@ -1,11 +1,25 @@
 import openai
+# Imports the official openai Python client library so you
+# can make API calls to ChatGPT / GPT-4.
+
 import json
 import time
+# Imports the time module, which provides time-related utilities
+# (later used for sleep delays between requests).
+
 
 # === CONFIG ===
 INPUT_JSON = "output/transformed_code_dataset.json"
 OUTPUT_JSON = "output/chatgpt_specifications.json"
 # Load API key from token.txt file for security
+
+# Tries to open token.txt and read its lines:
+# • If the file exists and has at least three lines, it assumes the API key is on
+#   line 3 (lines[2] because indexing starts at 0) and strips the newline characters.
+# • If the file exists but the key isn’t on line 3, it prints a warning and prompts
+#   the user to paste an API key.
+# • If token.txt is missing, the FileNotFoundError branch catches that and again
+#   prompts the user for an API key.
 try:
     with open("token.txt", "r") as f:
         lines = f.readlines()
@@ -24,7 +38,13 @@ MAX_REQUESTS = 100  # Limit for safety/testing
 # === OpenAI API setup ===
 openai.api_key = API_KEY
 
+# openai confgured
+
 # === Prompt builder ===
+# Defines a helper function build_prompt that wraps a given Python snippet (code)
+# in a Markdown code-block and appends clear instructions for ChatGPT:
+# “generate a Dafny spec only, no extra commentary.”
+
 def build_prompt(code):
     return f"""Here is the Python code snippet:
 ```python
@@ -40,6 +60,11 @@ with open(INPUT_JSON, "r", encoding="utf-8") as f:
 results = []
 errors = []
 
+# Iterates over each entry (up to MAX_REQUESTS).
+# -- Pulls file_path metadata (fallback name if missing).
+# -- Extracts the cleaned Python source (transformed_code).
+# -- Builds the ChatGPT prompt.
+# -- Prints progress.
 # === Loop through each code snippet ===
 for i, item in enumerate(dataset[:MAX_REQUESTS]):
     file_path = item.get("file_path", f"snippet_{i}.py")
@@ -49,6 +74,12 @@ for i, item in enumerate(dataset[:MAX_REQUESTS]):
 
     try:
         # New OpenAI API format (v1.0.0+)
+        # Instantiates an OpenAI client with your API key.
+        # -- Calls chat.completions.create with:
+        #      – model (e.g., "gpt-4.1").
+        #      – A system message telling the model to output a Dafny specification.
+        #      – A user message containing the prompt (the code snippet).
+        #      - temperature=0.2 for low randomness.
         client = openai.OpenAI(api_key=API_KEY)
         response = client.chat.completions.create(
             model=MODEL,
