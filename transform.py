@@ -1,8 +1,17 @@
 import ast
 import json
-import re
 import textwrap
 import keyword
+
+# This script reads a JSON file of cleaned Python code snippets,
+# applies a series of AST-based transformations to normalize and anonymize the code:
+#   • Removes type hints from function signatures
+#   • Renames all variables and arguments to generic names (var_1, var_2,…)
+#   • Strips out try/except blocks (keeps only the try body)
+#   . strinps docstrings, and standalone string expressions
+#   • Simplifies if-statements by dropping else/elif clauses
+# Transformed code is saved back to JSON, and any errors during transformation
+# are logged to a separate text file.
 
 # --- CONFIG ---
 INPUT_JSON = "cleaned_code_dataset_ast.json"

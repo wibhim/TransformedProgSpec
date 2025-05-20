@@ -2,6 +2,38 @@ import ast
 import json
 import textwrap
 
+# -----------------------------------------------------------------------------
+# transform_final.py  —  second-pass AST transformation
+#
+# Purpose
+# -------
+# • Load the “cleaned” snippets produced earlier (cleaned_code_dataset_ast.json).
+# • Apply a lighter AST transform that *preserves variable names* while:
+#     – stripping type hints from functions
+#     – deleting try/except blocks (keeps the try-body only)
+#     – removing else / elif branches from if-statements
+#     – deleting docstrings and standalone string literals that act as comments
+# • Save the fully transformed code to  output/transformed_code_dataset.json.
+# • Log any snippets that failed to parse/transform to errors/transformation_errors.txt.
+#
+# Key classes / functions
+# -----------------------
+# CodeTransformer  : ast.NodeTransformer subclass that performs the edits above.
+# transform_code() : helper that normalises tabs/indent, runs CodeTransformer, and
+#                    unparses the AST back to source (using ast.unparse or astor).
+#
+# Pipeline
+# --------
+# 1. Read INPUT_JSON  (output/cleaned_code_dataset_ast.json).
+# 2. For each entry:
+#       • call transform_code(entry["cleaned_code"])
+#       • on success  -> add "transformed_code" field  -> append to transformed_data
+#       • on failure  -> append {file_path, error}     -> errors list
+# 3. Write transformed_data  to OUTPUT_JSON.
+# 4. Write errors            to ERROR_FILE.
+# 5. Print summary and a sample of transformed code.
+# -----------------------------------------------------------------------------
+
 # --- CONFIG ---
 INPUT_JSON = "output/cleaned_code_dataset_ast.json"
 OUTPUT_JSON = "output/transformed_code_dataset.json"
