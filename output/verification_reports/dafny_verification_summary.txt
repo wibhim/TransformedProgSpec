@@ -1,9 +1,9 @@
 Dafny Verification Summary
 ==============================
 
-Total files processed: 4
+Total files processed: 9
 Files verified successfully: 0
-Files with verification errors: 4
+Files with verification errors: 9
 
 
 --------------------------------------------------
@@ -12,35 +12,51 @@ Status: ❌ Not Verified
 Parse errors: 2
 
 ERRORS:
-  Line 47, Col 8: missing semicolon at end of statement
-  Line 47, Col 18: invalid AssignStatement
+  Line 38, Col 8: missing semicolon at end of statement
+  Line 38, Col 18: invalid AssignStatement
 
 --------------------------------------------------
 File: 1-100q/03.py
 Status: ❌ Not Verified
-Verification details: 1 verified, 1 errors
+Verification details: 1 verified, 5 errors
 
 ERRORS:
-  Line 20, Col 18: this loop invariant could not be proved on entry
+  Line 8, Col 0: a postcondition could not be proved on this return path
+  Line 8, Col 0: a postcondition could not be proved on this return path
+  Line 8, Col 0: a postcondition could not be proved on this return path
+  Line 17, Col 30: this invariant could not be proved to be maintained by the loop
+ Related message: loop invariant violation
+  Line 20, Col 18: this invariant could not be proved to be maintained by the loop
  Related message: loop invariant violation
 
 WARNINGS:
-  Line 6, Col 12: unusual indentation in body of exists (which ends at line 7, column 67); do you perhaps need parentheses?
-  Line 20, Col 18: unusual indentation in body of exists (which ends at line 21, column 71); do you perhaps need parentheses?
+  Line 6, Col 12: unusual indentation in body of exists (which ends at line 7, column 85); do you perhaps need parentheses?
   Line 4, Col 12: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
   Line 6, Col 12: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
-  Line 18, Col 18: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
   Line 20, Col 18: Could not find a trigger for this quantifier. Without a trigger, the quantifier may cause brittle verification. To silence this warning, add an explicit trigger using the {:trigger} attribute. For more information, see the section quantifier instantiation rules in the reference manual.
 
 --------------------------------------------------
 File: 1-100q/05.py
 Status: ❌ Not Verified
-Parse errors: 3
 
 ERRORS:
-  Line 36, Col 4: rbrace expected
-  Line 39, Col 74: invalid UnaryExpression
-  Line 36, Col 4: the phrase 'function method' is not allowed when using --function-syntax:4; to declare a compiled function, use just 'function'
+  Line 25, Col 84: expression is not allowed to invoke a method (IsPalindrome)
+  Line 25, Col 96: method call is not allowed to be used in an expression context (IsPalindrome)
+  Line 26, Col 49: expression is not allowed to invoke a method (IsPalindrome)
+  Line 26, Col 61: method call is not allowed to be used in an expression context (IsPalindrome)
+  Line 33, Col 26: initial value must be assignable to array's elements (expected 'bool', got 'int')
+  Line 40, Col 50: element selection requires a sequence, array, multiset, or map (got bool)
+  Line 42, Col 13: element selection requires a sequence, array, multiset, or map (got bool)
+  Line 51, Col 17: element selection requires a sequence, array, multiset, or map (got bool)
+  Line 42, Col 10: LHS of array assignment must denote an array element (found bool)
+  Line 51, Col 14: LHS of array assignment must denote an array element (found bool)
+  Line 69, Col 38: element selection requires a sequence, array, multiset, or map (got bool)
+  Line 70, Col 18: LHS of array assignment must denote an array element (found bool)
+  Line 70, Col 21: element selection requires a sequence, array, multiset, or map (got bool)
+  Line 102, Col 84: expression is not allowed to invoke a method (IsPalindrome)
+  Line 102, Col 96: method call is not allowed to be used in an expression context (IsPalindrome)
+  Line 103, Col 49: expression is not allowed to invoke a method (IsPalindrome)
+  Line 103, Col 61: method call is not allowed to be used in an expression context (IsPalindrome)
 
 --------------------------------------------------
 File: 1-100q/06.py
@@ -48,9 +64,54 @@ Status: ❌ Not Verified
 Parse errors: 2
 
 ERRORS:
-  Line 55, Col 40: missing semicolon at end of statement
-  Line 55, Col 55: verticalbar expected
+  Line 53, Col 40: invalid statement beginning here (is a 'label' keyword missing? or a 'const' or 'var' keyword?)
+  Line 53, Col 43: rbrace expected
+
+--------------------------------------------------
+File: 1-100q/11.py
+Status: ❌ Not Verified
+
+ERRORS:
+  Line 8, Col 8: the two branches of an if-then-else expression must have the same type (got int and bool)
+  Line 7, Col 20: arguments must have comparable types (got int and bool)
+
+WARNINGS:
+  Line 11, Col 49: unusual indentation in right-hand operand of ==> (which ends at line 15, column 93); do you perhaps need parentheses?
+
+--------------------------------------------------
+File: 1-100q/14.py
+Status: ❌ Not Verified
+Parse errors: 1
+
+ERRORS:
+  Line 21, Col 104: rbracket expected
+
+--------------------------------------------------
+File: 1-100q/15.py
+Status: ❌ Not Verified
+Parse errors: 1
+
+ERRORS:
+  Line 6, Col 80: rbrace expected
+
+--------------------------------------------------
+File: 1-100q/16.py
+Status: ❌ Not Verified
+Parse errors: 2
+
+ERRORS:
+  Line 22, Col 46: missing semicolon at end of statement
+  Line 23, Col 12: invalid AssignStatement
+
+--------------------------------------------------
+File: 1-100q/17.py
+Status: ❌ Not Verified
+Parse errors: 2
+
+ERRORS:
+  Line 27, Col 8: missing semicolon at end of statement
+  Line 27, Col 23: invalid AssignStatement
 
 --------------------------------------------------
 
-Report generated on 2025-05-15 09:15:11
+Report generated on 2025-06-02 15:26:44

@@ -1,11 +1,10 @@
-// Dafny Specification and Program for Zigzag Conversion
+// Dafny Specification and Program for the Zigzag Conversion
 
-method Convert(s: seq<char>, numRows: int) returns (res: seq<char>)
+method Convert(s: seq<char>, numRows: int) returns (finalString: seq<char>)
     requires numRows >= 1
-    ensures numRows == 1 ==> res == s
-    ensures |res| == |s|
-    ensures multiset(res) == multiset(s)
-    // The output is the zigzag conversion of s with numRows rows
+    ensures numRows == 1 ==> finalString == s
+    ensures |finalString| == |s|
+    ensures multiset(finalString) == multiset(s)
 {
     if numRows == 1 {
         return s;
@@ -29,8 +28,8 @@ method Convert(s: seq<char>, numRows: int) returns (res: seq<char>)
         invariant 0 <= row < numRows
         invariant 0 <= idx <= |s|
         invariant |result| == numRows
-        invariant forall j :: 0 <= j < numRows ==> result[j].Length <= idx
-        invariant multiset(SeqConcat(result)) == multiset(s[..idx])
+        invariant multiset(ConcatAll(result)) == multiset(s[..idx])
+        invariant forall j :: 0 <= j < numRows ==> |result[j]| <= idx
     {
         result[row] := result[row] + [s[idx]];
         if row == numRows - 1 {
@@ -47,23 +46,12 @@ method Convert(s: seq<char>, numRows: int) returns (res: seq<char>)
         idx := idx + 1;
     }
 
-    // Concatenate all rows
-    var final_string := [];
-    var j := 0;
-    while j < numRows
-        invariant 0 <= j <= numRows
-        invariant |final_string| == sum k | 0 <= k < j :: |result[k]|
-        invariant multiset(final_string) == multiset(SeqConcat(result[..j]))
-    {
-        final_string := final_string + result[j];
-        j := j + 1;
-    }
-    res := final_string;
+    finalString := ConcatAll(result);
 }
 
-// Helper function to concatenate a sequence of sequences
-function method SeqConcat(ss: seq<seq<char>>): seq<char>
-    decreases |ss|
+// Helper function to concatenate all sequences in a sequence of sequences
+function method ConcatAll(seqs: seq<seq<char>>): seq<char>
+    decreases |seqs|
 {
-    if |ss| == 0 then [] else ss[0] + SeqConcat(ss[1..])
+    if |seqs| == 0 then [] else seqs[0] + ConcatAll(seqs[1..])
 }
