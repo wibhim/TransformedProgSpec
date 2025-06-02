@@ -26,6 +26,8 @@ os.makedirs(os.path.join(OUTPUT_DIR, "verification_reports", "individual"), exis
 GITHUB_CONFIG = {
     "token_file": os.path.join(TOKEN_DIR, "token_git.txt"),
     "output_json": os.path.join(OUTPUT_DIR, "python_code_dataset.json"),
+    "target_repo": "Garvit244/Leetcode",  # Target repository to collect from
+    "max_files": 5,  # Maximum number of files to collect
 }
 
 # Configuration for code cleanup

@@ -27,14 +27,43 @@ def setup_argparser() -> argparse.ArgumentParser:
         "--verbose", "-v", action="store_true",
         help="Show verbose output"
     )
+    
+    # GitHub data collection parameters
+    parser.add_argument(
+        "--repo", type=str,
+        help="GitHub repository to collect from (format: 'owner/repo')"
+    )
+    parser.add_argument(
+        "--max-files", type=int,
+        help="Maximum number of files to collect from GitHub"
+    )
+    
     return parser
 
-def run_github_collection(verbose: bool = False) -> bool:
+def run_github_collection(verbose: bool = False, repo: str = None, max_files: int = None) -> bool:
     """Run the step to collect code from GitHub."""
     try:
         print("\n📥 Running GitHub code collection...")
-        # This will execute the script as it runs when imported
+        
+        # Build command line arguments for data collection
+        import sys
+        original_args = sys.argv.copy()
+        sys.argv = [sys.argv[0]]  # Reset argv to just the script name
+        
+        # Add optional parameters if provided
+        if repo:
+            sys.argv.extend(["--repo", repo])
+        if max_files:
+            sys.argv.extend(["--max-files", str(max_files)])
+        if verbose:
+            print(f"Running data collection with args: {sys.argv}")
+            
+        # Import and run data collection
         import process.data_collect as data_collect
+        
+        # Restore original arguments
+        sys.argv = original_args
+        
         print("✅ Successfully collected data from GitHub")
         return True
     except Exception as e:
@@ -120,7 +149,11 @@ def main() -> None:
     results = {}
     
     if run_all or "github" in steps:
-        results["github"] = run_github_collection(args.verbose)
+        results["github"] = run_github_collection(
+            verbose=args.verbose,
+            repo=args.repo,
+            max_files=args.max_files
+        )
         
     if run_all or "cleanup" in steps:
         results["cleanup"] = run_cleanup(args.verbose)
