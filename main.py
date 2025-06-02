@@ -21,7 +21,7 @@ def setup_argparser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--steps", type=str, default="all",
-        help="Comma-separated list of steps to run ('github', 'cleanup', 'transform', 'spec', 'verify', 'report')"
+        help="Comma-separated list of steps to run ('github', 'cleanup', 'transform', 'spec', 'extract', 'verify', 'report')"
     )
     parser.add_argument(
         "--verbose", "-v", action="store_true",
@@ -109,6 +109,19 @@ def run_specification_generation(verbose: bool = False) -> bool:
         print(f"❌ Error in specification generation: {str(e)}")
         return False
 
+def run_dafny_extraction(verbose: bool = False) -> bool:
+    """Extract Dafny code from specifications and save as .dfy files."""
+    try:
+        print("\n📄 Extracting Dafny code from specifications...")
+        # Execute the extraction module
+        import process.extract_dafny as extract_dafny
+        extract_dafny.main()
+        print("✅ Successfully extracted Dafny programs")
+        return True
+    except Exception as e:
+        print(f"❌ Error extracting Dafny code: {str(e)}")
+        return False
+
 def run_dafny_verification(verbose: bool = False) -> bool:
     """Run Dafny verification step."""
     try:
@@ -127,6 +140,8 @@ def run_report_generation(verbose: bool = False) -> bool:
         print("\n📊 Generating report...")
         # Execute the report generation module
         import process.format_dafny_results as format_dafny_results
+        # Call the main function to generate reports
+        format_dafny_results.main()
         print("✅ Successfully generated reports")
         return True
     except Exception as e:
@@ -163,6 +178,9 @@ def main() -> None:
         
     if run_all or "spec" in steps:
         results["spec"] = run_specification_generation(args.verbose)
+        
+    if run_all or "extract" in steps:
+        results["extract"] = run_dafny_extraction(args.verbose)
         
     if run_all or "verify" in steps:
         results["verify"] = run_dafny_verification(args.verbose)

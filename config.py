@@ -27,12 +27,12 @@ GITHUB_CONFIG = {
     "token_file": os.path.join(TOKEN_DIR, "token_git.txt"),
     "output_json": os.path.join(OUTPUT_DIR, "python_code_dataset.json"),
     "target_repo": "Garvit244/Leetcode",  # Target repository to collect from
-    "max_files": 5,  # Maximum number of files to collect
+    "max_files": 10,  # Maximum number of files to collect
 }
 
 # Configuration for code cleanup
 CLEANUP_CONFIG = {
-    "input_json": os.path.join(OUTPUT_DIR, "python_code_dataset_with_metadata.json"),
+    "input_json": os.path.join(OUTPUT_DIR, "python_code_dataset.json"),
     "output_json": os.path.join(OUTPUT_DIR, "cleaned_code_dataset_ast.json"),
     "error_log": os.path.join(ERROR_DIR, "cleanup_errors_ast.txt"),
 }
