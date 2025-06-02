@@ -9,8 +9,9 @@ The pipeline consists of several steps:
 2. **Code Cleanup**: Remove docstrings, comments, and normalize code
 3. **Code Transformation**: Simplify code while preserving variable names
 4. **Specification Generation**: Generate formal Dafny specifications using GPT models
-5. **Dafny Verification**: Verify the specifications using Dafny
-6. **Report Generation**: Create reports of verification results
+5. **Dafny Extraction**: Extract Dafny code from specifications and save as .dfy files
+6. **Dafny Verification**: Verify the extracted Dafny code
+7. **Report Generation**: Create reports of verification results
 
 ## Setup Instructions
 
@@ -104,7 +105,8 @@ Available steps:
 - `cleanup`: Clean and normalize code
 - `transform`: Transform code to simplify structure
 - `spec`: Generate Dafny specifications using LLMs
-- `verify`: Verify specifications with Dafny
+- `extract`: Extract Dafny code from specifications into .dfy files
+- `verify`: Verify extracted Dafny code
 - `report`: Generate verification reports
 
 Example:
@@ -180,10 +182,13 @@ The data flows through the pipeline as follows:
 4. **Specification → `chatgpt_specifications.json`**
    - Code paired with generated Dafny specifications
 
-5. **Verification → `dafny_verification_results.json`**
+5. **Extraction → `output/dafny_programs/*.dfy`**
+   - Dafny code extracted from specifications and saved as .dfy files
+
+6. **Verification → `dafny_verification_results.json`**
    - Verification results from Dafny
 
-6. **Reports → `verification_reports/`**
+7. **Reports → `verification_reports/`**
    - HTML and text reports on verification results
   - **format_dafny_results.py**: Generates readable reports
 - **output/**: Output files and directories
@@ -226,8 +231,9 @@ You can customize the pipeline by:
   - Test with a simpler repository if you're encountering parsing problems
   - Try reducing the number of files with `--max-files 3` for testing
 
-- **Dafny Verification Failures**: 
+- **Dafny Extraction or Verification Failures**: 
   - Ensure Dafny is properly installed and in your system PATH
+  - Make sure the extraction step runs before verification to create the .dfy files
   - Try increasing the timeout in `config.py` if verifications are timing out
   - Check the verification reports for specific error messages
   
@@ -239,14 +245,19 @@ You can customize the pipeline by:
 
 ## Common Examples
 
+### Running Just the Extraction Step
+```
+python main.py --steps extract
+```
+
 ### Collecting from a Different Repository
 ```
 python main.py --steps github --repo "tensorflow/models" --max-files 10
 ```
 
-### Running Just the Verification Step
+### Running Extraction and Verification Steps
 ```
-python main.py --steps verify --verbose
+python main.py --steps extract,verify --verbose
 ```
 
 ### Generating Reports After Verification
