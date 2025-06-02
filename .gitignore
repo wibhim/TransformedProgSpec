@@ -1,5 +1,8 @@
+# Token files and folders (contains secrets)
 /token.txt
 /token_git.txt
+/token/
+token/*.txt
 
 # Byte-compiled / cache files
 __pycache__/
@@ -45,4 +48,11 @@ poetry.lock
 
 # ChatGPT API output logs
 chatgpt_spec_errors.txt
+
+# API keys and credentials
+*.pem
+*.key
+*.env
+.env
+credentials.json
 
