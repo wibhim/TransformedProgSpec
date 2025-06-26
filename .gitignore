@@ -17,37 +17,32 @@ proto/
 env/
 .venv/
 
-# Output data files
-# Removing output/ exclusion to include these files in the repository
+# Data directories (generated content)
+data/repositories/
+data/cache/
+data/verification/
+data/transformed/
+data/specification/
 
-# Jupyter/IPython
-.ipynb_checkpoints/
+# Output directories (generated content)
+output/
 
-# VS Code settings
-.vscode/
-
-# macOS & Windows system files
-.DS_Store
-Thumbs.db
-
-# Log or output files
+# Error logs
+errors/*.txt
 *.log
 *.out
 *.tmp
 
-# JSON artifacts
-# Allow JSON files in the output directory
-output/*.json
-# For all other directories, ignore JSONs except datasets
-!output/*.json
-!*.dataset.json   # <- optional: ignore all JSONs except your datasets
+# Jupyter/IPython
+.ipynb_checkpoints/
 
-# Pipenv/poetry lock files
-Pipfile.lock
-poetry.lock
+# IDE settings
+.vscode/
+.idea/
 
-# ChatGPT API output logs
-chatgpt_spec_errors.txt
+# OS generated files
+.DS_Store
+Thumbs.db
 
 # API keys and credentials
 *.pem
@@ -55,4 +50,8 @@ chatgpt_spec_errors.txt
 *.env
 .env
 credentials.json
+
+# Pipenv/poetry lock files
+Pipfile.lock
+poetry.lock
 

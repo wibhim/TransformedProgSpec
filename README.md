@@ -13,6 +13,42 @@ The pipeline consists of several steps:
 6. **Dafny Verification**: Verify the extracted Dafny code
 7. **Report Generation**: Create reports of verification results
 
+## Project Structure
+
+```
+Prototype/
+├── config/                   # Configuration settings and templates
+│   ├── settings.py           # Central configuration file
+│   └── templates/            # Prompt templates for specification generation
+│
+├── data/                     # All data storage
+│   ├── cache/                # Cache for API requests
+│   ├── repositories/         # Repository data
+│   │   ├── datasets/         # Processed datasets (JSON files)
+│   │   ├── original/         # Original collected code (JSON format)
+│   │   └── python/           # Python file versions
+│   │
+│   ├── specification/        # Generated specifications
+│   ├── transformed/          # Transformed code
+│   └── verification/         # Verification data
+│       ├── programs/         # Dafny programs
+│       ├── reports/          # Verification reports
+│       └── results/          # Verification results
+│
+├── errors/                   # Error logs
+├── scripts/                  # Utility scripts
+├── src/                      # Source code
+│   ├── collection/           # Code collection modules
+│   ├── specification/        # Specification generation
+│   ├── transformation/       # Code transformation
+│   ├── utils/                # Utility modules
+│   └── verification/         # Verification modules
+│
+├── tests/                    # Test suite
+├── token/                    # API tokens (gitignored)
+└── main.py                   # Pipeline entry point
+```
+
 ## Setup Instructions
 
 ### 1. Prerequisites
@@ -42,7 +78,7 @@ The pipeline consists of several steps:
 
 ### 3. Configuration
 
-1. Create a token directory:
+1. Ensure token directory exists:
    ```
    mkdir token
    ```
@@ -86,18 +122,20 @@ The pipeline consists of several steps:
 
 ## Usage
 
-The project uses a single entry point (`main.py`) that can run the entire pipeline or individual steps.
+The project provides multiple ways to interact with the pipeline:
 
-### Running the Complete Pipeline
+### Option 1: Using the Complete Pipeline (main.py)
+
+Use the main entry point to run the entire pipeline or specific steps:
 
 ```
 python main.py
 ```
 
-### Running Specific Steps
+Or run specific steps:
 
 ```
-python main.py --steps step1,step2,step3
+python main.py --steps github,cleanup,transform,spec,extract,verify,report
 ```
 
 Available steps:
@@ -113,6 +151,39 @@ Example:
 ```
 python main.py --steps cleanup,transform,spec
 ```
+
+### Option 2: Using Individual Entry Points
+
+The project also provides dedicated entry point scripts for each stage:
+
+1. **Collect Code**: `collect_code.py`
+   ```
+   python collect_code.py --target 200 --max-per-repo 20 --min-lines 15
+   ```
+
+2. **Transform Code**: `transform_code.py`
+   ```
+   # Transform a single file
+   python transform_code.py --single-file input.py --output-file output.py --transformers control_flow,variable_naming
+   
+   # List available transformers
+   python transform_code.py --list
+   ```
+
+3. **Generate Specifications**: `generate_specs.py`
+   ```
+   python generate_specs.py --input transformed_code.json --output specs.json
+   ```
+
+4. **Verify Specifications**: `verify_specs.py`
+   ```
+   python verify_specs.py --input specs.json --output results.json
+   ```
+
+5. **Analyze Results**: `analyze_results.py`
+   ```
+   python analyze_results.py --specs specs.json --results verification_results.json
+   ```
 
 ### Specifying GitHub Repository
 
@@ -263,4 +334,158 @@ python main.py --steps extract,verify --verbose
 ### Generating Reports After Verification
 ```
 python main.py --steps report
+```
+
+### Running Code Transformation
+
+You can run the code transformation step with different options:
+
+#### Running All Transformations (Default)
+
+For transforming a dataset:
+
+```
+python scripts/run_transformation.py --all
+```
+
+or
+
+```
+transform.bat --all
+```
+
+For transforming a single file:
+
+```
+python standalone_transform.py input.py output.py --all
+```
+
+or
+
+```
+transform_file.bat input.py output.py --all
+```
+
+#### Running Standard Structural Transformations
+
+The following transformations are available for code structure simplification:
+- control_flow (simplifies control flow)
+- variable_naming (standardizes variable naming)
+- expression (decomposes complex expressions)
+- loop_standard (standardizes loop structures)
+- function_extract (extracts nested functions)
+
+For a dataset, you can select these transformers individually or as a group:
+
+```
+python scripts/run_transformation.py --transformers control_flow,variable_naming,expression,loop_standard,function_extract
+```
+
+or 
+
+```
+transform.bat --transformers control_flow,variable_naming,expression,loop_standard,function_extract
+```
+
+For a single file:
+
+```
+python standalone_transform.py input.py output.py --core-only
+```
+
+or
+
+```
+transform_file.bat input.py output.py --core-only
+```
+
+#### Running Specific Transformations
+
+You can select specific transformations to run:
+
+For a dataset:
+
+```
+python scripts/run_transformation.py --transformers drop_comments,remove_print
+```
+
+or
+
+```
+transform.bat --transformers drop_comments,remove_print
+```
+
+For a single file:
+
+```
+python standalone_transform.py input.py output.py --transformers drop_comments,remove_print
+```
+
+or
+
+```
+transform_file.bat input.py output.py --transformers drop_comments,remove_print
+```
+
+You can also use the simplified batch file for single file transformations:
+
+```
+transform_selective.bat input.py output.py drop_comments,remove_print
+```
+
+#### Selecting Specific Transformations
+
+All transformers can be selected individually. For example, to run just specific transformers:
+
+```
+python scripts/run_transformation.py --transformers drop_comments,remove_print
+```
+
+For a single file:
+
+```
+python standalone_transform.py input.py output.py --no-core --transformers drop_comments,remove_print
+```
+
+or
+
+```
+transform_file.bat input.py output.py --no-core --transformers drop_comments,remove_print
+```
+
+#### Available Transformers
+
+The following transformers are available:
+
+Core transformers (applied by default):
+- `control_flow`: Simplifies control flow structures
+- `variable_naming`: Renames variables for clarity
+- `expression`: Decomposes complex expressions
+- `loop_standard`: Standardizes loop structures
+- `function_extract`: Extracts embedded functions
+
+Additional transformers:
+- `drop_comments`: Removes code comments
+- `drop_self`: Removes self references
+- `drop_path`: Removes path operations
+- `drop_return`: Removes explicit return statements
+- `drop_vars`: Removes unused variables
+- `replace_parentheses`: Replaces redundant parentheses
+- `forget_indent`: Normalizes indentation
+- `remove_exceptions`: Removes exception handling
+- `remove_print`: Removes print statements
+- `remove_else`: Removes else statements (converting to if-not structures)
+
+#### Transforming a Single File
+
+You can transform a single Python file instead of processing the entire dataset:
+
+```
+python scripts/run_transformation.py --single-file input.py --output-file output.py --transformers drop_comments,remove_print
+```
+
+or
+
+```
+transform_file.bat input.py output.py --transformers drop_comments,remove_print
 ```
