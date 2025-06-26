@@ -1,0 +1,26 @@
+## Educational Dafny Specification Prompt
+
+Here is the Python code to verify:
+```python
+{{code}}
+```
+
+As an educational assistant, create a Dafny program that:
+
+1. Introduces clear formal specifications by:
+   - Adding detailed comments explaining each requires/ensures clause
+   - Including "why" each precondition is necessary
+   - Documenting how each postcondition relates to program correctness
+
+2. Implements the Python code's functionality with:
+   - Well-named variables matching Python when possible
+   - Step-by-step implementation matching the original algorithm
+   - Clear loop invariants with explanatory comments
+   - Assertion statements at key points to improve verifiability
+
+3. Uses proper Dafny idioms that demonstrate:
+   - Appropriate data types
+   - Clean verification without excessive annotations
+   - Good variable scope management
+
+The goal is to create a Dafny program that not only verifies but also serves as a teaching example.

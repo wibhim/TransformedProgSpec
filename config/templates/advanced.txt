@@ -1,0 +1,24 @@
+## Advanced Dafny Specification Prompt Template
+
+Here is the Python code snippet to analyze:
+```python
+{{code}}
+```
+
+As a formal verification expert, your task is to:
+
+1. Create a precise Dafny program that implements the functionality of this Python code
+2. Include comprehensive formal specifications with:
+   - Detailed preconditions that capture all input requirements
+   - Thorough postconditions that fully describe the expected output
+   - Helper functions with their own specifications where appropriate
+   - Ghost variables when needed to track state for verification
+   
+3. Ensure correctness by adding:
+   - Loop invariants for all loops
+   - Decreases clauses to prove termination
+   - Assert statements at critical points for verification
+   
+4. Structure your response as a complete, verifiable Dafny program without any explanation or commentary.
+
+Remember that Dafny is proof-oriented - prioritize verifiability over performance.

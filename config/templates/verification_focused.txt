@@ -1,0 +1,28 @@
+## Verification-Focused Dafny Specification Prompt
+
+Here is the Python code snippet:
+```python
+{{code}}
+```
+
+As an expert in Dafny formal verification, generate a specification and implementation that is guaranteed to verify correctly. Follow these steps:
+
+1. Analyze the computational essence of the Python code:
+   - Identify core functionality and algorithm
+   - Determine input/output relationships
+   - Understand edge cases and failure modes
+
+2. Create a Dafny implementation with strong specifications:
+   - Use minimal but sufficient preconditions (requires)
+   - Write complete postconditions (ensures) that fully capture behavior
+   - When necessary, simplify the implementation to ensure verification
+   - Add appropriate loop invariants for all loops with clear decreases clauses
+   - Use assert statements strategically to help the verifier
+
+3. Validate your solution:
+   - Ensure termination is properly proven
+   - Consider all edge cases
+   - Avoid partial functions when possible
+   - Use helper functions with their own specifications when needed
+
+Your goal is to create a Dafny program that will verify without timeouts or errors. Prioritize verification success over matching exact Python implementation details when necessary.

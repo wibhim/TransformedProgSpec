@@ -1,0 +1,20 @@
+## Beginner-Friendly Dafny Specification Template
+
+Here is the Python code snippet I need you to formally specify:
+```python
+{{code}}
+```
+
+Please follow these steps:
+
+1. First, identify the main function or purpose of the code
+2. Create a Dafny program that:
+   - Has clear variable names matching the Python code when possible
+   - Uses simple preconditions (requires) to state what the code needs
+   - Uses straightforward postconditions (ensures) to state what the code does
+   - Implements the same functionality as the Python code
+
+3. For any loops, include a basic loop invariant explaining what stays true during each iteration
+
+Your Dafny program should be complete and match the Python code's behavior. 
+Keep the specifications straightforward and focus on correctness.
