@@ -12,7 +12,7 @@ import argparse
 from typing import Dict, Any, Optional
 
 # Import configuration
-from config import CONFIG
+from config.settings import CONFIG
 
 def setup_argparser() -> argparse.ArgumentParser:
     """Set up command-line arguments."""
@@ -38,6 +38,17 @@ def setup_argparser() -> argparse.ArgumentParser:
         help="Maximum number of files to collect from GitHub"
     )
     
+    # Specification generation parameters
+    parser.add_argument(
+        "--spec-type", type=str, default="transformed",
+        choices=["original", "transformed", "prompt_engineered"],
+        help="Type of specification to generate ('original', 'transformed', 'prompt_engineered')"
+    )
+    parser.add_argument(
+        "--prompt-template", type=str,
+        help="Path to prompt template file for prompt-engineered specifications"
+    )
+    
     return parser
 
 def run_github_collection(verbose: bool = False, repo: str = None, max_files: int = None) -> bool:
@@ -59,7 +70,7 @@ def run_github_collection(verbose: bool = False, repo: str = None, max_files: in
             print(f"Running data collection with args: {sys.argv}")
             
         # Import and run data collection
-        import process.data_collect as data_collect
+        import src.collection.repository as repository
         
         # Restore original arguments
         sys.argv = original_args
@@ -74,8 +85,8 @@ def run_cleanup(verbose: bool = False) -> bool:
     """Run code cleanup step."""
     try:
         print("\n🧹 Running code cleanup...")
-        # This will execute the script when imported
-        import process.cleanup as cleanup
+        # Import the cleanup module from the new location
+        import src.utils.cleanup as cleanup
         print("✅ Successfully cleaned up code")
         return True
     except Exception as e:
@@ -87,23 +98,37 @@ def run_transformation(verbose: bool = False) -> bool:
     try:
         print("\n🔄 Running code transformation...")
         # Execute the transformation module
-        import process.transform_final as transform_final
+        import src.transformation.transformer as transformer
         # Call the main function if the module doesn't run automatically
-        if hasattr(transform_final, 'run_transformation'):
-            transform_final.run_transformation()
+        if hasattr(transformer, 'run_transformation'):
+            transformer.run_transformation()
         print("✅ Successfully transformed code")
         return True
     except Exception as e:
         print(f"❌ Error in transformation: {str(e)}")
         return False
 
-def run_specification_generation(verbose: bool = False) -> bool:
-    """Run formal specification generation step."""
+def run_specification_generation(verbose: bool = False, spec_type: str = "transformed", prompt_template: str = None) -> bool:
+    """Run formal specification generation step.
+    
+    Args:
+        verbose: Whether to show verbose output
+        spec_type: Type of specification to generate ('original', 'transformed', 'prompt_engineered')
+        prompt_template: Path to prompt template file for prompt-engineered specifications
+    """
     try:
-        print("\n📝 Running specification generation...")
+        print(f"\n📝 Running specification generation (type: {spec_type})...")
+        
+        # Set environment variables for the ChatGPT module
+        import os
+        os.environ["SPEC_TYPE"] = spec_type
+        if prompt_template:
+            os.environ["PROMPT_TEMPLATE"] = prompt_template
+            
         # Execute the ChatGPT module
-        import process.chatgpt as chatgpt
-        print("✅ Successfully generated specifications")
+        import src.specification.generator as generator
+        
+        print(f"✅ Successfully generated {spec_type} specifications")
         return True
     except Exception as e:
         print(f"❌ Error in specification generation: {str(e)}")
@@ -114,8 +139,8 @@ def run_dafny_extraction(verbose: bool = False) -> bool:
     try:
         print("\n📄 Extracting Dafny code from specifications...")
         # Execute the extraction module
-        import process.extract_dafny as extract_dafny
-        extract_dafny.main()
+        import src.verification.extractor as extractor
+        extractor.main()
         print("✅ Successfully extracted Dafny programs")
         return True
     except Exception as e:
@@ -127,7 +152,7 @@ def run_dafny_verification(verbose: bool = False) -> bool:
     try:
         print("\n✅ Running Dafny verification...")
         # Execute the Dafny verification module
-        import process.dafny_check as dafny_check
+        import src.verification.verifier as verifier
         print("✅ Successfully verified with Dafny")
         return True
     except Exception as e:
@@ -139,9 +164,7 @@ def run_report_generation(verbose: bool = False) -> bool:
     try:
         print("\n📊 Generating report...")
         # Execute the report generation module
-        import process.format_dafny_results as format_dafny_results
-        # Call the main function to generate reports
-        format_dafny_results.main()
+        import src.verification.reporter as reporter
         print("✅ Successfully generated reports")
         return True
     except Exception as e:
@@ -177,9 +200,18 @@ def main() -> None:
         results["transform"] = run_transformation(args.verbose)
         
     if run_all or "spec" in steps:
-        results["spec"] = run_specification_generation(args.verbose)
+        results["spec"] = run_specification_generation(
+            verbose=args.verbose,
+            spec_type=args.spec_type,
+            prompt_template=args.prompt_template
+        )
         
     if run_all or "extract" in steps:
+        results["extract"] = run_dafny_extraction(args.verbose)
+        
+    # Always run extraction before verification when running all steps
+    if run_all and "verify" in steps and "extract" not in steps:
+        print("\n⚠️ Running extraction step automatically before verification...")
         results["extract"] = run_dafny_extraction(args.verbose)
         
     if run_all or "verify" in steps:
