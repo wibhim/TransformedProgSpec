@@ -1,0 +1,43 @@
+Generate a Dafny program with formal specifications for the following Python code:
+
+```python
+{code}
+```
+
+Requirements:
+- Write a complete Dafny program that implements the same functionality
+- Include preconditions (requires) and postconditions (ensures) 
+- Add loop invariants for any loops
+- Use appropriate Dafny data types and constructs
+- Ensure the specifications capture the essential behavior of the original code
+
+Example - Fibonacci
+Dafny:
+```Dafny
+function fib(n: nat): nat
+{
+  if n == 0 then 0
+  else if n == 1 then 1
+  else fib(n - 1) + fib(n - 2)
+}
+method ComputeFib(n: nat) returns (b: nat)
+  ensures b == fib(n)
+{
+  if n == 0 { return 0; }
+  var i: int := 1;
+  var a := 0;
+  b := 1;
+  while i < n
+    invariant 0 < i <= n
+    invariant a == fib(i - 1)
+    invariant b == fib(i)
+  {
+    a, b := b, a + b;
+    i := i + 1;
+  }
+}
+```
+
+Avoid any syntax error such as function method and make sure it is compatible with Dafny version 4.10
+
+Provide only the Dafny code with specifications, no explanations.

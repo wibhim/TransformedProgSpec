@@ -1,0 +1,48 @@
+Generate a Dafny program with formal specifications for the following Python code:
+
+```python
+{code}
+```
+
+Requirements:
+- Ensure all specifications are verifiable by Dafny
+- Use simple, achievable postconditions
+- Include sufficient loop invariants for termination
+- Avoid over-constraining specifications
+- Start with minimal viable specifications
+- Use assert statements for intermediate verification
+- Ensure loop invariants are maintained and sufficient
+- Use decreases clauses for termination proofs
+- Use only Dafny 4.10 compatible syntax
+- Prefer 'method' over 'function' for procedural code
+- Use proper sequence/array syntax: seq<T>, array<T>
+- Include explicit type annotations
+- Generate specifications that verify step-by-step
+- Include intermediate assertions for complex logic
+- Break down complex postconditions into simpler parts
+
+**Examples:**
+
+Example 1 - Simple function:
+Python:
+```python
+def max_two(a, b):
+    return a if a > b else b
+```
+
+Dafny:
+```dafny
+method MaxTwo(a: int, b: int) returns (result: int)
+    ensures result >= a && result >= b
+    ensures result == a || result == b
+{
+    if a > b {
+        result := a;
+    } else {
+        result := b;
+    }
+}
+```
+
+Avoid this error:
+the phrase 'function method' is not allowed when using --function-syntax:4; to declare a compiled function, use just 'function'

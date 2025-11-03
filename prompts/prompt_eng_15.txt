@@ -1,0 +1,137 @@
+Write a method in Dafny that represent this Python program.
+
+Step 1: Identify and understand what the function's purpose is.
+
+Step 2: Define the method's signature. This is where the executable code is located, and in Python it has the term function. Use the same function name as in Python.
+
+Step 3: Determine the pre-conditions. This is something that must be True before the method is called (Input). 
+
+Step 4: Determine the postcondition. It is something that is true after the method returns (Output).
+
+Step 5: Write the method body code, its formal specification, and the verification annotations that help the solver prove the postconditions. Add `decreases` for recursive methods or loops, and simple invariants if needed.
+
+Rules:
+1. ALWAYS output Dafny `method` for Python functions.
+   - NEVER write `function method`.
+   - NEVER use `function` except for tiny pure mathematical helpers.
+2. One Python function = one Dafny method.
+3. All arrays must include `requires arr != null`. 
+   - For arrays, use `arr.Length` for length.
+   - For sequences (`seq<T>`), use `|s|` for length.
+   - Never write `null` for sequences.
+4. Encode input checks as `requires`.
+   Encode output properties as `ensures`.
+5. Every statement ends with `;`.
+6. Identifiers must not start with `_`.
+7. Add invariants for loops:
+   - Always include `0 <= i <= arr.Length` (for arrays) or `0 <= i <= |s|` (for sequences).
+   - Add a relation invariant tied directly to the postcondition (e.g. accumulator matches prefix).
+   - Always add a `decreases` clause for termination.
+8. Preserve helper function calls as Dafny methods.
+   - Do not generate Dafny classes, traits, or records.
+   - One Python file with multiple functions = multiple Dafny methods in the same module.
+9. Postconditions must be minimal and simple.
+   - Avoid complex quantifiers unless absolutely necessary.
+   - Connect them directly to inputs/outputs.
+
+Output:
+- Produce only Dafny code inside ```dafny fences.
+- Use correct Dafny 4.10 syntax only.
+
+Here are few examples:
+Example 1 - Max of two integers:
+Python:
+```python
+def max_of_two(a: int, b: int) -> int:
+    return aif a >= b else b
+
+```
+
+Dafny:
+```dafny
+method MaxOfTwo(a: int, b: int) returns (m: int)
+  ensures (m == a || m == b)
+  ensures m >= a && m >= b
+  ensures (a >= b) ==> m == a
+  ensures (b >  a) ==> m == b
+{
+  if a >= b {
+    m := a;
+  } else {
+    m := b;
+  }
+}
+```
+
+Example 2 - Clamp into a closed interval:
+Python:
+```python
+def clamp(x: int, lo: int, hi: int) -> int:
+    if lo > hi:
+        raise ValueError("bad interval")
+    if x < lo:
+        return lo
+    if x > hi:
+        return hi
+    return x
+```
+
+Dafny:
+```dafny
+method Clamp(x: int, lo: int, hi: int) returns (y: int)
+  requires lo <= hi
+  ensures lo <= y <= hi
+  ensures (x < lo) ==> y == lo
+  ensures (x > hi) ==> y == hi
+  ensures (lo <= x && x <= hi) ==> y == x
+{
+  if x < lo {
+    y := lo;
+  } else if x > hi {
+    y := hi;
+  } else {
+    y := x;
+  }
+}
+```
+
+Example 3 - Two functions in one Python file → Two methods in Dafny:
+Python:
+```python
+def abs_diff(a: int, b: int) -> int:
+    d = a - b
+    return -d if d < 0 else d
+
+def is_within(a: int, b: int, tol: int) -> bool:
+    if tol < 0:
+        raise ValueError("tol must be nonnegative")
+    return abs_diff(a, b) <= tol
+```
+
+Dafny:
+```dafny
+method AbsDiff(a: int, b: int) returns (d: int)
+  ensures d >= 0
+  ensures (a >= b) ==> d == a - b
+  ensures (b >  a) ==> d == b - a
+{
+  if a >= b {
+    d := a - b;
+  } else {
+    d := b - a;
+  }
+}
+
+method IsWithin(a: int, b: int, tol: int) returns (ok: bool)
+  requires tol >= 0
+  ensures ok <==> AbsDiff(a, b) <= tol
+{
+  var d := AbsDiff(a, b);
+  ok := d <= tol;
+}
+```
+
+Here is the Python code that you need to generete its specification in Dafny language:
+```python
+{code}
+```

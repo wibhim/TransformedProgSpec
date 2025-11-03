@@ -1,0 +1,14 @@
+Generate a Dafny program with formal specifications for the following Python code:
+
+```python
+{code}
+```
+
+Requirements:
+- Write a complete Dafny program that implements the same functionality
+- Include preconditions (requires) and postconditions (ensures) 
+- Add loop invariants for any loops
+- Use appropriate Dafny data types and constructs
+- Ensure the specifications capture the essential behavior of the original code
+
+Provide only the Dafny code with specifications, no explanations.

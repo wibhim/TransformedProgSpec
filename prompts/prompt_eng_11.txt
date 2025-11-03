@@ -1,0 +1,109 @@
+Translate the following Python function into Dafny 4.10 code.
+Focus on simplicity and verifiability, not completeness.
+
+Follow these rules:
+1. One Python function = one Dafny method.
+2. Always use method, not function-method.
+3. Encode input checks as requires.
+4. Encode output behavior as ensures.
+5. Add invariants for loops.
+6. Preserve helper function calls as Dafny methods.
+7. Output Dafny code only.
+
+Here are few examples:
+Example 1 - Max of two integers:
+Python:
+```python
+def max_of_two(a: int, b: int) -> int:
+    return aif a >= b else b
+
+```
+
+Dafny:
+```dafny
+method MaxOfTwo(a: int, b: int) returns (m: int)
+  ensures (m == a || m == b)
+  ensures m >= a && m >= b
+  ensures (a >= b) ==> m == a
+  ensures (b >  a) ==> m == b
+{
+  if a >= b {
+    m := a;
+  } else {
+    m := b;
+  }
+}
+```
+
+Example 2 - Clamp into a closed interval:
+Python:
+```python
+def clamp(x: int, lo: int, hi: int) -> int:
+    if lo > hi:
+        raise ValueError("bad interval")
+    if x < lo:
+        return lo
+    if x > hi:
+        return hi
+    return x
+```
+
+Dafny:
+```dafny
+method Clamp(x: int, lo: int, hi: int) returns (y: int)
+  requires lo <= hi
+  ensures lo <= y <= hi
+  ensures (x < lo) ==> y == lo
+  ensures (x > hi) ==> y == hi
+  ensures (lo <= x && x <= hi) ==> y == x
+{
+  if x < lo {
+    y := lo;
+  } else if x > hi {
+    y := hi;
+  } else {
+    y := x;
+  }
+}
+```
+
+Example 3 - Two functions in one Python file → Two methods in Dafny:
+Python:
+```python
+def abs_diff(a: int, b: int) -> int:
+    d = a - b
+    return -d if d < 0 else d
+
+def is_within(a: int, b: int, tol: int) -> bool:
+    if tol < 0:
+        raise ValueError("tol must be nonnegative")
+    return abs_diff(a, b) <= tol
+```
+
+Dafny:
+```dafny
+method AbsDiff(a: int, b: int) returns (d: int)
+  ensures d >= 0
+  ensures (a >= b) ==> d == a - b
+  ensures (b >  a) ==> d == b - a
+{
+  if a >= b {
+    d := a - b;
+  } else {
+    d := b - a;
+  }
+}
+
+method IsWithin(a: int, b: int, tol: int) returns (ok: bool)
+  requires tol >= 0
+  ensures ok <==> AbsDiff(a, b) <= tol
+{
+  var d := AbsDiff(a, b);
+  ok := d <= tol;
+}
+```
+
+Here is the Python code that you need to translate into Dafny:
+```python
+{code}
+```

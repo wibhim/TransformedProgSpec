@@ -1,0 +1,122 @@
+Generate a Dafny program with formal specifications for the following Python code:
+
+```python
+{code}
+```
+
+**CRITICAL SUCCESS PRINCIPLES**:
+- START WITH THE SIMPLEST POSSIBLE POSTCONDITION - only specify the most essential property
+- AVOID COMPLEX MATHEMATICAL RELATIONSHIPS - focus on basic bounds and existence
+- HANDLE EMPTY COLLECTIONS EXPLICITLY - always check for length 0 or null
+- USE QUANTIFIERS SPARINGLY - prefer simple bounds checks over complex forall/exists
+- CONNECT LOOP INVARIANTS DIRECTLY TO POSTCONDITIONS - make the relationship obvious
+
+**Requirements:**
+- Ensure all specifications are verifiable by Dafny
+- Use only Dafny 4.10 compatible syntax
+- Prefer 'method' over 'function' for procedural code
+- Use proper sequence/array syntax: seq<T>, array<T>
+- Include explicit type annotations
+- Use decreases clauses for termination proofs
+- Always handle edge cases (empty collections, null inputs)
+- Keep postconditions simple and direct
+
+**VERIFIED EXAMPLES:**
+
+Example 1 - Simple Method with Basic Postcondition:
+Python:
+```python
+def max_two(a, b):
+    return a if a > b else b
+```
+
+Dafny:
+```dafny
+method MaxTwo(a: int, b: int) returns (result: int)
+    ensures result >= a && result >= b
+    ensures result == a || result == b
+{
+    if a > b {
+        result := a;
+    } else {
+        result := b;
+    }
+}
+```
+
+Example 2 - Array Processing with Edge Cases:
+Python:
+```python
+def copy_array(arr):
+    return [x for x in arr]
+```
+
+Dafny:
+```dafny
+method CopyArray(A: array<int>) returns (B: array<int>)
+    requires A != null
+    ensures B != null && B.Length == A.Length
+    ensures forall i :: 0 <= i < A.Length ==> B[i] == A[i]
+{
+    B := new int[A.Length];
+    var i := 0;
+    while i < A.Length
+        invariant 0 <= i <= A.Length
+        invariant forall j :: 0 <= j < i ==> B[j] == A[j]
+        decreases A.Length - i
+    {
+        B[i] := A[i];
+        i := i + 1;
+    }
+}
+```
+
+Example 3 - Sequence Search with Loop Invariant:
+Python:
+```python
+def find_fixed_point(arr):
+    for i in range(len(arr)):
+        if arr[i] == i:
+            return i
+    return -1
+```
+
+Dafny:
+```dafny
+method FixedPoint(A: seq<int>) returns (result: int)
+    ensures (exists i :: 0 <= i < |A| && A[i] == i) ==> (result >= 0 && result < |A| && A[result] == result)
+    ensures (forall i :: 0 <= i < |A| ==> A[i] != i) ==> result == -1
+{
+    if |A| == 0 {
+        result := -1;
+        return;
+    }
+    var i: int := 0;
+    while i < |A|
+        invariant 0 <= i <= |A|
+        invariant forall j :: 0 <= j < i ==> A[j] != j
+        decreases |A| - i
+    {
+        if A[i] == i {
+            result := i;
+            return;
+        }
+        i := i + 1;
+    }
+    result := -1;
+}
+```
+
+**ANTI-PATTERNS TO AVOID:**
+- Complex nested quantifiers (forall x :: exists y :: ...)
+- Over-specified postconditions with multiple mathematical constraints
+- Missing edge case handling (empty arrays/sequences)
+- Loop invariants unrelated to postconditions
+- Using 'function method' syntax (use just 'method' or 'function')
+- Array/sequence type mismatches
+
+**TYPE USAGE GUIDELINES:**
+- Use `array<T>` for mutable collections that need null checks
+- Use `seq<T>` for immutable collections and mathematical operations  
+- Always include `!= null` preconditions for arrays
+- Use `|seq|` for sequence length, `array.Length` for array length

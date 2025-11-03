@@ -1,0 +1,6 @@
+Translate the following Python function into Dafny 4.10 code.
+Focus on simplicity and verifiability, not completeness.
+
+```python
+{code}
+```

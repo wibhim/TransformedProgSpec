@@ -1,0 +1,8 @@
+Make Python code that satisfies this verified specification.
+- Preserve any implied function names and signatures.
+- Enforce preconditions by raising appropriate exceptions.
+- Satisfy postconditions by construction (no runtime asserts unless required).
+- Handle edge cases implied by the spec.
+
+SPEC:
+{spec}

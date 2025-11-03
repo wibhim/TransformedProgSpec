@@ -1,0 +1,11 @@
+Please analyze the following Python function and generate formal specifications:
+
+{code}
+
+Requirements:
+- Generate Dafny-style specifications
+- Include clear preconditions and postconditions  
+- Focus on algorithmic correctness
+- Use precise mathematical notation
+
+Format your response as a JSON object with specification details.

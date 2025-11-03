@@ -1,0 +1,38 @@
+Generate a Dafny program with formal specifications for the following Python code:
+
+```python
+{code}
+```
+
+Requirements:
+- Write a complete Dafny program that implements the same functionality
+- Include preconditions (requires) and postconditions (ensures) 
+- Add loop invariants for any loops
+- Use appropriate Dafny data types and constructs
+- Ensure the specifications capture the essential behavior of the original code
+
+**Examples:**
+
+Example 1 - Simple function:
+Python:
+```python
+def max_two(a, b):
+    return a if a > b else b
+```
+
+Dafny:
+```dafny
+method MaxTwo(a: int, b: int) returns (result: int)
+    ensures result >= a && result >= b
+    ensures result == a || result == b
+{
+    if a > b {
+        result := a;
+    } else {
+        result := b;
+    }
+}
+```
+
+Avoid this error:
+the phrase 'function method' is not allowed when using --function-syntax:4; to declare a compiled function, use just 'function'
