@@ -35,6 +35,8 @@ CSV/
 summary/
 summary_2/
 summary_3/
+output/
+others/
 
 # Output directories (generated content)
 output/
