@@ -23,6 +23,18 @@ data/cache/
 data/verification/
 data/transformed/
 data/specification/
+data/
+datasets/
+
+
+archieves/
+cache/
+analysis/
+analysis_output/
+CSV/
+summary/
+summary_2/
+summary_3/
 
 # Output directories (generated content)
 output/

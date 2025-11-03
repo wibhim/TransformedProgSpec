@@ -28,6 +28,16 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # Import the transformation functionality
 from src.transformation.transforms import TRANSFORMERS
+try:
+    # Optional set of string-only transformers to apply after AST unparse
+    from src.transformation.transforms import STRING_TRANSFORMERS
+except Exception:
+    STRING_TRANSFORMERS = set()
+try:
+    # Optional set of string-only transformers to apply after AST unparse
+    from src.transformation.transforms import STRING_TRANSFORMERS
+except Exception:
+    STRING_TRANSFORMERS = set()
 from src.transformation.base import BaseTransformer
 
 # Import settings
@@ -68,9 +78,13 @@ def transform_code(code: str, transformation_names: Optional[List[str]] = None,
         
         # Parse the code
         tree = ast.parse(code)
+        # Keep a structural snapshot to detect true AST changes
+        orig_dump = ast.dump(tree, include_attributes=False)
         
         # Build the list of transformers to apply
-        transformers = []
+        ast_transformers: List[BaseTransformer] = []
+        string_transformers: List[str] = []
+        
         # Add requested transformers or use all if none specified
         transformer_names_to_use = transformation_names or list(TRANSFORMERS.keys())
         
@@ -78,11 +92,16 @@ def transform_code(code: str, transformation_names: Optional[List[str]] = None,
             if name in TRANSFORMERS:
                 # Get the transformer class directly from the imported dictionary
                 try:
-                    transformer_class = TRANSFORMERS[name]
-                    transformer = create_transformer_instance(transformer_class, verbose)
-                    transformers.append(transformer)
-                    if verbose:
-                        print(f"Added transformer: {name}")
+                    if name in STRING_TRANSFORMERS:
+                        string_transformers.append(name)
+                        if verbose:
+                            print(f"Queued string transformer: {name}")
+                    else:
+                        transformer_class = TRANSFORMERS[name]
+                        transformer = create_transformer_instance(transformer_class, verbose)
+                        ast_transformers.append(transformer)
+                        if verbose:
+                            print(f"Added AST transformer: {name}")
                 except Exception as e:
                     if verbose:
                         print(f"Error creating transformer '{name}': {e}")
@@ -90,15 +109,32 @@ def transform_code(code: str, transformation_names: Optional[List[str]] = None,
                 if verbose:
                     print(f"Warning: Transformer '{name}' not found")
         
-        # Apply each transformer in sequence
-        for transformer in transformers:
+        # Apply AST transformers in sequence
+        for transformer in ast_transformers:
             if verbose:
                 print(f"Applying transformer: {transformer.__class__.__name__}")
             tree = transformer.visit(tree)
             ast.fix_missing_locations(tree)
         
-        # Generate the transformed code
-        transformed = ast.unparse(tree)
+        # Generate the transformed code only if the AST actually changed.
+        # This avoids formatting-only diffs from ast.unparse when no transform applied.
+        new_dump = ast.dump(tree, include_attributes=False)
+        if new_dump == orig_dump:
+            transformed = code  # no structural change; preserve original formatting
+        else:
+            transformed = ast.unparse(tree)
+
+        # Apply string-only transformers after unparse (no reparse)
+        for name in string_transformers:
+            try:
+                if verbose:
+                    print(f"Applying string transformer: {name}")
+                transformer_class = TRANSFORMERS[name]
+                transformer = create_transformer_instance(transformer_class, verbose)
+                transformed = transformer.transform(transformed)
+            except Exception as e:
+                if verbose:
+                    print(f"Error in string transformer '{name}': {e}")
         
         return transformed, None
         
@@ -111,7 +147,7 @@ def transform_code(code: str, transformation_names: Optional[List[str]] = None,
         return code, error_message
 
 def transform_file(input_path: str, output_path: str, transformation_names: Optional[List[str]] = None,
-                  verbose: bool = False) -> bool:
+                  verbose: bool = False, changed_only: bool = False) -> bool:
     """Transform a Python file using selected transformations."""
     try:
         if verbose:
@@ -132,6 +168,12 @@ def transform_file(input_path: str, output_path: str, transformation_names: Opti
         if error:
             print(f"Error transforming file: {error}")
             return False
+
+        # If only storing changed outputs is requested and nothing changed, skip writing
+        if changed_only and transformed.strip() == code.strip():
+            if verbose:
+                print("No changes detected; skipping write due to --changed-only.")
+            return True
         
         # Create output directory if it doesn't exist
         output_dir = os.path.dirname(output_path)
@@ -156,7 +198,8 @@ def transform_file(input_path: str, output_path: str, transformation_names: Opti
 def transform_dataset(transformation_names: Optional[List[str]] = None, 
                      verbose: bool = False,
                      input_path: Optional[str] = None,
-                     output_path: Optional[str] = None) -> bool:
+                     output_path: Optional[str] = None,
+                     changed_only: bool = False) -> bool:
     """Transform the entire dataset of Python code samples."""
     try:
         # Get input and output paths
@@ -170,7 +213,17 @@ def transform_dataset(transformation_names: Optional[List[str]] = None,
         
         # Load the input dataset
         with open(input_path, 'r', encoding='utf-8') as f:
-            dataset = json.load(f)
+            raw_data = json.load(f)
+        
+        # Handle both direct arrays and wrapped data structures
+        if isinstance(raw_data, dict) and 'data' in raw_data:
+            dataset = raw_data['data']
+        elif isinstance(raw_data, dict) and 'programs' in raw_data:
+            dataset = raw_data['programs']
+        elif isinstance(raw_data, list):
+            dataset = raw_data
+        else:
+            raise ValueError("Input file must contain either a list of items or a dict with 'data' or 'programs' field")
         
         # Transform each code sample
         transformed_dataset = []
@@ -196,10 +249,43 @@ def transform_dataset(transformation_names: Optional[List[str]] = None,
                 transformation_names=transformation_names,
                 verbose=verbose
             )
+
+            # Fallback: if replace_parentheses was requested but parentheses remain,
+            # remove them directly here to ensure the dataset reflects the request.
+            if transformation_names and 'replace_parentheses' in transformation_names:
+                if '(' in transformed_code or ')' in transformed_code:
+                    if verbose:
+                        print("Fallback: removing parentheses at dataset stage")
+                    transformed_code = transformed_code.replace('(', '').replace(')', '')
             
+            # Decide if the sample actually changed
+            changed = transformed_code.strip() != code.strip()
+
             # Create a new sample with transformed code
             new_sample = sample.copy()
             new_sample['code'] = transformed_code
+            
+            # Set the transformation type based on the transformations applied
+            if transformation_names:
+                # Use the first/primary transformation as the type
+                new_sample['transformation_type'] = transformation_names[0]
+                # Also record all requested transforms for clarity
+                new_sample['applied_transformers'] = transformation_names
+                # Optional: flag if parentheses still present when requested removal
+                if 'replace_parentheses' in transformation_names:
+                    if '(' in transformed_code or ')' in transformed_code:
+                        new_sample['note'] = "Warning: parentheses still present after replace_parentheses even after fallback."
+            else:
+                new_sample['transformation_type'] = 'all_transformations'
+                new_sample['applied_transformers'] = list(TRANSFORMERS.keys())
+
+            # If original filename exists, compute an output name that appends the transformation type
+            # e.g., foo.py -> foo__control_flow.py
+            orig_fname = sample.get('filename') or sample.get('file')
+            if orig_fname:
+                base, ext = os.path.splitext(orig_fname)
+                suffix = new_sample.get('transformation_type', 'transformed')
+                new_sample['output_filename'] = f"{base}__{suffix}{ext or '.py'}"
             
             if error:
                 new_sample['transformation_error'] = error
@@ -209,12 +295,44 @@ def transform_dataset(transformation_names: Optional[List[str]] = None,
             else:
                 new_sample['transformation_error'] = None
             
-            transformed_dataset.append(new_sample)
+            # If only-changed mode is enabled, keep only changed samples
+            if (not changed_only) or changed:
+                transformed_dataset.append(new_sample)
+            else:
+                if verbose:
+                    sid = sample.get('id') or sample.get('filename') or 'unknown'
+                    print(f"Skipping unchanged sample due to --changed-only: {sid}")
         
         # Save the transformed dataset
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        output_dir = os.path.dirname(output_path)
+        if output_dir:  # Only create directory if there is one
+            os.makedirs(output_dir, exist_ok=True)
+        
+        # Prepare output in the same format as input
+        if isinstance(raw_data, dict) and 'data' in raw_data:
+            # Maintain wrapper structure
+            output_data = {
+                "metadata": raw_data.get("metadata", {}),
+                "data": transformed_dataset
+            }
+        elif isinstance(raw_data, dict) and 'programs' in raw_data:
+            # Maintain wrapper structure for consolidated datasets
+            output_data = {
+                "metadata": raw_data.get("metadata", {}),
+                "programs": transformed_dataset
+            }
+            # Update metadata if it exists
+            if "metadata" in output_data:
+                output_data["metadata"]["total_items"] = len(transformed_dataset)
+                output_data["metadata"]["transformation_applied"] = True
+                if changed_only:
+                    output_data["metadata"]["filtered_to_changed_only"] = True
+        else:
+            # Direct array output
+            output_data = transformed_dataset
+        
         with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump(transformed_dataset, f, indent=2)
+            json.dump(output_data, f, indent=2)
         
         if verbose:
             print(f"\nTransformation complete. {len(transformed_dataset)} samples processed.")
@@ -266,6 +384,8 @@ def main():
                        help='Input dataset file (for dataset transformation)')
     parser.add_argument('--output', metavar='OUTPUT_DATASET',
                        help='Output dataset file (for dataset transformation)')
+    parser.add_argument('--name-with-transform', action='store_true',
+                       help='In single-file mode, derive output filename as <name>__<transform>.py when --output-file is not provided')
     
     # Transformer selection options
     transform_group = parser.add_mutually_exclusive_group()
@@ -279,6 +399,8 @@ def main():
     # Other options
     parser.add_argument('--verbose', '-v', action='store_true',
                        help='Show detailed progress information')
+    parser.add_argument('--changed-only', action='store_true',
+                       help='Only store outputs where the code actually changed after transformation')
     
     # Legacy positional arguments support
     parser.add_argument('input_pos', nargs='?', help=argparse.SUPPRESS)
@@ -305,8 +427,30 @@ def main():
             return 1
         
         if not output_path:
-            print("Error: Output file path is required.")
-            return 1
+            if args.name_with_transform and (args.all or args.core_only or args.transformers):
+                # Build output path from input file name and primary transformation
+                in_dir = os.path.dirname(input_path)
+                in_base = os.path.basename(input_path)
+                base, ext = os.path.splitext(in_base)
+                # Determine primary transform label
+                if args.all:
+                    label = 'all_transformations'
+                elif args.core_only:
+                    label = 'core_transformations'
+                else:
+                    # transformers string already split below; recompute here safely
+                    primary = None
+                    if args.transformers:
+                        for t in [t.strip() for t in args.transformers.split(',') if t.strip()]:
+                            primary = t
+                            break
+                    label = primary or 'transformed'
+                output_path = os.path.join(in_dir, f"{base}__{label}{ext or '.py'}")
+                if args.verbose:
+                    print(f"Derived output path: {output_path}")
+            else:
+                print("Error: Output file path is required.")
+                return 1
     
     # Determine which transformers to use
     transformers = None
@@ -318,7 +462,8 @@ def main():
         core_transformers = ["control_flow", "variable_naming", "expression", "loop_standard", "function_extract"]
         transformers = [t for t in core_transformers]
     elif args.transformers:
-        transformers = [t.strip() for t in args.transformers.split(',')]
+        # Split by comma, trim whitespace, and drop empty entries
+        transformers = [t.strip() for t in args.transformers.split(',') if t.strip()]
     
     # Execute the appropriate transformation
     if is_single_file:
@@ -326,7 +471,8 @@ def main():
             input_path=input_path,
             output_path=output_path,
             transformation_names=transformers,
-            verbose=args.verbose
+            verbose=args.verbose,
+            changed_only=args.changed_only
         )
         
         if success:
@@ -340,7 +486,8 @@ def main():
             transformation_names=transformers,
             verbose=args.verbose,
             input_path=args.input,
-            output_path=args.output
+            output_path=args.output,
+            changed_only=args.changed_only
         )
         
         if success:

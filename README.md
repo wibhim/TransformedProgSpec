@@ -1,17 +1,17 @@
 # Python to Dafny Formal Verification Pipeline
 
-This project automates the process of transforming Python code into formal specifications using Large Language Models (specifically OpenAI's GPT models), and then verifies these specifications using the Dafny verification language.
+This project automates the process of transforming Python code into formal specifications using Large Language Models (LLMs), and then verifies these specifications using the Dafny verification language. The system supports large-scale data collection with deduplication and is designed for experiments comparing different LLMs (ChatGPT, CodeLlama-13B, Claude-4).
 
 ## Project Overview
 
 The pipeline consists of several steps:
-1. **Data Collection**: Obtain Python code snippets from GitHub repositories
+1. **Incremental Data Collection**: Collect Python programs from GitHub in batches with deduplication
 2. **Code Cleanup**: Remove docstrings, comments, and normalize code
 3. **Code Transformation**: Simplify code while preserving variable names
-4. **Specification Generation**: Generate formal Dafny specifications using GPT models
+4. **Specification Generation**: Generate formal Dafny specifications using different LLMs
 5. **Dafny Extraction**: Extract Dafny code from specifications and save as .dfy files
 6. **Dafny Verification**: Verify the extracted Dafny code
-7. **Report Generation**: Create reports of verification results
+7. **Comparative Analysis**: Compare LLM performance across different metrics
 
 ## Project Structure
 
@@ -119,6 +119,129 @@ Prototype/
      ```
    
    Review and adjust these settings as needed for your specific use case.
+
+## Incremental Data Collection
+
+This project supports large-scale, incremental data collection with automatic deduplication. This is essential for collecting the target of 5000+ programs while respecting GitHub API limits.
+
+### Key Features
+
+- **Batch Collection**: Collect programs in manageable batches (default: 500 per batch)
+- **Deduplication**: Prevents collecting the same program across different batches
+- **Progress Tracking**: Persistent tracking of collection progress and batch history
+- **Repository Balancing**: Automatically balances collection across repositories
+- **Resume Capability**: Can resume interrupted collections
+
+### Quick Start - Incremental Collection
+
+1. **Collect your first batch** (easiest method):
+   ```
+   collect_batch.bat 500
+   ```
+
+2. **Check collection statistics**:
+   ```
+   python manage_batches.py --stats
+   ```
+
+3. **Plan your next batch**:
+   ```
+   python manage_batches.py --plan --batch-size 500
+   ```
+
+4. **Collect another batch**:
+   ```
+   python collect_incremental.py --batch-size 500
+   ```
+
+### Detailed Incremental Collection
+
+#### Basic Collection Commands
+
+```bash
+# Collect a batch of 500 programs (default)
+python collect_incremental.py
+
+# Collect specific batch size
+python collect_incremental.py --batch-size 200
+
+# Target specific repositories
+python collect_incremental.py --repos "django/django" "scikit-learn/scikit-learn"
+
+# Test mode (collect just a few files to verify setup)
+python collect_incremental.py --test-mode
+```
+
+#### Batch Management Commands
+
+```bash
+# Show detailed collection statistics
+python manage_batches.py --stats
+
+# Show repository collection balance
+python manage_batches.py --repo-balance
+
+# Plan next batch without executing
+python manage_batches.py --plan --batch-size 500
+
+# Export collected program metadata
+python manage_batches.py --export --format json
+```
+
+#### Planning Your Collection Strategy
+
+To reach 5000 programs efficiently:
+
+1. **Start with test collection**:
+   ```
+   python collect_incremental.py --test-mode
+   ```
+
+2. **Collect in batches of 500**:
+   ```
+   # Collect 10 batches of 500 = 5000 programs
+   collect_batch.bat 500
+   # Wait, then repeat 9 more times
+   ```
+
+3. **Monitor progress**:
+   ```
+   python manage_batches.py --stats
+   ```
+
+4. **Check repository balance** (ensure diversity):
+   ```
+   python manage_batches.py --repo-balance
+   ```
+
+### Deduplication System
+
+The system uses content-based hashing to identify duplicates:
+
+- **Normalization**: Removes comments and normalizes whitespace before hashing
+- **Persistent Index**: SQLite database tracks all collected programs
+- **Cross-batch Protection**: Prevents duplicates across different collection runs
+- **Repository Tracking**: Tracks which repositories have been processed
+
+### Collection Progress Example
+
+```
+📊 COLLECTION SUMMARY
+============================================================
+Total Programs Collected: 2,450
+Programs by Repository:
+  django/django: 245
+  scikit-learn/scikit-learn: 238
+  pytorch/pytorch: 235
+  TheAlgorithms/Python: 220
+  ...
+
+Recent Collection Batches:
+  ✅ Batch 5: 489/500 programs (completed)
+  ✅ Batch 4: 495/500 programs (completed)
+  ✅ Batch 3: 501/500 programs (completed)
+============================================================
+```
 
 ## Usage
 
