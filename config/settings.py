@@ -14,7 +14,7 @@ ERROR_DIR = os.path.join(BASE_DIR, "errors")
 TOKEN_DIR = os.path.join(BASE_DIR, "token")
 
 # Sub-directories
-REPO_DIR = os.path.join(DATA_DIR, "repositories")
+REPO_DIR = os.path.join(DATA_DIR, "programs")
 SPEC_DIR = os.path.join(DATA_DIR, "specification")
 TRANSFORM_DIR = os.path.join(DATA_DIR, "transformed")
 VERIFY_DIR = os.path.join(DATA_DIR, "verification")
@@ -63,12 +63,15 @@ TRANSFORMATION_CONFIG = {
 
 # Configuration for ChatGPT specification generation
 CHATGPT_CONFIG = {
-    "input_json": os.path.join(REPO_DIR, "datasets", "transformed_code_dataset.json"),
-    "output_json": os.path.join(SPEC_DIR, "chatgpt_specifications.json"),
+    "model": "gpt-4.1",  # Model to use for specification generation
+    "input_json": "drop_parentheses_dataset.json",  # Full consolidated dataset
+    "output_json": os.path.join(SPEC_DIR, "drop_parentheses_specifications.json"),
     "token_file": os.path.join(TOKEN_DIR, "token_gpt.txt"),
     "error_log": os.path.join(ERROR_DIR, "chatgpt_spec_errors.txt"),
-    "delay": 3,  # seconds between API calls
-    "temperature": 0.2,
+    "delay": 5,  # Reduced delay for faster processing while staying within rate limits
+    "temperature": 0.4,  # Temperature (ignored for models that don't support it like GPT-5)
+    "use_cache": True,  # Enable cache for safe progress saving
+    "use_enhanced_cache": True,  # Enable enhanced cache system with metadata
 }
 
 # Configuration for Dafny verification
