@@ -1,0 +1,981 @@
+[
+  {
+    "task_id": "003",
+    "filename": "program_003.py",
+    "code": "def octal_To_Decimal(n):\n    base = 1\n    num = n\n    dec_value = 0\n    temp = num\n    while temp:\n        last_digit = temp % 10\n        temp = int(temp / 10)\n        dec_value += last_digit * base\n        base = base * 8\n    return dec_value",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_003__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "009",
+    "filename": "program_009.py",
+    "code": "def find_Min_Sum(num):\n    sum += num\n    sum = 0\n    while i * i <= num:\n        while num % i == 0:\n            num /= i\n            sum += i\n        i += 1\n    i = 2\n    return sum",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_009__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "011",
+    "filename": "program_011.py",
+    "code": "def three_sum(array):\n    \"\"\"\n    :param array: List[int]\n    :return: Set[ Tuple[int, int, int] ]\n    \"\"\"\n    res = set()\n    array.sort()\n    for i in range(len(array) - 2):\n        if i > 0 and array[i] == array[i - 1]:\n            continue\n        l, r = (i + 1, len(array) - 1)\n        while l < r:\n            s = array[i] + array[l] + array[r]\n            if s > 0:\n                r -= 1\n            elif s < 0:\n                l += 1\n            else:\n                res.add((array[i], array[l], array[r]))\n                while l < r and array[l] == array[l + 1]:\n                    l += 1\n                while l < r and array[r] == array[r - 1]:\n                    r -= 1\n                r -= 1\n                l += 1\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_011__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "015",
+    "filename": "program_015.py",
+    "code": "def min_Swaps(s1, s2):\n    c1 = 0\n    c0 = 0\n    for i in range(len(s1)):\n        if s1[i] == '0' and s2[i] == '1':\n            c0 += 1\n        elif s1[i] == '1' and s2[i] == '0':\n            c1 += 1\n    result = c0 // 2 + c1 // 2\n    if c0 % 2 == 0 and c1 % 2 == 0:\n        return result\n    elif (c0 + c1) % 2 == 0:\n        return result + 2\n    else:\n        return -1",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_015__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "024",
+    "filename": "program_024.py",
+    "code": "def octal_to_binary(octal_number: str) -> str:\n    \"\"\"\n    Convert an Octal number to Binary.\n\n    >>> octal_to_binary(\"17\")\n    '001111'\n    >>> octal_to_binary(\"7\")\n    '111'\n    >>> octal_to_binary(\"Av\")\n    Traceback (most recent call last):\n        ...\n    ValueError: Non-octal value was passed to the function\n    >>> octal_to_binary(\"@#\")\n    Traceback (most recent call last):\n        ...\n    ValueError: Non-octal value was passed to the function\n    >>> octal_to_binary(\"\")\n    Traceback (most recent call last):\n        ...\n    ValueError: Empty string was passed to the function\n    \"\"\"\n    if not octal_number:\n        raise ValueError('Empty string was passed to the function')\n    octal_digits = '01234567'\n    binary_number = ''\n    for digit in octal_number:\n        if digit not in octal_digits:\n            raise ValueError('Non-octal value was passed to the function')\n        binary_digit = ''\n        value = int(digit)\n        for _ in range(3):\n            binary_digit = str(value % 2) + binary_digit\n            value //= 2\n        binary_number += binary_digit\n    return binary_number",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_024__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "025",
+    "filename": "program_025.py",
+    "code": "def magic_square_test(my_matrix):\n    result1 = 0\n    iSize = len(my_matrix[0])\n    sum_list.extend([sum(lines) for lines in my_matrix])\n    for col in range(iSize):\n        sum_list.append(sum((row[col] for row in my_matrix)))\n    sum_list = []\n    for i in range(0, iSize):\n        result1 += my_matrix[i][i]\n    sum_list.append(result1)\n    result2 = 0\n    for i in range(iSize - 1, -1, -1):\n        result2 += my_matrix[i][i]\n    sum_list.append(result2)\n    if len(set(sum_list)) > 1:\n        return False\n    return True",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_025__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "028",
+    "filename": "program_028.py",
+    "code": "def max_Product(arr):\n    x = arr[0]\n    if arr_len < 2:\n        return 'No pairs exists'\n    y = arr[1]\n    arr_len = len(arr)\n    for i in range(0, arr_len):\n        for j in range(i + 1, arr_len):\n            if arr[i] * arr[j] > x * y:\n                y = arr[j]\n                x = arr[i]\n    return (x, y)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_028__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "034",
+    "filename": "program_034.py",
+    "code": "def swap_count(s):\n    count_left = 0\n    imbalance = 0\n    count_right = 0\n    swap = 0\n    chars = s\n    for i in range(len(chars)):\n        if chars[i] == '[':\n            count_left += 1\n            if imbalance > 0:\n                swap += imbalance\n                imbalance -= 1\n        elif chars[i] == ']':\n            count_right += 1\n            imbalance = count_right - count_left\n    return swap",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_034__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "037",
+    "filename": "program_037.py",
+    "code": "def find_Nth_Digit(p, q, N):\n    while N > 0:\n        p *= 10\n        p %= q\n        res = p // q\n        N -= 1\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_037__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "042",
+    "filename": "program_042.py",
+    "code": "def run_length_encode(text: str) -> list:\n    \"\"\"\n    Performs Run Length Encoding\n    >>> run_length_encode(\"AAAABBBCCDAA\")\n    [('A', 4), ('B', 3), ('C', 2), ('D', 1), ('A', 2)]\n    >>> run_length_encode(\"A\")\n    [('A', 1)]\n    >>> run_length_encode(\"AA\")\n    [('A', 2)]\n    >>> run_length_encode(\"AAADDDDDDFFFCCCAAVVVV\")\n    [('A', 3), ('D', 6), ('F', 3), ('C', 3), ('A', 2), ('V', 4)]\n    \"\"\"\n    count = 1\n    encoded = []\n    for i in range(len(text)):\n        if i + 1 < len(text) and text[i] == text[i + 1]:\n            count += 1\n        else:\n            encoded.append((text[i], count))\n            count = 1\n    return encoded",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_042__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "044",
+    "filename": "program_044.py",
+    "code": "def find_demlo(s):\n    res = ''\n    l = len(s)\n    for i in range(1, l + 1):\n        res = res + str(i)\n    for i in range(l - 1, 0, -1):\n        res = res + str(i)\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_044__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "049",
+    "filename": "program_049.py",
+    "code": "def prime_factors(n: int) -> list[int]:\n    \"\"\"\n    Returns prime factors of n as a list.\n\n    >>> prime_factors(0)\n    []\n    >>> prime_factors(100)\n    [2, 2, 5, 5]\n    >>> prime_factors(2560)\n    [2, 2, 2, 2, 2, 2, 2, 2, 2, 5]\n    >>> prime_factors(10**-2)\n    []\n    >>> prime_factors(0.02)\n    []\n    >>> x = prime_factors(10**241) # doctest: +NORMALIZE_WHITESPACE\n    >>> x == [2]*241 + [5]*241\n    True\n    >>> prime_factors(10**-354)\n    []\n    >>> prime_factors('hello')\n    Traceback (most recent call last):\n        ...\n    TypeError: '<=' not supported between instances of 'int' and 'str'\n    >>> prime_factors([1,2,'hello'])\n    Traceback (most recent call last):\n        ...\n    TypeError: '<=' not supported between instances of 'int' and 'list'\n\n    \"\"\"\n    factors = []\n    i = 2\n    while i * i <= n:\n        if n % i:\n            i += 1\n        else:\n            n //= i\n            factors.append(i)\n    if n > 1:\n        factors.append(n)\n    return factors",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_049__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "051",
+    "filename": "program_051.py",
+    "code": "def int_to_roman(num):\n    roman_num = ''\n    val = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]\n    syb = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']\n    i = 0\n    while num > 0:\n        for _ in range(num // val[i]):\n            num -= val[i]\n            roman_num += syb[i]\n        i += 1\n    return roman_num",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_051__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "057",
+    "filename": "program_057.py",
+    "code": "def generate_sum_of_subsets_solutions(nums: list[int], max_sum: int) -> list[list[int]]:\n    \"\"\"\n    The main function. For list of numbers 'nums' find the subsets with sum\n    equal to 'max_sum'\n\n    >>> generate_sum_of_subsets_solutions(nums=[3, 34, 4, 12, 5, 2], max_sum=9)\n    [[3, 4, 2], [4, 5]]\n    >>> generate_sum_of_subsets_solutions(nums=[3, 34, 4, 12, 5, 2], max_sum=3)\n    [[3]]\n    >>> generate_sum_of_subsets_solutions(nums=[3, 34, 4, 12, 5, 2], max_sum=1)\n    []\n    \"\"\"\n    num_index = 0\n    result: list[list[int]] = []\n    path: list[int] = []\n    remaining_nums_sum = sum(nums)\n    create_state_space_tree(nums, max_sum, num_index, path, result, remaining_nums_sum)\n    return result",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_057__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "064",
+    "filename": "program_064.py",
+    "code": "def longest_common_substring(text1: str, text2: str) -> str:\n    \"\"\"\n    Finds the longest common substring between two strings.\n\n    >>> longest_common_substring(\"\", \"\")\n    ''\n    >>> longest_common_substring(\"a\",\"\")\n    ''\n    >>> longest_common_substring(\"\", \"a\")\n    ''\n    >>> longest_common_substring(\"a\", \"a\")\n    'a'\n    >>> longest_common_substring(\"abcdef\", \"bcd\")\n    'bcd'\n    >>> longest_common_substring(\"abcdef\", \"xabded\")\n    'ab'\n    >>> longest_common_substring(\"GeeksforGeeks\", \"GeeksQuiz\")\n    'Geeks'\n    >>> longest_common_substring(\"abcdxyz\", \"xyzabcd\")\n    'abcd'\n    >>> longest_common_substring(\"zxabcdezy\", \"yzabcdezx\")\n    'abcdez'\n    >>> longest_common_substring(\"OldSite:GeeksforGeeks.org\", \"NewSite:GeeksQuiz.com\")\n    'Site:Geeks'\n    >>> longest_common_substring(1, 1)\n    Traceback (most recent call last):\n        ...\n    ValueError: longest_common_substring() takes two strings for inputs\n    \"\"\"\n    if not (isinstance(text1, str) and isinstance(text2, str)):\n        raise ValueError('longest_common_substring() takes two strings for inputs')\n    if not text1 or not text2:\n        return ''\n    end_pos = 0\n    text1_length = len(text1)\n    dp = [[0] * (text2_length + 1) for _ in range(text1_length + 1)]\n    text2_length = len(text2)\n    max_length = 0\n    for i in range(1, text1_length + 1):\n        for j in range(1, text2_length + 1):\n            if text1[i - 1] == text2[j - 1]:\n                dp[i][j] = 1 + dp[i - 1][j - 1]\n                if dp[i][j] > max_length:\n                    end_pos = i\n                    max_length = dp[i][j]\n    return text1[end_pos - max_length:end_pos]",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_064__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "066",
+    "filename": "program_066.py",
+    "code": "def longest_increasing_subsequence(arr):\n    maximum = 0\n    longest_increasing_subsequence = [1] * n\n    for i in range(1, n):\n        for j in range(0, i):\n            if arr[i] > arr[j] and longest_increasing_subsequence[i] < longest_increasing_subsequence[j] + 1:\n                longest_increasing_subsequence[i] = longest_increasing_subsequence[j] + 1\n    n = len(arr)\n    for i in range(n):\n        maximum = max(maximum, longest_increasing_subsequence[i])\n    return maximum",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_066__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "068",
+    "filename": "program_068.py",
+    "code": "def find_longest_conseq_subseq(arr, n):\n    count = 0\n    v = []\n    arr.sort()\n    ans = 0\n    v.append(arr[0])\n    for i in range(1, n):\n        if arr[i] != arr[i - 1]:\n            v.append(arr[i])\n    for i in range(len(v)):\n        if i > 0 and v[i] == v[i - 1] + 1:\n            count += 1\n        else:\n            count = 1\n        ans = max(ans, count)\n    return ans",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_068__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "102",
+    "filename": "program_102.py",
+    "code": "def frequency_Of_Smallest(n, arr):\n    freq = 1\n    mn = arr[0]\n    for i in range(1, n):\n        if arr[i] < mn:\n            freq = 1\n            mn = arr[i]\n        elif arr[i] == mn:\n            freq += 1\n    return freq",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_102__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "108",
+    "filename": "program_108.py",
+    "code": "def get_median(arr1, arr2, n):\n    count = 0\n    i = 0\n    m1 = -1\n    m2 = -1\n    j = 0\n    while count < n + 1:\n        count += 1\n        if i == n:\n            m1 = m2\n            m2 = arr2[0]\n            break\n        elif j == n:\n            m1 = m2\n            m2 = arr1[0]\n            break\n        if arr1[i] <= arr2[j]:\n            i += 1\n            m2 = arr1[i]\n            m1 = m2\n        else:\n            j += 1\n            m2 = arr2[j]\n            m1 = m2\n    return (m1 + m2) / 2",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_108__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "117",
+    "filename": "program_117.py",
+    "code": "def longest_non_repeat_v1(string):\n    \"\"\"\n    Find the length of the longest substring\n    without repeating characters.\n    \"\"\"\n    if string is None:\n        return 0\n    max_length = 0\n    j = 0\n    dict = {}\n    for i in range(len(string)):\n        if string[i] in dict:\n            j = max(dict[string[i]], j)\n        dict[string[i]] = i + 1\n        max_length = max(max_length, i - j + 1)\n    return max_length",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_117__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "120",
+    "filename": "program_120.py",
+    "code": "def fizz_buzz(number: int, iterations: int) -> str:\n    \"\"\"\n    | Plays FizzBuzz.\n    | Prints Fizz if number is a multiple of ``3``.\n    | Prints Buzz if its a multiple of ``5``.\n    | Prints FizzBuzz if its a multiple of both ``3`` and ``5`` or ``15``.\n    | Else Prints The Number Itself.\n\n    >>> fizz_buzz(1,7)\n    '1 2 Fizz 4 Buzz Fizz 7 '\n    >>> fizz_buzz(1,0)\n    Traceback (most recent call last):\n      ...\n    ValueError: Iterations must be done more than 0 times to play FizzBuzz\n    >>> fizz_buzz(-5,5)\n    Traceback (most recent call last):\n        ...\n    ValueError: starting number must be\n                             and integer and be more than 0\n    >>> fizz_buzz(10,-5)\n    Traceback (most recent call last):\n        ...\n    ValueError: Iterations must be done more than 0 times to play FizzBuzz\n    >>> fizz_buzz(1.5,5)\n    Traceback (most recent call last):\n        ...\n    ValueError: starting number must be\n                             and integer and be more than 0\n    >>> fizz_buzz(1,5.5)\n    Traceback (most recent call last):\n        ...\n    ValueError: iterations must be defined as integers\n    \"\"\"\n    if not isinstance(iterations, int):\n        raise ValueError('iterations must be defined as integers')\n    if not isinstance(number, int) or not number >= 1:\n        raise ValueError('starting number must be\\n                         and integer and be more than 0')\n    if not iterations >= 1:\n        raise ValueError('Iterations must be done more than 0 times to play FizzBuzz')\n    out = ''\n    while number <= iterations:\n        if number % 3 == 0:\n            out += 'Fizz'\n        if number % 5 == 0:\n            out += 'Buzz'\n        if 0 not in (number % 3, number % 5):\n            out += str(number)\n        out += ' '\n        number += 1\n    return out",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_120__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "123",
+    "filename": "program_123.py",
+    "code": "def _from_ctypes_union(t):\n    import ctypes\n    offsets = []\n    names = []\n    formats = []\n    for fname, ftyp in t._fields_:\n        names.append(fname)\n        formats.append(dtype_from_ctypes_type(ftyp))\n        offsets.append(0)\n    return np.dtype({'formats': formats, 'offsets': offsets, 'names': names, 'itemsize': ctypes.sizeof(t)})",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_123__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "129",
+    "filename": "program_129.py",
+    "code": "def max_volume(s):\n    i = 1\n    maxvalue = 0\n    for i in range(s - 1):\n        j = 1\n        for j in range(s):\n            k = s - i - j\n            maxvalue = max(maxvalue, i * j * k)\n    return maxvalue",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_129__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "130",
+    "filename": "program_130.py",
+    "code": "def match_word_pattern(pattern: str, input_string: str) -> bool:\n    \"\"\"\n    Determine if a given pattern matches a string using backtracking.\n\n    pattern: The pattern to match.\n    input_string: The string to match against the pattern.\n    return: True if the pattern matches the string, False otherwise.\n\n    >>> match_word_pattern(\"aba\", \"GraphTreesGraph\")\n    True\n\n    >>> match_word_pattern(\"xyx\", \"PythonRubyPython\")\n    True\n\n    >>> match_word_pattern(\"GG\", \"PythonJavaPython\")\n    False\n    \"\"\"\n\n    def backtrack(pattern_index: int, str_index: int) -> bool:\n        \"\"\"\n        >>> backtrack(0, 0)\n        True\n\n        >>> backtrack(0, 1)\n        True\n\n        >>> backtrack(0, 4)\n        False\n        \"\"\"\n        if pattern_index == len(pattern) and str_index == len(input_string):\n            return True\n        if pattern_index == len(pattern) or str_index == len(input_string):\n            return False\n        char = pattern[pattern_index]\n        if char in pattern_map:\n            mapped_str = pattern_map[char]\n            if input_string.startswith(mapped_str, str_index):\n                return backtrack(pattern_index + 1, str_index + len(mapped_str))\n            else:\n                return False\n        for end in range(str_index + 1, len(input_string) + 1):\n            substr = input_string[str_index:end]\n            if substr in str_map:\n                continue\n            str_map[substr] = char\n            pattern_map[char] = substr\n            if backtrack(pattern_index + 1, end):\n                return True\n            del pattern_map[char]\n            del str_map[substr]\n        return False\n    str_map: dict[str, str] = {}\n    pattern_map: dict[str, str] = {}\n    return backtrack(0, 0)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_130__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "133",
+    "filename": "program_133.py",
+    "code": "def frequency_Of_Largest(n, arr):\n    freq = 1\n    mn = arr[0]\n    for i in range(1, n):\n        if arr[i] > mn:\n            freq = 1\n            mn = arr[i]\n        elif arr[i] == mn:\n            freq += 1\n    return freq",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_133__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "138",
+    "filename": "program_138.py",
+    "code": "def show_phase_response(filter_type: FilterType, samplerate: int) -> None:\n    \"\"\"\n    Show phase response of a filter\n\n    >>> from audio_filters.iir_filter import IIRFilter\n    >>> filt = IIRFilter(4)\n    >>> show_phase_response(filt, 48000)\n    \"\"\"\n    outputs += filler\n    inputs = [1] + [0] * (size - 1)\n    outputs = [filter_type.process(item) for item in inputs]\n    filler = [0] * (samplerate - size)\n    size = 512\n    fft_out = np.angle(np.fft.fft(outputs))\n    plt.xlim(24, samplerate / 2 - 1)\n    plt.xlabel('Frequency (Hz)')\n    plt.xscale('log')\n    plt.ylim(-2 * pi, 2 * pi)\n    plt.ylabel('Phase shift (Radians)')\n    plt.plot(np.unwrap(fft_out, -2 * pi))\n    plt.show()",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_138__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "141",
+    "filename": "program_141.py",
+    "code": "def find_Max_Len_Even(str):\n    currlen = 0\n    n = len(str)\n    i = 0\n    maxlen = 0\n    st = -1\n    while i < n:\n        if str[i] == ' ':\n            if currlen % 2 == 0:\n                if maxlen < currlen:\n                    maxlen = currlen\n                    st = i - currlen\n            currlen = 0\n        else:\n            currlen += 1\n        i += 1\n    if currlen % 2 == 0:\n        if maxlen < currlen:\n            maxlen = currlen\n            st = i - currlen\n    if st == -1:\n        return '-1'\n    return str[st:st + maxlen]",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_141__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "144",
+    "filename": "program_144.py",
+    "code": "def glob_to_regex_pattern(glob: str) -> str:\n    in_group = False\n    i = 0\n    tokens = ['^']\n    while i < len(glob):\n        c = glob[i]\n        if c == '\\\\' and i + 1 < len(glob):\n            char = glob[i + 1]\n            tokens.append('\\\\' + char if char in escaped_chars else char)\n            i += 1\n        elif c == '*':\n            before_deep = glob[i - 1] if i > 0 else None\n            star_count = 1\n            while i + 1 < len(glob) and glob[i + 1] == '*':\n                i += 1\n                star_count += 1\n            after_deep = glob[i + 1] if i + 1 < len(glob) else None\n            is_deep = star_count > 1 and (before_deep == '/' or before_deep is None) and (after_deep == '/' or after_deep is None)\n            if is_deep:\n                tokens.append('((?:[^/]*(?:/|$))*)')\n                i += 1\n            else:\n                tokens.append('([^/]*)')\n        elif c == '{':\n            in_group = True\n            tokens.append('(')\n        elif c == '}':\n            in_group = False\n            tokens.append(')')\n        elif c == ',':\n            if in_group:\n                tokens.append('|')\n            else:\n                tokens.append('\\\\' + c)\n        else:\n            tokens.append('\\\\' + c if c in escaped_chars else c)\n        i += 1\n    tokens.append('$')\n    return ''.join(tokens)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_144__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "146",
+    "filename": "program_146.py",
+    "code": "def recur_gcd(a, b):\n    high = max(a, b)\n    low = min(a, b)\n    if low == 0:\n        return high\n    elif low == 1:\n        return 1\n    else:\n        return recur_gcd(low, high % low)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_146__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "147",
+    "filename": "program_147.py",
+    "code": "def dfs(graph: dict, vert: int, visited: list) -> list:\n    \"\"\"\n    Use depth first search to find all vertices\n    being in the same component as initial vertex\n    >>> dfs(test_graph_1, 0, 5 * [False])\n    [0, 1, 3, 2]\n    >>> dfs(test_graph_2, 0, 6 * [False])\n    [0, 1, 3, 2]\n    \"\"\"\n    connected_verts = []\n    visited[vert] = True\n    for neighbour in graph[vert]:\n        if not visited[neighbour]:\n            connected_verts += dfs(graph, neighbour, visited)\n    return [vert, *connected_verts]",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_147__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "148",
+    "filename": "program_148.py",
+    "code": "def rsafactor(d: int, e: int, n: int) -> list[int]:\n    \"\"\"\n\n    This function returns the factors of N, where p*q=N\n\n    Return: [p, q]\n\n    We call N the RSA modulus, e the encryption exponent, and d the decryption exponent.\n\n    The pair (N, e) is the public key. As its name suggests, it is public and is used to\n\n    encrypt messages.\n\n    The pair (N, d) is the secret key or private key and is known only to the recipient\n\n    of encrypted messages.\n\n    >>> rsafactor(3, 16971, 25777)\n\n    [149, 173]\n\n    >>> rsafactor(7331, 11, 27233)\n\n    [113, 241]\n\n    >>> rsafactor(4021, 13, 17711)\n\n    [89, 199]\n\n    \"\"\"\n    k = d * e - 1\n    q = 0\n    p = 0\n    while p == 0:\n        g = random.randint(2, n - 1)\n        t = k\n        while True:\n            if t % 2 == 0:\n                t = t // 2\n                x = g ** t % n\n                y = math.gcd(x - 1, n)\n                if x > 1 and y > 1:\n                    p = y\n                    q = n // y\n                    break\n            else:\n                break\n    return sorted([p, q])",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_148__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "151",
+    "filename": "program_151.py",
+    "code": "def find_platform(arr, dep, n):\n    arr.sort()\n    dep.sort()\n    i = 1\n    plat_needed = 1\n    result = 1\n    j = 0\n    while i < n and j < n:\n        if arr[i] <= dep[j]:\n            i += 1\n            plat_needed += 1\n        elif arr[i] > dep[j]:\n            j += 1\n            plat_needed -= 1\n        if plat_needed > result:\n            result = plat_needed\n    return result",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_151__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "153",
+    "filename": "program_153.py",
+    "code": "def excel_title_to_column(column_title: str) -> int:\n    \"\"\"\n    Given a string column_title that represents\n    the column title in an Excel sheet, return\n    its corresponding column number.\n\n    >>> excel_title_to_column(\"A\")\n    1\n    >>> excel_title_to_column(\"B\")\n    2\n    >>> excel_title_to_column(\"AB\")\n    28\n    >>> excel_title_to_column(\"Z\")\n    26\n    \"\"\"\n    assert column_title.isupper()\n    power = 0\n    index = len(column_title) - 1\n    answer = 0\n    while index >= 0:\n        value = (ord(column_title[index]) - 64) * pow(26, power)\n        power += 1\n        index -= 1\n        answer += value\n    return answer",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_153__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "165",
+    "filename": "program_165.py",
+    "code": "def perfect_cube_binary_search(n: int) -> bool:\n    \"\"\"\n    Check if a number is a perfect cube or not using binary search.\n    Time complexity : O(Log(n))\n    Space complexity: O(1)\n\n    >>> perfect_cube_binary_search(27)\n    True\n    >>> perfect_cube_binary_search(64)\n    True\n    >>> perfect_cube_binary_search(4)\n    False\n    >>> perfect_cube_binary_search(\"a\")\n    Traceback (most recent call last):\n        ...\n    TypeError: perfect_cube_binary_search() only accepts integers\n    >>> perfect_cube_binary_search(0.1)\n    Traceback (most recent call last):\n        ...\n    TypeError: perfect_cube_binary_search() only accepts integers\n    \"\"\"\n    if not isinstance(n, int):\n        raise TypeError('perfect_cube_binary_search() only accepts integers')\n    if n < 0:\n        n = -n\n    right = n\n    left = 0\n    while left <= right:\n        mid = left + (right - left) // 2\n        if mid * mid * mid == n:\n            return True\n        elif mid * mid * mid < n:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return False",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_165__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "168",
+    "filename": "program_168.py",
+    "code": "def numeric_dtype_min_max(dtype):\n    \"\"\"Return minimum and maximum representable value for a given dtype.\n\n    A convenient wrapper around `numpy.finfo` and `numpy.iinfo` that\n    additionally supports numpy.bool as well.\n\n    Parameters\n    ----------\n    dtype : numpy.dtype\n        The dtype. Tries to convert Python \"types\" such as int or float, to\n        the corresponding NumPy dtype.\n\n    Returns\n    -------\n    min, max : number\n        Minimum and maximum of the given `dtype`. These scalars are themselves\n        of the given `dtype`.\n\n    Examples\n    --------\n    >>> import numpy as np\n    >>> numeric_dtype_min_max(np.uint8)\n    (0, 255)\n    >>> numeric_dtype_min_max(bool)\n    (False, True)\n    >>> numeric_dtype_min_max(np.float64)\n    (-1.7976931348623157e+308, 1.7976931348623157e+308)\n    >>> numeric_dtype_min_max(int)\n    (-9223372036854775808, 9223372036854775807)\n    \"\"\"\n    dtype = np.dtype(dtype)\n    if np.issubdtype(dtype, np.integer):\n        info = np.iinfo(dtype)\n        min_ = dtype.type(info.min)\n        max_ = dtype.type(info.max)\n    elif np.issubdtype(dtype, np.inexact):\n        info = np.finfo(dtype)\n        max_ = info.max\n        min_ = info.min\n    elif np.issubdtype(dtype, np.dtype(bool)):\n        min_ = dtype.type(False)\n        max_ = dtype.type(True)\n    else:\n        raise ValueError(f'unsupported dtype {dtype!r}')\n    return (min_, max_)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_168__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "171",
+    "filename": "program_171.py",
+    "code": "def get_index_of_rightmost_set_bit(number: int) -> int:\n    \"\"\"\n    Take in a positive integer 'number'.\n    Returns the zero-based index of first set bit in that 'number' from right.\n    Returns -1, If no set bit found.\n\n    >>> get_index_of_rightmost_set_bit(0)\n    -1\n    >>> get_index_of_rightmost_set_bit(5)\n    0\n    >>> get_index_of_rightmost_set_bit(36)\n    2\n    >>> get_index_of_rightmost_set_bit(8)\n    3\n    >>> get_index_of_rightmost_set_bit(-18)\n    Traceback (most recent call last):\n        ...\n    ValueError: Input must be a non-negative integer\n    >>> get_index_of_rightmost_set_bit('test')\n    Traceback (most recent call last):\n        ...\n    ValueError: Input must be a non-negative integer\n    >>> get_index_of_rightmost_set_bit(1.25)\n    Traceback (most recent call last):\n        ...\n    ValueError: Input must be a non-negative integer\n    \"\"\"\n    if not isinstance(number, int) or number < 0:\n        raise ValueError('Input must be a non-negative integer')\n    intermediate = number & ~(number - 1)\n    index = 0\n    while intermediate:\n        index += 1\n        intermediate >>= 1\n    return index - 1",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_171__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "175",
+    "filename": "program_175.py",
+    "code": "def decimal_to_Octal(deciNum):\n    countval = 1\n    dNo = deciNum\n    octalNum = 0\n    while deciNum != 0:\n        remainder = deciNum % 8\n        octalNum += remainder * countval\n        countval = countval * 10\n        deciNum //= 8\n    return octalNum",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_175__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "177",
+    "filename": "program_177.py",
+    "code": "def letter_combinations(digits):\n    if digits == '':\n        return []\n    ans = ['']\n    kmaps = {'2': 'abc', '3': 'def', '4': 'ghi', '5': 'jkl', '6': 'mno', '7': 'pqrs', '8': 'tuv', '9': 'wxyz'}\n    for num in digits:\n        tmp = []\n        for an in ans:\n            for char in kmaps[num]:\n                tmp.append(an + char)\n        ans = tmp\n    return ans",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_177__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "187",
+    "filename": "program_187.py",
+    "code": "def topological_sort(graph: dict[int, list[int]]) -> list[int] | None:\n    \"\"\"\n    Perform topological sorting of a Directed Acyclic Graph (DAG)\n    using Kahn's Algorithm via Breadth-First Search (BFS).\n\n    Topological sorting is a linear ordering of vertices in a graph such that for\n    every directed edge u \u2192 v, vertex u comes before vertex v in the ordering.\n\n    Parameters:\n    graph: Adjacency list representing the directed graph where keys are\n           vertices, and values are lists of adjacent vertices.\n\n    Returns:\n    The topologically sorted order of vertices if the graph is a DAG.\n    Returns None if the graph contains a cycle.\n\n    Example:\n    >>> graph = {0: [1, 2], 1: [3], 2: [3], 3: [4, 5], 4: [], 5: []}\n    >>> topological_sort(graph)\n    [0, 1, 2, 3, 4, 5]\n\n    >>> graph_with_cycle = {0: [1], 1: [2], 2: [0]}\n    >>> topological_sort(graph_with_cycle)\n    \"\"\"\n    indegree = [0] * len(graph)\n    topo_order = []\n    processed_vertices_count = 0\n    queue = []\n    for values in graph.values():\n        for i in values:\n            indegree[i] += 1\n    for i in range(len(indegree)):\n        if indegree[i] == 0:\n            queue.append(i)\n    while queue:\n        vertex = queue.pop(0)\n        processed_vertices_count += 1\n        topo_order.append(vertex)\n        for neighbor in graph[vertex]:\n            indegree[neighbor] -= 1\n            if indegree[neighbor] == 0:\n                queue.append(neighbor)\n    if processed_vertices_count != len(graph):\n        return None\n    return topo_order",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_187__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "189",
+    "filename": "program_189.py",
+    "code": "import math\n\ndef max_Prime_Factors(n):\n    maxPrime = -1\n    while n % 2 == 0:\n        n >>= 1\n        maxPrime = 2\n    for i in range(3, int(math.sqrt(n)) + 1, 2):\n        while n % i == 0:\n            maxPrime = i\n            n = n / i\n    if n > 2:\n        maxPrime = n\n    return int(maxPrime)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_189__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "193",
+    "filename": "program_193.py",
+    "code": "def list_of_submasks(mask: int) -> list[int]:\n    \"\"\"\n    Args:\n        mask : number which shows mask ( always integer > 0, zero does not have any\n            submasks )\n\n    Returns:\n        all_submasks : the list of submasks of mask (mask s is called submask of mask\n        m if only bits that were included in original mask are set\n\n    Raises:\n        AssertionError: mask not positive integer\n\n    >>> list_of_submasks(15)\n    [15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]\n    >>> list_of_submasks(13)\n    [13, 12, 9, 8, 5, 4, 1]\n    >>> list_of_submasks(-7)  # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    AssertionError: mask needs to be positive integer, your input -7\n    >>> list_of_submasks(0)  # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    AssertionError: mask needs to be positive integer, your input 0\n\n    \"\"\"\n    assert isinstance(mask, int) and mask > 0, f'mask needs to be positive integer, your input {mask}'\n    all_submasks = []\n    submask = mask\n    '\\n    first submask iterated will be mask itself then operation will be performed\\n    to get other submasks till we reach empty submask that is zero ( zero is not\\n    included in final submasks list )\\n    '\n    while submask:\n        all_submasks.append(submask)\n        submask = submask - 1 & mask\n    return all_submasks",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_193__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "194",
+    "filename": "program_194.py",
+    "code": "def func(nums, k):\n    import collections\n    d = collections.defaultdict(int)\n    for row in nums:\n        for i in row:\n            d[i] += 1\n    result = []\n    import heapq\n    for key, v in d.items():\n        if len(temp) < k:\n            temp.append((v, key))\n            if len(temp) == k:\n                heapq.heapify(temp)\n        elif v > temp[0][0]:\n            heapq.heappop(temp)\n            heapq.heappush(temp, (v, key))\n    temp = []\n    while temp:\n        v, key = heapq.heappop(temp)\n        result.append(key)\n    return result",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_194__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "202",
+    "filename": "program_202.py",
+    "code": "def immediate_dominators(G, start):\n    \"\"\"Returns the immediate dominators of all nodes of a directed graph.\n\n    Parameters\n    ----------\n    G : a DiGraph or MultiDiGraph\n        The graph where dominance is to be computed.\n\n    start : node\n        The start node of dominance computation.\n\n    Returns\n    -------\n    idom : dict keyed by nodes\n        A dict containing the immediate dominators of each node reachable from\n        `start`.\n\n    Raises\n    ------\n    NetworkXNotImplemented\n        If `G` is undirected.\n\n    NetworkXError\n        If `start` is not in `G`.\n\n    Notes\n    -----\n    Except for `start`, the immediate dominators are the parents of their\n    corresponding nodes in the dominator tree.\n\n    Examples\n    --------\n    >>> G = nx.DiGraph([(1, 2), (1, 3), (2, 5), (3, 4), (4, 5)])\n    >>> sorted(nx.immediate_dominators(G, 1).items())\n    [(1, 1), (2, 1), (3, 1), (4, 3), (5, 1)]\n\n    References\n    ----------\n    .. [1] Cooper, Keith D., Harvey, Timothy J. and Kennedy, Ken.\n           \"A simple, fast dominance algorithm.\" (2006).\n           https://hdl.handle.net/1911/96345\n    \"\"\"\n    if start not in G:\n        raise nx.NetworkXError('start is not in G')\n    changed = True\n    order = list(nx.dfs_postorder_nodes(G, start))\n    dfn = {u: i for i, u in enumerate(order)}\n    order.pop()\n    order.reverse()\n\n    def intersect(u, v):\n        while u != v:\n            while dfn[u] < dfn[v]:\n                u = idom[u]\n            while dfn[u] > dfn[v]:\n                v = idom[v]\n        return u\n    idom = {start: start}\n    while changed:\n        changed = False\n        for u in order:\n            new_idom = reduce(intersect, (v for v in G.pred[u] if v in idom))\n            if u not in idom or idom[u] != new_idom:\n                changed = True\n                idom[u] = new_idom\n    return idom",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_202__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "206",
+    "filename": "program_206.py",
+    "code": "def lcp_w_suffix_str(array, s):\n    maxLen = 0\n    lcp_array = [0] * N\n    inv_suffix = [0] * N\n    for index in range(N):\n        inv_suffix[array[index]] = index\n    N = len(array)\n    for index in range(N):\n        if inv_suffix[index] == N - 1:\n            maxLen = 0\n            continue\n        index_j = array[inv_suffix[index] + 1]\n        while index + maxLen < N and index_j + maxLen < N and (s[index + maxLen] == s[index_j + maxLen]):\n            maxLen += 1\n        lcp_array[inv_suffix[index]] = maxLen\n        if maxLen > 0:\n            maxLen -= 1\n    return lcp_array",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_206__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "219",
+    "filename": "program_219.py",
+    "code": "def swap_List(newList):\n    temp = newList[0]\n    size = len(newList)\n    newList[0] = newList[size - 1]\n    newList[size - 1] = temp\n    return newList",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_219__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "230",
+    "filename": "program_230.py",
+    "code": "def max_ones_index(arr):\n    max_count = 0\n    max_index = 0\n    n = len(arr)\n    prev_zero = -1\n    prev_prev_zero = -1\n    for curr in range(n):\n        if arr[curr] == 0:\n            if curr - prev_prev_zero > max_count:\n                max_count = curr - prev_prev_zero\n                max_index = prev_zero\n            prev_prev_zero = prev_zero\n            prev_zero = curr\n    if n - prev_prev_zero > max_count:\n        max_index = prev_zero\n    return max_index",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_230__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "250",
+    "filename": "program_250.py",
+    "code": "def first_Factorial_Divisible_Number(x):\n    fact = 1\n    i = 1\n    for i in range(1, x):\n        fact = fact * i\n        if fact % x == 0:\n            break\n    return i",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_250__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "251",
+    "filename": "program_251.py",
+    "code": "def armstrong_number(number):\n    temp = number\n    sum = 0\n    times = 0\n    while temp > 0:\n        times = times + 1\n        temp = temp // 10\n    temp = number\n    while temp > 0:\n        reminder = temp % 10\n        sum = sum + reminder ** times\n        temp //= 10\n    if number == sum:\n        return True\n    else:\n        return False",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_251__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "266",
+    "filename": "program_266.py",
+    "code": "def minimum_Length(s):\n    n = len(s)\n    maxOcc = 0\n    arr = [0] * 26\n    for i in range(n):\n        arr[ord(s[i]) - ord('a')] += 1\n    for i in range(26):\n        if arr[i] > maxOcc:\n            maxOcc = arr[i]\n    return n - maxOcc",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_266__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "268",
+    "filename": "program_268.py",
+    "code": "def are_Rotations(string1, string2):\n    size2 = len(string2)\n    temp = ''\n    size1 = len(string1)\n    if size1 != size2:\n        return False\n    temp = string1 + string1\n    if temp.count(string2) > 0:\n        return True\n    else:\n        return False",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_268__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "274",
+    "filename": "program_274.py",
+    "code": "def count_no_of_ways(n, k):\n    dp = [0] * (n + 1)\n    mod = 1000000007\n    dp[1] = k\n    total = k\n    dp[2] = k * k\n    for i in range(3, n + 1):\n        dp[i] = (k - 1) * (dp[i - 1] + dp[i - 2]) % mod\n    return dp[n]",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_274__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "281",
+    "filename": "program_281.py",
+    "code": "def find_lcm(num1, num2):\n    if num1 > num2:\n        den = num2\n        num = num1\n    else:\n        den = num1\n        num = num2\n    rem = num % den\n    while rem != 0:\n        num = den\n        den = rem\n        rem = num % den\n    gcd = den\n    lcm = int(int(num1 * num2) / int(gcd))\n    return lcm",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_281__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "282",
+    "filename": "program_282.py",
+    "code": "import math as mt\n\ndef get_Position(a, n, m):\n    for i in range(n):\n        a[i] = a[i] // m + (a[i] % m != 0)\n    result, maxx = (-1, -1)\n    for i in range(n - 1, -1, -1):\n        if maxx < a[i]:\n            result = i\n            maxx = a[i]\n    return result + 1",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_282__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "285",
+    "filename": "program_285.py",
+    "code": "def Odd_Length_Sum(arr):\n    l = len(arr)\n    Sum = 0\n    for i in range(l):\n        Sum += ((i + 1) * (l - i) + 1) // 2 * arr[i]\n    return Sum",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_285__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "288",
+    "filename": "program_288.py",
+    "code": "def bin_to_hexadecimal(binary_str: str) -> str:\n    \"\"\"\n    Converting a binary string into hexadecimal using Grouping Method\n\n    >>> bin_to_hexadecimal('101011111')\n    '0x15f'\n    >>> bin_to_hexadecimal(' 1010   ')\n    '0x0a'\n    >>> bin_to_hexadecimal('-11101')\n    '-0x1d'\n    >>> bin_to_hexadecimal('a')\n    Traceback (most recent call last):\n        ...\n    ValueError: Non-binary value was passed to the function\n    >>> bin_to_hexadecimal('')\n    Traceback (most recent call last):\n        ...\n    ValueError: Empty string was passed to the function\n    \"\"\"\n    binary_str = str(binary_str).strip()\n    if not binary_str:\n        raise ValueError('Empty string was passed to the function')\n    hexadecimal = []\n    binary_str = binary_str[1:] if is_negative else binary_str\n    if not all((char in '01' for char in binary_str)):\n        raise ValueError('Non-binary value was passed to the function')\n    binary_str = '0' * (4 * (divmod(len(binary_str), 4)[0] + 1) - len(binary_str)) + binary_str\n    is_negative = binary_str[0] == '-'\n    for x in range(0, len(binary_str), 4):\n        hexadecimal.append(BITS_TO_HEX[binary_str[x:x + 4]])\n    hexadecimal_str = '0x' + ''.join(hexadecimal)\n    return '-' + hexadecimal_str if is_negative else hexadecimal_str",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_288__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "293",
+    "filename": "program_293.py",
+    "code": "def stable_matching(donor_pref: list[list[int]], recipient_pref: list[list[int]]) -> list[int]:\n    \"\"\"\n    Finds the stable match in any bipartite graph, i.e a pairing where no 2 objects\n    prefer each other over their partner.  The function accepts the preferences of\n    oegan donors and recipients (where both are assigned numbers from 0 to n-1) and\n    returns a list where the index position corresponds to the donor and value at the\n    index is the organ recipient.\n\n    To better understand the algorithm, see also:\n    https://github.com/akashvshroff/Gale_Shapley_Stable_Matching (README).\n    https://www.youtube.com/watch?v=Qcv1IqHWAzg&t=13s (Numberphile YouTube).\n\n    >>> donor_pref = [[0, 1, 3, 2], [0, 2, 3, 1], [1, 0, 2, 3], [0, 3, 1, 2]]\n    >>> recipient_pref = [[3, 1, 2, 0], [3, 1, 0, 2], [0, 3, 1, 2], [1, 0, 3, 2]]\n    >>> stable_matching(donor_pref, recipient_pref)\n    [1, 2, 3, 0]\n    \"\"\"\n    assert len(donor_pref) == len(recipient_pref)\n    n = len(donor_pref)\n    unmatched_donors = list(range(n))\n    donor_record = [-1] * n\n    rec_record = [-1] * n\n    num_donations = [0] * n\n    while unmatched_donors:\n        prev_donor = rec_record[recipient]\n        num_donations[donor] += 1\n        recipient = donor_preference[num_donations[donor]]\n        donor_preference = donor_pref[donor]\n        rec_preference = recipient_pref[recipient]\n        donor = unmatched_donors[0]\n        if prev_donor != -1:\n            if rec_preference.index(prev_donor) > rec_preference.index(donor):\n                donor_record[donor] = recipient\n                rec_record[recipient] = donor\n                unmatched_donors.append(prev_donor)\n                unmatched_donors.remove(donor)\n        else:\n            donor_record[donor] = recipient\n            rec_record[recipient] = donor\n            unmatched_donors.remove(donor)\n    return donor_record",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_293__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "294",
+    "filename": "program_294.py",
+    "code": "def pacific_atlantic(matrix):\n    \"\"\"\n    :type matrix: List[List[int]]\n    :rtype: List[List[int]]\n    \"\"\"\n    m = len(matrix[0])\n    if not n:\n        return []\n    res = []\n    if not m:\n        return []\n    n = len(matrix)\n    atlantic = [[False for _ in range(n)] for _ in range(m)]\n    pacific = [[False for _ in range(n)] for _ in range(m)]\n    for i in range(n):\n        dfs(pacific, matrix, float('-inf'), i, 0)\n        dfs(atlantic, matrix, float('-inf'), i, m - 1)\n    for i in range(m):\n        dfs(pacific, matrix, float('-inf'), 0, i)\n        dfs(atlantic, matrix, float('-inf'), n - 1, i)\n    for i in range(n):\n        for j in range(m):\n            if pacific[i][j] and atlantic[i][j]:\n                res.append([i, j])\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_294__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "297",
+    "filename": "program_297.py",
+    "code": "from array import array\n\ndef negative_count(nums):\n    n1 = 0\n    n = len(nums)\n    for x in nums:\n        if x < 0:\n            n1 += 1\n        else:\n            None\n    return round(n1 / n, 2)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_297__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "301",
+    "filename": "program_301.py",
+    "code": "def min_distance_up_bottom(word1: str, word2: str) -> int:\n    \"\"\"\n    >>> min_distance_up_bottom(\"intention\", \"execution\")\n    5\n    >>> min_distance_up_bottom(\"intention\", \"\")\n    9\n    >>> min_distance_up_bottom(\"\", \"\")\n    0\n    >>> min_distance_up_bottom(\"zooicoarchaeologist\", \"zoologist\")\n    10\n    \"\"\"\n    len_word2 = len(word2)\n    len_word1 = len(word1)\n\n    @functools.cache\n    def min_distance(index1: int, index2: int) -> int:\n        if index1 >= len_word1:\n            return len_word2 - index2\n        if index2 >= len_word2:\n            return len_word1 - index1\n        diff = int(word1[index1] != word2[index2])\n        return min(1 + min_distance(index1 + 1, index2), 1 + min_distance(index1, index2 + 1), diff + min_distance(index1 + 1, index2 + 1))\n    return min_distance(0, 0)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_301__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "307",
+    "filename": "program_307.py",
+    "code": "def common_prefix_util(str1, str2):\n    n1 = len(str1)\n    j = 0\n    n2 = len(str2)\n    i = 0\n    result = ''\n    while i <= n1 - 1 and j <= n2 - 1:\n        if str1[i] != str2[j]:\n            break\n        i += 1\n        j += 1\n        result += str1[i]\n    return result",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_307__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "323",
+    "filename": "program_323.py",
+    "code": "def encode_rle(input):\n    \"\"\"\n    Gets a stream of data and compresses it\n    under a Run-Length Encoding.\n    :param input: The data to be encoded.\n    :return: The encoded string.\n    \"\"\"\n    if not input:\n        return ''\n    prev_ch = ''\n    count = 1\n    encoded_str = ''\n    for ch in input:\n        if ch != prev_ch:\n            if prev_ch:\n                encoded_str += str(count) + prev_ch\n            prev_ch = ch\n            count = 1\n        else:\n            count += 1\n    else:\n        return encoded_str + (str(count) + prev_ch)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_323__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "326",
+    "filename": "program_326.py",
+    "code": "def decimal_to_any(num: int, base: int) -> str:\n    \"\"\"\n    Convert a positive integer to another base as str.\n    >>> decimal_to_any(0, 2)\n    '0'\n    >>> decimal_to_any(5, 4)\n    '11'\n    >>> decimal_to_any(20, 3)\n    '202'\n    >>> decimal_to_any(58, 16)\n    '3A'\n    >>> decimal_to_any(243, 17)\n    'E5'\n    >>> decimal_to_any(34923, 36)\n    'QY3'\n    >>> decimal_to_any(10, 11)\n    'A'\n    >>> decimal_to_any(16, 16)\n    '10'\n    >>> decimal_to_any(36, 36)\n    '10'\n    >>> # negatives will error\n    >>> decimal_to_any(-45, 8)  # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    ValueError: parameter must be positive int\n    >>> # floats will error\n    >>> decimal_to_any(34.4, 6) # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    TypeError: int() can't convert non-string with explicit base\n    >>> # a float base will error\n    >>> decimal_to_any(5, 2.5) # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    TypeError: 'float' object cannot be interpreted as an integer\n    >>> # a str base will error\n    >>> decimal_to_any(10, '16') # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    TypeError: 'str' object cannot be interpreted as an integer\n    >>> # a base less than 2 will error\n    >>> decimal_to_any(7, 0) # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    ValueError: base must be >= 2\n    >>> # a base greater than 36 will error\n    >>> decimal_to_any(34, 37) # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    ValueError: base must be <= 36\n    \"\"\"\n    if isinstance(num, float):\n        raise TypeError(\"int() can't convert non-string with explicit base\")\n    if num < 0:\n        raise ValueError('parameter must be positive int')\n    if isinstance(base, str):\n        raise TypeError(\"'str' object cannot be interpreted as an integer\")\n    if isinstance(base, float):\n        raise TypeError(\"'float' object cannot be interpreted as an integer\")\n    if base in (0, 1):\n        raise ValueError('base must be >= 2')\n    if base > 36:\n        raise ValueError('base must be <= 36')\n    mod = 0\n    div = 0\n    new_value = ''\n    while div != 1:\n        div, mod = divmod(num, base)\n        if base >= 11 and 9 < mod < 36:\n            actual_value = ALPHABET_VALUES[str(mod)]\n        else:\n            actual_value = str(mod)\n        num = div\n        div = num // base\n        new_value += actual_value\n        if div == 0:\n            return str(new_value[::-1])\n        elif div == 1:\n            new_value += str(div)\n            return str(new_value[::-1])\n    return new_value[::-1]",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_326__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "328",
+    "filename": "program_328.py",
+    "code": "def longest_palindromic_subsequence(input_string: str) -> int:\n    \"\"\"\n    This function returns the longest palindromic subsequence in a string\n    >>> longest_palindromic_subsequence(\"bbbab\")\n    4\n    >>> longest_palindromic_subsequence(\"bbabcbcab\")\n    7\n    \"\"\"\n    m = len(rev)\n    rev = input_string[::-1]\n    n = len(input_string)\n    dp = [[-1] * (m + 1) for i in range(n + 1)]\n    for i in range(n + 1):\n        dp[i][0] = 0\n    for i in range(m + 1):\n        dp[0][i] = 0\n    for i in range(1, n + 1):\n        for j in range(1, m + 1):\n            if input_string[i - 1] == rev[j - 1]:\n                dp[i][j] = 1 + dp[i - 1][j - 1]\n            else:\n                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])\n    return dp[n][m]",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_328__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "334",
+    "filename": "program_334.py",
+    "code": "def num_comm_div(x, y):\n    n = ngcd(x, y)\n    i = 1\n    z = int(n ** 0.5)\n    result = 0\n    while i <= z:\n        if n % i == 0:\n            result += 2\n            if i == n / i:\n                result -= 1\n        i += 1\n    return result",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_334__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "337",
+    "filename": "program_337.py",
+    "code": "def decimal_to_hexadecimal(decimal: float) -> str:\n    \"\"\"\n    take integer decimal value, return hexadecimal representation as str beginning\n    with 0x\n    >>> decimal_to_hexadecimal(5)\n    '0x5'\n    >>> decimal_to_hexadecimal(15)\n    '0xf'\n    >>> decimal_to_hexadecimal(37)\n    '0x25'\n    >>> decimal_to_hexadecimal(255)\n    '0xff'\n    >>> decimal_to_hexadecimal(4096)\n    '0x1000'\n    >>> decimal_to_hexadecimal(999098)\n    '0xf3eba'\n    >>> # negatives work too\n    >>> decimal_to_hexadecimal(-256)\n    '-0x100'\n    >>> # floats are acceptable if equivalent to an int\n    >>> decimal_to_hexadecimal(17.0)\n    '0x11'\n    >>> # other floats will error\n    >>> decimal_to_hexadecimal(16.16) # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    AssertionError\n    >>> # strings will error as well\n    >>> decimal_to_hexadecimal('0xfffff') # doctest: +ELLIPSIS\n    Traceback (most recent call last):\n        ...\n    AssertionError\n    >>> # results are the same when compared to Python's default hex function\n    >>> decimal_to_hexadecimal(-256) == hex(-256)\n    True\n    \"\"\"\n    assert isinstance(decimal, (int, float))\n    assert decimal == int(decimal)\n    decimal = int(decimal)\n    negative = False\n    hexadecimal = ''\n    if decimal < 0:\n        negative = True\n        decimal *= -1\n    while decimal > 0:\n        decimal, remainder = divmod(decimal, 16)\n        hexadecimal = values[remainder] + hexadecimal\n    hexadecimal = '0x' + hexadecimal\n    if negative:\n        hexadecimal = '-' + hexadecimal\n    return hexadecimal",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_337__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "341",
+    "filename": "program_341.py",
+    "code": "def maximum_non_adjacent_sum(nums: list[int]) -> int:\n    \"\"\"\n    Find the maximum non-adjacent sum of the integers in the nums input list\n\n    >>> maximum_non_adjacent_sum([1, 2, 3])\n    4\n    >>> maximum_non_adjacent_sum([1, 5, 3, 7, 2, 2, 6])\n    18\n    >>> maximum_non_adjacent_sum([-1, -5, -3, -7, -2, -2, -6])\n    0\n    >>> maximum_non_adjacent_sum([499, 500, -3, -7, -2, -2, -6])\n    500\n    \"\"\"\n    if not nums:\n        return 0\n    max_excluding = 0\n    max_including = nums[0]\n    for num in nums[1:]:\n        max_including, max_excluding = (max_excluding + num, max(max_including, max_excluding))\n    return max(max_excluding, max_including)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_341__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "348",
+    "filename": "program_348.py",
+    "code": "def missing_ranges(arr, lo, hi):\n    start = lo\n    res = []\n    for n in arr:\n        if n == start:\n            start += 1\n        elif n > start:\n            res.append((start, n - 1))\n            start = n + 1\n    if start <= hi:\n        res.append((start, hi))\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_348__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "349",
+    "filename": "program_349.py",
+    "code": "def is_Isomorphic(str1, str2):\n    dict_str2 = {}\n    dict_str1 = {}\n    for i, value in enumerate(str1):\n        dict_str1[value] = dict_str1.get(value, []) + [i]\n    for j, value in enumerate(str2):\n        dict_str2[value] = dict_str2.get(value, []) + [j]\n    if sorted(dict_str1.values()) == sorted(dict_str2.values()):\n        return True\n    else:\n        return False",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_349__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "357",
+    "filename": "program_357.py",
+    "code": "def find_missing_number(nums: list[int]) -> int:\n    \"\"\"\n    Finds the missing number in a list of consecutive integers.\n\n    Args:\n        nums: A list of integers.\n\n    Returns:\n        The missing number.\n\n    Example:\n        >>> find_missing_number([0, 1, 3, 4])\n        2\n        >>> find_missing_number([4, 3, 1, 0])\n        2\n        >>> find_missing_number([-4, -3, -1, 0])\n        -2\n        >>> find_missing_number([-2, 2, 1, 3, 0])\n        -1\n        >>> find_missing_number([1, 3, 4, 5, 6])\n        2\n        >>> find_missing_number([6, 5, 4, 2, 1])\n        3\n        >>> find_missing_number([6, 1, 5, 3, 4])\n        2\n    \"\"\"\n    high = max(nums)\n    missing_number = high\n    low = min(nums)\n    for i in range(low, high):\n        missing_number ^= i ^ nums[i - low]\n    return missing_number",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_357__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "358",
+    "filename": "program_358.py",
+    "code": "def check_permutation(str1, str2):\n    a = sorted(str1)\n    n1 = len(str1)\n    if n1 != n2:\n        return False\n    n2 = len(str2)\n    str1 = ' '.join(a)\n    b = sorted(str2)\n    str2 = ' '.join(b)\n    for i in range(0, n1, 1):\n        if str1[i] != str2[i]:\n            return False\n    return True",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_358__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "368",
+    "filename": "program_368.py",
+    "code": "import math\n\ndef sumofFactors(n):\n    if n % 2 != 0:\n        return 0\n    res = 1\n    for i in range(2, int(math.sqrt(n)) + 1):\n        curr_sum = 1\n        curr_term = 1\n        count = 0\n        while n % i == 0:\n            count = count + 1\n            n = n // i\n            if i == 2 and count == 1:\n                curr_sum = 0\n            curr_term = curr_term * i\n            curr_sum = curr_sum + curr_term\n        res = res * curr_sum\n    if n >= 2:\n        res = res * (1 + n)\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_368__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "377",
+    "filename": "program_377.py",
+    "code": "def even_bit_toggle_number(n):\n    count = 0\n    temp = n\n    res = 0\n    while temp > 0:\n        if count % 2 == 0:\n            res = res | 1 << count\n        count = count + 1\n        temp >>= 1\n    return n ^ res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_377__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "388",
+    "filename": "program_388.py",
+    "code": "def get_max_occuring_char(str1):\n    ch = ''\n    ctr = [0] * ASCII_SIZE\n    max = -1\n    ASCII_SIZE = 256\n    for i in str1:\n        ctr[ord(i)] += 1\n    for i in str1:\n        if max < ctr[ord(i)]:\n            max = ctr[ord(i)]\n            ch = i\n    return ch",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_388__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "395",
+    "filename": "program_395.py",
+    "code": "def radix_sort(nums):\n    placement = 1\n    max_digit = max(nums)\n    RADIX = 10\n    while placement < max_digit:\n        buckets = [list() for _ in range(RADIX)]\n        for i in nums:\n            tmp = int(i / placement % RADIX)\n            buckets[tmp].append(i)\n        placement *= RADIX\n        for b in range(RADIX):\n            buck = buckets[b]\n            for i in buck:\n                nums[a] = i\n                a += 1\n        a = 0\n    return nums",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_395__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "406",
+    "filename": "program_406.py",
+    "code": "def get_gcd(l):\n    num2 = l[1]\n    num1 = l[0]\n    gcd = find_gcd(num1, num2)\n    for i in range(2, len(l)):\n        gcd = find_gcd(gcd, l[i])\n    return gcd",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_406__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "434",
+    "filename": "program_434.py",
+    "code": "def knapsack(weights: list, values: list, number_of_items: int, max_weight: int, index: int) -> int:\n    \"\"\"\n    Function description is as follows-\n    :param weights: Take a list of weights\n    :param values: Take a list of profits corresponding to the weights\n    :param number_of_items: number of items available to pick from\n    :param max_weight: Maximum weight that could be carried\n    :param index: the element we are looking at\n    :return: Maximum expected gain\n    >>> knapsack([1, 2, 4, 5], [5, 4, 8, 6], 4, 5, 0)\n    13\n    >>> knapsack([3 ,4 , 5], [10, 9 , 8], 3, 25, 0)\n    27\n    \"\"\"\n    if index == number_of_items:\n        return 0\n    ans2 = 0\n    ans1 = 0\n    ans1 = knapsack(weights, values, number_of_items, max_weight, index + 1)\n    if weights[index] <= max_weight:\n        ans2 = values[index] + knapsack(weights, values, number_of_items, max_weight - weights[index], index + 1)\n    return max(ans1, ans2)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_434__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "435",
+    "filename": "program_435.py",
+    "code": "def zeller(date_input: str) -> str:\n    \"\"\"\n    | Zellers Congruence Algorithm\n    | Find the day of the week for nearly any Gregorian or Julian calendar date\n\n    >>> zeller('01-31-2010')\n    'Your date 01-31-2010, is a Sunday!'\n\n    Validate out of range month:\n\n    >>> zeller('13-31-2010')\n    Traceback (most recent call last):\n        ...\n    ValueError: Month must be between 1 - 12\n    >>> zeller('.2-31-2010')\n    Traceback (most recent call last):\n        ...\n    ValueError: invalid literal for int() with base 10: '.2'\n\n    Validate out of range date:\n\n    >>> zeller('01-33-2010')\n    Traceback (most recent call last):\n        ...\n    ValueError: Date must be between 1 - 31\n    >>> zeller('01-.4-2010')\n    Traceback (most recent call last):\n        ...\n    ValueError: invalid literal for int() with base 10: '.4'\n\n    Validate second separator:\n\n    >>> zeller('01-31*2010')\n    Traceback (most recent call last):\n        ...\n    ValueError: Date separator must be '-' or '/'\n\n    Validate first separator:\n\n    >>> zeller('01^31-2010')\n    Traceback (most recent call last):\n        ...\n    ValueError: Date separator must be '-' or '/'\n\n    Validate out of range year:\n\n    >>> zeller('01-31-8999')\n    Traceback (most recent call last):\n        ...\n    ValueError: Year out of range. There has to be some sort of limit...right?\n\n    Test null input:\n\n    >>> zeller()\n    Traceback (most recent call last):\n        ...\n    TypeError: zeller() missing 1 required positional argument: 'date_input'\n\n    Test length of `date_input`:\n\n    >>> zeller('')\n    Traceback (most recent call last):\n        ...\n    ValueError: Must be 10 characters long\n    >>> zeller('01-31-19082939')\n    Traceback (most recent call last):\n        ...\n    ValueError: Must be 10 characters long\"\"\"\n    sep_1: str = date_input[2]\n    days = {'0': 'Sunday', '1': 'Monday', '2': 'Tuesday', '3': 'Wednesday', '4': 'Thursday', '5': 'Friday', '6': 'Saturday'}\n    if not 0 < len(date_input) < 11:\n        raise ValueError('Must be 10 characters long')\n    m: int = int(date_input[0] + date_input[1])\n    if not 0 < m < 13:\n        raise ValueError('Month must be between 1 - 12')\n    convert_datetime_days = {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 0}\n    if sep_1 not in ['-', '/']:\n        raise ValueError(\"Date separator must be '-' or '/'\")\n    d: int = int(date_input[3] + date_input[4])\n    if not 0 < d < 32:\n        raise ValueError('Date must be between 1 - 31')\n    sep_2: str = date_input[5]\n    if sep_2 not in ['-', '/']:\n        raise ValueError(\"Date separator must be '-' or '/'\")\n    y: int = int(date_input[6] + date_input[7] + date_input[8] + date_input[9])\n    if not 45 < y < 8500:\n        raise ValueError('Year out of range. There has to be some sort of limit...right?')\n    dt_ck = datetime.date(int(y), int(m), int(d))\n    if m <= 2:\n        y = y - 1\n        m = m + 12\n    c: int = int(str(y)[:2])\n    k: int = int(str(y)[2:])\n    t: int = int(2.6 * m - 5.39)\n    u: int = int(c / 4)\n    v: int = int(k / 4)\n    x: int = int(d + k)\n    z: int = int(t + u + v + x)\n    w: int = int(z - 2 * c)\n    f: int = round(w % 7)\n    if f != convert_datetime_days[dt_ck.weekday()]:\n        raise AssertionError('The date was evaluated incorrectly. Contact developer.')\n    response: str = f'Your date {date_input}, is a {days[str(f)]}!'\n    return response",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_435__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "446",
+    "filename": "program_446.py",
+    "code": "import heapq\n\ndef merge_sorted_list(num1, num2, num3):\n    num2 = sorted(num2)\n    num3 = sorted(num3)\n    num1 = sorted(num1)\n    result = heapq.merge(num1, num2, num3)\n    return list(result)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_446__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "451",
+    "filename": "program_451.py",
+    "code": "import math\n\ndef sum_of_odd_Factors(n):\n    res = 1\n    while n % 2 == 0:\n        n = n // 2\n    for i in range(3, int(math.sqrt(n) + 1)):\n        curr_sum = 1\n        res *= curr_sum\n        curr_term = 1\n        while n % i == 0:\n            curr_term *= i\n            n = n // i\n            curr_sum += curr_term\n            count += 1\n        count = 0\n    if n >= 2:\n        res *= 1 + n\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_451__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "452",
+    "filename": "program_452.py",
+    "code": "def roman_to_int(s):\n    int_val = 0\n    rom_val = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n    for i in range(len(s)):\n        if i > 0 and rom_val[s[i]] > rom_val[s[i - 1]]:\n            int_val += rom_val[s[i]] - 2 * rom_val[s[i - 1]]\n        else:\n            int_val += rom_val[s[i]]\n    return int_val",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_452__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "453",
+    "filename": "program_453.py",
+    "code": "def prefix_sum(array: list[int], queries: list[tuple[int, int]]) -> list[int]:\n    \"\"\"\n    >>> prefix_sum([1, 4, 6, 2, 61, 12], [(2, 5), (1, 5), (3, 4)])\n    [81, 85, 63]\n    >>> prefix_sum([4, 2, 1, 6, 3], [(3, 4), (1, 3), (0, 2)])\n    [9, 9, 7]\n    \"\"\"\n    dp = [0] * len(array)\n    result = []\n    for i in range(1, len(array)):\n        dp[i] = dp[i - 1] + array[i]\n    dp[0] = array[0]\n    for query in queries:\n        left, right = query\n        res = dp[right]\n        if left > 0:\n            res -= dp[left - 1]\n        result.append(res)\n    return result",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_453__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "461",
+    "filename": "program_461.py",
+    "code": "from heapq import heappop, heappush\n\ndef find_minimum_range(list):\n    high = float('-inf')\n    p = (0, float('inf'))\n    pq = []\n    for i in range(len(list)):\n        heappush(pq, Node(list[i][0], i, 0))\n        high = max(high, list[i][0])\n    while True:\n        top = heappop(pq)\n        i = top.list_num\n        j = top.index\n        low = top.value\n        if high - low < p[1] - p[0]:\n            p = (low, high)\n        if j == len(list[i]) - 1:\n            return p\n        heappush(pq, Node(list[i][j + 1], i, j + 1))\n        high = max(high, list[i][j + 1])",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_461__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "473",
+    "filename": "program_473.py",
+    "code": "def find_length(string, n):\n    max_sum = 0\n    current_sum = 0\n    for i in range(n):\n        current_sum += 1 if string[i] == '0' else -1\n        if current_sum < 0:\n            current_sum = 0\n        max_sum = max(current_sum, max_sum)\n    return max_sum if max_sum else 0",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_473__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "474",
+    "filename": "program_474.py",
+    "code": "def count_Set_Bits(n):\n    powerOf2 = 2\n    n += 1\n    cnt = n // 2\n    while powerOf2 <= n:\n        totalPairs = n // powerOf2\n        cnt += totalPairs // 2 * powerOf2\n        if totalPairs & 1:\n            cnt += n % powerOf2\n        else:\n            cnt += 0\n        powerOf2 <<= 1\n    return cnt",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_474__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "476",
+    "filename": "program_476.py",
+    "code": "def pass_and_relaxation(graph: dict, v: str, visited_forward: set, visited_backward: set, cst_fwd: dict, cst_bwd: dict, queue: PriorityQueue, parent: dict, shortest_distance: float) -> float:\n    for nxt, d in graph[v]:\n        if nxt in visited_forward:\n            continue\n        old_cost_f = cst_fwd.get(nxt, np.inf)\n        new_cost_f = cst_fwd[v] + d\n        if new_cost_f < old_cost_f:\n            queue.put((new_cost_f, nxt))\n            parent[nxt] = v\n            cst_fwd[nxt] = new_cost_f\n        if nxt in visited_backward and cst_fwd[v] + d + cst_bwd[nxt] < shortest_distance:\n            shortest_distance = cst_fwd[v] + d + cst_bwd[nxt]\n    return shortest_distance",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_476__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "479",
+    "filename": "program_479.py",
+    "code": "def count_vowels(test_str):\n    vow_list = ['a', 'e', 'i', 'o', 'u']\n    res = 0\n    for idx in range(1, len(test_str) - 1):\n        if test_str[idx] not in vow_list and (test_str[idx - 1] in vow_list or test_str[idx + 1] in vow_list):\n            res += 1\n    if test_str[0] not in vow_list and test_str[1] in vow_list:\n        res += 1\n    if test_str[-1] not in vow_list and test_str[-2] in vow_list:\n        res += 1\n    return res",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_479__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "481",
+    "filename": "program_481.py",
+    "code": "def plus_one_v1(digits):\n    \"\"\"\n    :type digits: List[int]\n    :rtype: List[int]\n    \"\"\"\n    digits[-1] = digits[-1] + 1\n    ten = 0\n    res = []\n    i = len(digits) - 1\n    while i >= 0 or ten == 1:\n        i -= 1\n        if i >= 0:\n            summ += digits[i]\n        if ten:\n            summ += 1\n        res.append(summ % 10)\n        ten = summ // 10\n        summ = 0\n    return res[::-1]",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_481__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "485",
+    "filename": "program_485.py",
+    "code": "def max_product(arr):\n    x = arr[0]\n    if arr_len < 2:\n        return None\n    y = arr[1]\n    arr_len = len(arr)\n    for i in range(0, arr_len):\n        for j in range(i + 1, arr_len):\n            if arr[i] * arr[j] > x * y:\n                y = arr[j]\n                x = arr[i]\n    return (x, y)",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_485__permute_statement.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "498",
+    "filename": "program_498.py",
+    "code": "def shell_sort(my_list):\n    gap = len(my_list) // 2\n    while gap > 0:\n        for i in range(gap, len(my_list)):\n            j = i\n            current_item = my_list[i]\n            while j >= gap and my_list[j - gap] > current_item:\n                my_list[j] = my_list[j - gap]\n                j -= gap\n            my_list[j] = current_item\n        gap //= 2\n    return my_list",
+    "transformation_type": "permute_statement",
+    "applied_transformers": [
+      "permute_statement"
+    ],
+    "output_filename": "program_498__permute_statement.py",
+    "transformation_error": null
+  }
+]

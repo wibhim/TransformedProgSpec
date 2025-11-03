@@ -1,0 +1,274 @@
+{
+  "results": [
+    {
+      "source_file": "program_001.py",
+      "specification_index": 1,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckAlphanumeric(s):\n    if not isinstance(s, (list, tuple, str)):\n        raise TypeError(\"Input must be a sequence of characters\")\n    found = False\n    for c in s:\n        if not isinstance(c, str) or len(c) != 1:\n            raise ValueError(\"All elements must be single characters\")\n        if ('a' <= c <= 'z') or ('A' <= c <= 'Z') or ('0' <= c <= '9'):\n            found = True\n            break\n    return \"Accept\" if found else \"Discard\""
+    },
+    {
+      "source_file": "program_004.py",
+      "specification_index": 4,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List\n\ndef IsValidURL(s: List[str]) -> bool:\n    if not s:\n        raise ValueError(\"Precondition violated: s must not be empty\")\n    url_str = ''.join(s)\n    # Conservative check: starts with \"http://\" or \"https://\"\n    if url_str.startswith(\"http://\") or url_str.startswith(\"https://\"):\n        return True\n    return False"
+    },
+    {
+      "source_file": "program_005.py",
+      "specification_index": 5,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List, Tuple\n\ndef DigLet(s: List[str]) -> Tuple[int, int]:\n    \"\"\"\n    Given a sequence of characters s, returns a tuple (l, d) where:\n    - l is the number of letters in s (A-Z, a-z)\n    - d is the number of digits in s ('0'-'9')\n    Preconditions:\n        - s is a list of single-character strings.\n    Postconditions:\n        - l >= 0 and d >= 0\n        - l + d <= len(s)\n        - For all i in [0, len(s)), if s[i] is a digit and d > 0, then there exists a j in [0, len(s)) such that s[j] is a digit.\n    \"\"\"\n    if not isinstance(s, list):\n        raise TypeError(\"Input must be a list of characters\")\n    for ch in s:\n        if not isinstance(ch, str) or len(ch) != 1:\n            raise ValueError(\"Each element of s must be a single character string\")\n    l = 0\n    d = 0\n    for ch in s:\n        if 'A' <= ch <= 'Z' or 'a' <= ch <= 'z':\n            l += 1\n        elif '0' <= ch <= '9':\n            d += 1\n    return (l, d)"
+    },
+    {
+      "source_file": "program_021.py",
+      "specification_index": 21,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def MinSwaps(s1: str, s2: str) -> int:\n    if len(s1) != len(s2):\n        raise ValueError(\"Precondition violated: s1 and s2 must have the same length\")\n    c0 = 0  # count of '01' mismatches\n    c1 = 0  # count of '10' mismatches\n    for a, b in zip(s1, s2):\n        if a != b:\n            if a == '0' and b == '1':\n                c0 += 1\n            elif a == '1' and b == '0':\n                c1 += 1\n            else:\n                # If characters are not '0' or '1', cannot swap to match\n                return -1\n    if (c0 + c1) % 2 != 0:\n        return -1\n    # Each pair of (01,10) can be swapped in one move, leftovers (if even) need 2 moves per 2\n    return (c0 // 2) + (c1 // 2) + (2 if c0 % 2 == 1 else 0)"
+    },
+    {
+      "source_file": "program_023.py",
+      "specification_index": 23,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def EvenOrOdd(N: list) -> str:\n    if len(N) == 0:\n        raise ValueError(\"Precondition violated: |N| > 0\")\n    last = N[-1]\n    if last in ['0', '2', '4', '6', '8', 'A', 'C', 'E']:\n        return \"Even\"\n    else:\n        return \"Odd\""
+    },
+    {
+      "source_file": "program_026.py",
+      "specification_index": 26,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def MaxOfTwo(x: int, y: int) -> int:\n    if x > y:\n        return x\n    else:\n        return y"
+    },
+    {
+      "source_file": "program_029.py",
+      "specification_index": 29,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def ConnectionRequiresHttpTunnel(proxyUrlIsNull: bool, proxyUrlScheme: str, proxyConfigIsNull: bool, proxyConfigUseForwardingForHttps: bool, destinationScheme: str) -> bool:\n    if proxyUrlIsNull:\n        return False\n    if proxyConfigIsNull:\n        return False\n    if destinationScheme.lower() != \"https\":\n        return False\n    if proxyUrlScheme.lower() != \"http\":\n        return False\n    if proxyConfigUseForwardingForHttps:\n        return False\n    return True"
+    },
+    {
+      "source_file": "program_031.py",
+      "specification_index": 31,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckIsosceles(x: int, y: int, z: int) -> bool:\n    # Enforce that the inputs are integers (Python is dynamic, but for clarity)\n    if not all(isinstance(v, int) for v in (x, y, z)):\n        raise TypeError(\"All arguments must be integers\")\n    # The specification says: b <==> (x != y and y != z and z != x)\n    return x != y and y != z and z != x"
+    },
+    {
+      "source_file": "program_038.py",
+      "specification_index": 38,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CountUnsetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    cnt = 0\n    if n == 0:\n        return 0\n    # Find the maximum bit length needed to represent n\n    max_bit = n.bit_length()\n    for k in range(max_bit):\n        # For bit position k, count number of unset bits at position k for all numbers from 1 to n\n        block_size = 1 << (k + 1)\n        full_blocks = n // block_size\n        zeros_in_full_blocks = full_blocks * (1 << k)\n        remainder = n % block_size\n        zeros_in_partial_block = max(0, (1 << k) - max(0, remainder - (1 << k) + 1))\n        cnt += zeros_in_full_blocks + zeros_in_partial_block\n    return cnt"
+    },
+    {
+      "source_file": "program_052.py",
+      "specification_index": 52,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def ValidityTriangle(a: int, b: int, c: int) -> bool:\n    return a + b + c == 180"
+    },
+    {
+      "source_file": "program_056.py",
+      "specification_index": 56,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def Maximum(a: int, b: int) -> int:\n    if not (a >= b):\n        return b\n    else:\n        return a"
+    },
+    {
+      "source_file": "program_061.py",
+      "specification_index": 61,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import Optional, Union\n\nclass Node:\n    def __init__(self, left: Optional['Node'] = None, right: Optional['Node'] = None):\n        self.left = left\n        self.right = right\n\nNil = None  # Represent Nil as None\n\ndef MaxHeight(node: Optional[Node]) -> int:\n    if node is Nil:\n        return 0\n    else:\n        left_height = MaxHeight(node.left)\n        right_height = MaxHeight(node.right)\n        return 1 + max(left_height, right_height)"
+    },
+    {
+      "source_file": "program_063.py",
+      "specification_index": 63,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def DoesContainB(a: int, b: int, c: int) -> bool:\n    if a == b:\n        return True\n    if c == 0:\n        return False\n    diff = b - a\n    if diff * c > 0 and diff % c == 0:\n        return True\n    return False"
+    },
+    {
+      "source_file": "program_065.py",
+      "specification_index": 65,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import Sequence\n\ndef CheckK(testTup: Sequence[int], K: int) -> bool:\n    \"\"\"\n    Returns True iff there exists an index i such that 0 <= i < len(testTup) and testTup[i] == K.\n    \"\"\"\n    i = 0\n    while i < len(testTup):\n        if testTup[i] == K:\n            return True\n        i += 1\n    return False"
+    },
+    {
+      "source_file": "program_069.py",
+      "specification_index": 69,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def MatchWordPattern(pattern: str, inputString: str) -> bool:\n    if len(pattern) > len(inputString):\n        return False\n    # The weaker postcondition: If ok, then pattern can be inject...\n    # We interpret this as: pattern can be injectively mapped into inputString as a subsequence\n    # That is, there exists a strictly increasing sequence of indices i0 < i1 < ... < i_{len(pattern)-1}\n    # such that inputString[i_k] == pattern[k] for all k\n\n    def is_subsequence_injective(pat, inp):\n        n, m = len(pat), len(inp)\n        i = 0\n        used = set()\n        for c in inp:\n            if i < n and c == pat[i] and i not in used:\n                used.add(i)\n                i += 1\n        return i == n\n\n    return is_subsequence_injective(pattern, inputString)"
+    },
+    {
+      "source_file": "program_073.py",
+      "specification_index": 73,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckMonthnum(monthname1: str) -> bool:\n    return monthname1 == \"February\""
+    },
+    {
+      "source_file": "program_076.py",
+      "specification_index": 76,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def BinomialCoeff(n: int, k: int) -> int:\n    if n < 0 or k < 0:\n        raise ValueError(\"n and k must be non-negative integers\")\n    if k > n:\n        return 0\n    if k == 0 or k == n:\n        return 1\n    return BinomialCoeff(n - 1, k - 1) + BinomialCoeff(n - 1, k)"
+    },
+    {
+      "source_file": "program_080.py",
+      "specification_index": 80,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import Sequence\n\ndef CheckElement(testTup: Sequence[int], checkList: Sequence[int]) -> bool:\n    for elem in checkList:\n        if elem in testTup:\n            return True\n    return False"
+    },
+    {
+      "source_file": "program_081.py",
+      "specification_index": 81,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def MaximumSegments(n: int, a: int, b: int, c: int) -> int:\n    if n < 0:\n        raise ValueError(\"n must be >= 0\")\n    if a <= 0 or b <= 0 or c <= 0:\n        raise ValueError(\"a, b, c must be > 0\")\n    dp = [-1] * (n + 1)\n    dp[0] = 0\n    for i in range(1, n + 1):\n        for seg in (a, b, c):\n            if i - seg >= 0 and dp[i - seg] != -1:\n                dp[i] = max(dp[i], dp[i - seg] + 1)\n    return dp[n]"
+    },
+    {
+      "source_file": "program_090.py",
+      "specification_index": 90,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def EvenNum(x: int) -> bool:\n    return x % 2 == 0"
+    },
+    {
+      "source_file": "program_091.py",
+      "specification_index": 91,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def FindDivisor(x: int, y: int) -> int:\n    if x == y:\n        return y\n    else:\n        return 2"
+    },
+    {
+      "source_file": "program_092.py",
+      "specification_index": 92,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def MatchNum(s):\n    if not isinstance(s, (list, tuple, str)):\n        raise TypeError(\"Input must be a sequence of characters\")\n    if len(s) > 0 and s[0] == '5':\n        return True\n    else:\n        return False"
+    },
+    {
+      "source_file": "program_095.py",
+      "specification_index": 95,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List, Set, Tuple\n\ndef FindWords(board: List[List[str]], words: List[List[str]]) -> Set[Tuple[str, ...]]:\n    if not board or not board[0]:\n        raise ValueError(\"Precondition failed: board must be non-empty and board[0] must be non-empty.\")\n\n    ROWS, COLS = len(board), len(board[0])\n    word_set = set(tuple(w) for w in words)\n    found = set()\n\n    # Build prefix set for pruning\n    prefix_set = set()\n    for w in words:\n        for i in range(1, len(w) + 1):\n            prefix_set.add(tuple(w[:i]))\n\n    def dfs(r, c, path, visited):\n        if (r < 0 or r >= ROWS or c < 0 or c >= COLS or (r, c) in visited):\n            return\n        path = path + (board[r][c],)\n        if path not in prefix_set:\n            return\n        if path in word_set:\n            found.add(path)\n        visited.add((r, c))\n        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:\n            dfs(r+dr, c+dc, path, visited)\n        visited.remove((r, c))\n\n    for r in range(ROWS):\n        for c in range(COLS):\n            dfs(r, c, tuple(), set())\n\n    return found"
+    },
+    {
+      "source_file": "program_109.py",
+      "specification_index": 109,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckEquality(s: str) -> str:\n    if len(s) == 0:\n        raise ValueError(\"Precondition violated: input sequence must be non-empty\")\n    if s[0] == s[-1]:\n        return \"Equal\"\n    else:\n        return \"Not Equal\""
+    },
+    {
+      "source_file": "program_114.py",
+      "specification_index": 114,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List\n\ndef TextMatchWord(text: List[str]) -> List[str]:\n    if text is None:\n        raise ValueError(\"Precondition failed: text is not None\")\n    # Find the first maximal contiguous sequence of alphanumeric characters\n    result = []\n    in_word = False\n    for c in text:\n        if c.isalnum():\n            if not in_word:\n                in_word = True\n            result.append(c)\n        else:\n            if in_word:\n                break\n    return result"
+    },
+    {
+      "source_file": "program_121.py",
+      "specification_index": 121,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def MedianNumbers(a: int, b: int, c: int) -> int:\n    # The median is the number that is neither the maximum nor the minimum\n    # If two or all values are equal, the median is any of them (since all are in {a, b, c})\n    if (a <= b <= c) or (c <= b <= a):\n        return b\n    elif (b <= a <= c) or (c <= a <= b):\n        return a\n    else:\n        return c"
+    },
+    {
+      "source_file": "program_122.py",
+      "specification_index": 122,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def SymbolOf(arg: int) -> int:\n    if not isinstance(arg, int):\n        raise TypeError(\"arg must be an int\")\n    return arg"
+    },
+    {
+      "source_file": "program_123.py",
+      "specification_index": 123,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List\n\ndef NegNos(list1: List[int]) -> int:\n    # Check if there is any negative number in the list\n    for n in list1:\n        if n < 0:\n            return n\n    # All numbers are non-negative, raise exception (since no negative exists)\n    raise ValueError(\"No negative number in the input list\")"
+    },
+    {
+      "source_file": "program_124.py",
+      "specification_index": 124,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List\n\ndef CommonPrefixUtil(str1: List[str], str2: List[str]) -> List[str]:\n    min_len = min(len(str1), len(str2))\n    result = []\n    for i in range(min_len):\n        if str1[i] == str2[i]:\n            result.append(str1[i])\n        else:\n            break\n    return result"
+    },
+    {
+      "source_file": "program_136.py",
+      "specification_index": 136,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import Sequence\n\ndef IsUndulating(n: Sequence[int]) -> bool:\n    if len(n) <= 2:\n        return False\n    for i in range(2, len(n)):\n        if n[i - 2] == n[i]:\n            return False\n    return True"
+    },
+    {
+      "source_file": "program_138.py",
+      "specification_index": 138,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckValidity(a: int, b: int, c: int) -> bool:\n    # The result is True iff none of the triangle inequalities are violated\n    return not ((a + b <= c) or (a + c <= b) or (b + c <= a))"
+    },
+    {
+      "source_file": "program_150.py",
+      "specification_index": 150,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List\n\ndef MaximumNonAdjacentSum(nums: List[int]) -> int:\n    if not isinstance(nums, list):\n        raise TypeError(\"nums must be a list of integers\")\n    n = len(nums)\n    if n == 0:\n        return 0\n    if any(not isinstance(x, int) for x in nums):\n        raise TypeError(\"All elements of nums must be integers\")\n    # dp[i] = max sum for nums[0..i] with no adjacent elements picked\n    prev2 = 0  # dp[i-2]\n    prev1 = max(0, nums[0])  # dp[i-1]\n    for i in range(1, n):\n        curr = max(prev1, prev2 + nums[i])\n        prev2, prev1 = prev1, curr\n    return prev1"
+    },
+    {
+      "source_file": "program_152.py",
+      "specification_index": 152,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List\n\ndef SeqFlatten(s: List[List[int]]) -> List[int]:\n    if len(s) == 0:\n        return []\n    else:\n        return s[0] + SeqFlatten(s[1:])\n\ndef FlattenSeq(s: List[List[int]]) -> List[int]:\n    return SeqFlatten(s)"
+    },
+    {
+      "source_file": "program_159.py",
+      "specification_index": 159,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def Flatten(testTuple):\n    if not isinstance(testTuple, (list, tuple)):\n        raise TypeError(\"testTuple must be a sequence of sequences of integers\")\n    flat = []\n    for inner in testTuple:\n        if not isinstance(inner, (list, tuple)):\n            raise TypeError(\"Each element of testTuple must be a sequence of integers\")\n        for x in inner:\n            if not isinstance(x, int):\n                raise TypeError(\"All elements of inner sequences must be integers\")\n            flat.append(x)\n    return flat"
+    },
+    {
+      "source_file": "program_163.py",
+      "specification_index": 163,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def RealPower(apparentPower: float, powerFactor: float) -> float:\n    if not (-1.0 <= powerFactor <= 1.0):\n        raise ValueError(\"powerFactor must be between -1.0 and 1.0 inclusive.\")\n    return apparentPower * powerFactor"
+    },
+    {
+      "source_file": "program_166.py",
+      "specification_index": 166,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "import math\n\ndef CheckTypeOfTriangle(a: int, b: int, c: int) -> str:\n    # Enforce triangle inequality and positive sides\n    if a <= 0 or b <= 0 or c <= 0:\n        raise ValueError(\"Sides must be positive integers\")\n    sides = sorted([a, b, c])\n    if sides[0] + sides[1] <= sides[2]:\n        raise ValueError(\"Sides do not form a valid triangle\")\n    a2, b2, c2 = sides[0]**2, sides[1]**2, sides[2]**2\n    if a2 + b2 == c2:\n        return \"Right-angled Triangle\"\n    elif a2 + b2 > c2:\n        return \"Acute-angled Triangle\"\n    else:\n        return \"Obtuse-angled Triangle\""
+    },
+    {
+      "source_file": "program_173.py",
+      "specification_index": 173,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def ElectricPower(voltage: float, current: float, power: float) -> (str, float):\n    # Enforce precondition: exactly one of voltage, current, power is 0.0\n    zero_count = sum(x == 0.0 for x in (voltage, current, power))\n    if zero_count != 1:\n        raise ValueError(\"Exactly one of voltage, current, or power must be 0.0\")\n\n    if voltage == 0.0:\n        # Compute voltage = power / current\n        if current == 0.0:\n            raise ValueError(\"Current must not be zero when voltage is unknown.\")\n        name = \"voltage\"\n        value = power / current\n    elif current == 0.0:\n        # Compute current = power / voltage\n        if voltage == 0.0:\n            raise ValueError(\"Voltage must not be zero when current is unknown.\")\n        name = \"current\"\n        value = power / voltage\n    else:  # power == 0.0\n        # Compute power = voltage * current\n        name = \"power\"\n        value = voltage * current\n\n    return name, value"
+    },
+    {
+      "source_file": "program_179.py",
+      "specification_index": 179,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckMonthnumbNumber(monthnum2: int) -> bool:\n    \"\"\"Returns True iff monthnum2 is a month number with 31 days.\"\"\"\n    if not isinstance(monthnum2, int):\n        raise TypeError(\"monthnum2 must be an integer\")\n    return monthnum2 in {1, 3, 5, 7, 8, 10, 12}"
+    },
+    {
+      "source_file": "program_182.py",
+      "specification_index": 182,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckSolution(a: int, b: int, c: int) -> str:\n    if a == c:\n        return \"Yes\"\n    else:\n        return \"No\""
+    },
+    {
+      "source_file": "program_184.py",
+      "specification_index": 184,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def BuildClientMiddlewares(handler: int, middlewares: list[int]) -> int:\n    # Since the types are placeholders and the spec does not specify behavior,\n    # we return the handler unchanged (as a placeholder for the composed middleware).\n    # Enforce preconditions: handler must be int, middlewares must be list of int\n    if not isinstance(handler, int):\n        raise TypeError(\"handler must be an int\")\n    if not isinstance(middlewares, list) or not all(isinstance(m, int) for m in middlewares):\n        raise TypeError(\"middlewares must be a list of int\")\n    return handler"
+    },
+    {
+      "source_file": "program_185.py",
+      "specification_index": 185,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def GetNoOfWays(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    if n == 0:\n        return 0\n    if n == 1:\n        return 1\n    # Weaker postcondition: result is non-negative for all n >= ...\n    # Since the spec does not specify behavior for n > 1, return a non-negative value\n    return 0"
+    },
+    {
+      "source_file": "program_190.py",
+      "specification_index": 190,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "from typing import List\n\ndef RemoveEven(l: List[int]) -> List[int]:\n    if l is None:\n        raise ValueError(\"Input list cannot be None\")\n    res = [x for x in l if x % 2 != 0]\n    return res"
+    },
+    {
+      "source_file": "program_195.py",
+      "specification_index": 195,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CountSetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition failed: n >= 0\")\n    nn = n + 1\n    powerOf2 = 2\n    cnt = nn // 2\n    while powerOf2 <= nn:\n        cnt += ((nn // powerOf2) * (powerOf2 // 2)) + max(0, (nn % powerOf2) - (powerOf2 // 2))\n        powerOf2 <<= 1\n    return cnt"
+    },
+    {
+      "source_file": "program_201.py",
+      "specification_index": 201,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckIP(Ip: str) -> str:\n    # Check if the input is a valid IPv4 address in dotted decimal notation\n    # An IPv4 address consists of four decimal numbers, each from 0 to 255, separated by dots\n    parts = Ip.split('.')\n    if len(parts) != 4:\n        return \"Invalid IP address\"\n    for part in parts:\n        if not part.isdigit():\n            return \"Invalid IP address\"\n        # No leading zeros unless the part is exactly '0'\n        if len(part) > 1 and part[0] == '0':\n            return \"Invalid IP address\"\n        num = int(part)\n        if not (0 <= num <= 255):\n            return \"Invalid IP address\"\n    return \"Valid IP address\""
+    },
+    {
+      "source_file": "program_209.py",
+      "specification_index": 209,
+      "transformation": "conditional_inversion",
+      "regenerated_code": "def CheckMonthNumb(monthname2: str) -> bool:\n    # List of months with 31 days\n    months_with_31_days = {\n        \"January\", \"March\", \"May\", \"July\", \"August\", \"October\", \"December\"\n    }\n    return monthname2 in months_with_31_days"
+    }
+  ]
+}

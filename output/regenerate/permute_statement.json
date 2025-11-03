@@ -1,0 +1,126 @@
+{
+  "metadata": {
+    "summary": {
+      "total_programs": 5,
+      "api_requests": 5,
+      "cached_results": 0,
+      "errors": 0,
+      "success_rate": "100.0%"
+    },
+    "timing": {
+      "total_duration_seconds": 12.23,
+      "total_duration_formatted": "12.23s",
+      "average_per_request_seconds": 2.446
+    },
+    "tokens": {
+      "total": 1468,
+      "input": 937,
+      "output": 531,
+      "average_per_request": 293.6
+    },
+    "cost": {
+      "total_usd": 0.006122,
+      "average_per_request_usd": 0.001224,
+      "cost_per_token_usd": 4.17e-06
+    },
+    "model": "gpt-4.1",
+    "generation_timestamp": "2025-10-29T17:26:59.640108"
+  },
+  "specifications": [
+    {
+      "file_path": "output\\specification\\transformed\\combined_spec_permute_statement3.json",
+      "code": "```dafny\nmethod ShowPhaseResponse(samplerate: int)\n  requires samplerate > 0\n  ensures true\n{\n  // Method intentionally left empty: visualization and external effects omitted.\n}\n```",
+      "program_specification": "def ShowPhaseResponse(samplerate: int):\n    if samplerate <= 0:\n        raise ValueError(\"samplerate must be greater than 0\")\n    # Method intentionally left empty: visualization and external effects omitted.\n    pass\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.979,
+        "duration_formatted": "1.98s",
+        "tokens": {
+          "input": 166,
+          "output": 49,
+          "total": 215
+        },
+        "cost_usd": 0.000724,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T17:26:24.226887"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_spec_permute_statement3.json",
+      "code": "```dafny\nmethod CountNoOfWays(n: int, k: int) returns (res: int)\n  requires n >= 1\n  requires k >= 1\n  ensures res >= 0\n{\n  var mod := 1000000007;\n  var dp := new int[n + 1];\n  // dp[0] is unused\n  dp...",
+      "program_specification": "```python\ndef CountNoOfWays(n: int, k: int) -> int:\n    if n < 1 or k < 1:\n        raise ValueError(\"Preconditions: n >= 1 and k >= 1\")\n    mod = 1000000007\n    dp = [0] * (n + 1)\n    dp[0] = 1  # There is 1 way to reach step 0 (do nothing)\n    for i in range(1, n + 1):\n        for j in range(1, min(k, i) + 1):\n            dp[i] = (dp[i] + dp[i - j]) % mod\n    return dp[n]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.829,
+        "duration_formatted": "3.83s",
+        "tokens": {
+          "input": 201,
+          "output": 149,
+          "total": 350
+        },
+        "cost_usd": 0.001594,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T17:26:33.110703"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_spec_permute_statement3.json",
+      "code": "```dafny\nmethod CommonPrefixUtil(str1: seq<char>, str2: seq<char>) returns (result: seq<char>)\n  ensures |result| <= |str1| && |result| <= |str2|\n  ensures forall k :: 0 <= k < |result| ==> str1[k] ==...",
+      "program_specification": "```python\ndef CommonPrefixUtil(str1: str, str2: str) -> str:\n    min_len = min(len(str1), len(str2))\n    i = 0\n    while i < min_len and str1[i] == str2[i]:\n        i += 1\n    return str1[:i]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.806,
+        "duration_formatted": "1.81s",
+        "tokens": {
+          "input": 189,
+          "output": 69,
+          "total": 258
+        },
+        "cost_usd": 0.00093,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T17:26:39.945436"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_spec_permute_statement3.json",
+      "code": "```dafny\nmethod CountSetBits(n: int) returns (cnt: int)\n  requires n >= 0\n  ensures cnt >= 0\n{\n  var powerOf2 := 2;\n  var np := n + 1;\n  cnt := np / 2;\n  while powerOf2 <= np\n    invariant powerOf2 >=...",
+      "program_specification": "```python\ndef CountSetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    powerOf2 = 2\n    np = n + 1\n    cnt = np // 2\n    while powerOf2 <= np:\n        cnt += (np // (powerOf2 * 2)) * powerOf2 + max(0, (np % (powerOf2 * 2)) - powerOf2)\n        powerOf2 *= 2\n    return cnt\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.445,
+        "duration_formatted": "2.45s",
+        "tokens": {
+          "input": 197,
+          "output": 119,
+          "total": 316
+        },
+        "cost_usd": 0.001346,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T17:26:47.420568"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_spec_permute_statement3.json",
+      "code": "```dafny\nmethod CountVowels(testStr: seq<char>) returns (res: int)\n  requires |testStr| >= 2\n  ensures res >= 0\n  // Each counted position is a non-vowel with a vowel neighbor\n{\n  var vowList := ['a',...",
+      "program_specification": "```python\ndef CountVowels(testStr):\n    if len(testStr) < 2:\n        raise ValueError(\"Precondition violated: |testStr| >= 2\")\n    vowels = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'}\n    count = 0\n    n = len(testStr)\n    for i in range(n):\n        if testStr[i] not in vowels:\n            if (i > 0 and testStr[i-1] in vowels) or (i < n-1 and testStr[i+1] in vowels):\n                count += 1\n    return count\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.171,
+        "duration_formatted": "2.17s",
+        "tokens": {
+          "input": 184,
+          "output": 145,
+          "total": 329
+        },
+        "cost_usd": 0.001528,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T17:26:54.619414"
+      }
+    }
+  ]
+}

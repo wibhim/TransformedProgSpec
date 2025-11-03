@@ -1,0 +1,202 @@
+{
+  "results": [
+    {
+      "source_file": "program_002.py",
+      "specification_index": 2,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def IsValidURL(s):\n    if not s:\n        raise ValueError(\"Precondition violated: s != []\")\n    # Minimal implementation: returns True if s is non-empty\n    return len(s) >= 1"
+    },
+    {
+      "source_file": "program_011.py",
+      "specification_index": 11,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def EvenOrOdd(N: list) -> str:\n    if len(N) == 0:\n        raise ValueError(\"Precondition violated: |N| > 0\")\n    last = N[-1]\n    even_chars = {'E', 'C', 'A', '8', '6', '4', '2', '0'}\n    if last in even_chars:\n        return 'E'\n    else:\n        return 'O'"
+    },
+    {
+      "source_file": "program_016.py",
+      "specification_index": 16,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def MaxOfTwo(x: int, y: int) -> int:\n    if y < x:\n        return x\n    else:\n        return y"
+    },
+    {
+      "source_file": "program_027.py",
+      "specification_index": 27,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def ConnectionRequiresHttpTunnel(\n    proxyUrlIsSome: bool,\n    proxyConfigIsSome: bool,\n    proxyUrlSchemeIsHttps: bool,\n    proxyConfigUseForwardingForHttps: bool,\n    destinationSchemeIsHttps: bool\n) -> bool:\n    \"\"\"\n    Determines if an HTTP tunnel is required for a connection based on proxy and destination configuration.\n    \"\"\"\n    if not proxyUrlIsSome or not proxyConfigIsSome:\n        return False\n    if not destinationSchemeIsHttps:\n        return False\n    if proxyUrlSchemeIsHttps:\n        return True\n    if not proxyConfigUseForwardingForHttps:\n        return True\n    return False"
+    },
+    {
+      "source_file": "program_032.py",
+      "specification_index": 32,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def CountUnsetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    cnt = 0\n    if n == 0:\n        return 0\n    # For each number from 1 to n, count unset bits in its binary representation\n    for x in range(1, n + 1):\n        # Number of bits needed to represent x\n        num_bits = x.bit_length()\n        # Count set bits\n        set_bits = bin(x).count('1')\n        # Unset bits are the difference\n        unset_bits = num_bits - set_bits\n        cnt += unset_bits\n    return cnt"
+    },
+    {
+      "source_file": "program_036.py",
+      "specification_index": 36,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def ValidityTriangle(a: int, b: int, c: int) -> bool:\n    return a + b + c == 180"
+    },
+    {
+      "source_file": "program_042.py",
+      "specification_index": 42,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def Maximum(a: int, b: int) -> int:\n    if b <= a:\n        return a\n    else:\n        return b"
+    },
+    {
+      "source_file": "program_043.py",
+      "specification_index": 43,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def ShearStress(stress: float, tangential_force: float, area: float) -> (str, float):\n    # Precondition: Exactly one of stress or tangential_force is zero, area > 0\n    if area <= 0.0:\n        raise ValueError(\"area must be positive\")\n    num_zeros = int(stress == 0.0) + int(tangential_force == 0.0)\n    if num_zeros != 1:\n        raise ValueError(\"Exactly one of stress or tangential_force must be zero\")\n\n    if stress == 0.0:\n        # Compute stress from tangential_force and area\n        value = tangential_force / area\n        return (\"stress\", value)\n    else:\n        # Compute tangential_force from stress and area\n        value = stress * area\n        return (\"tangential_force\", value)"
+    },
+    {
+      "source_file": "program_062.py",
+      "specification_index": 62,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def DoesContainB(a: int, b: int, c: int) -> bool:\n    # Precondition: none specified, but c == 0 is a special case\n    if b == a:\n        return True\n    if c == 0:\n        return False\n    diff = b - a\n    return (diff % c == 0) and ((diff) * c > 0)"
+    },
+    {
+      "source_file": "program_066.py",
+      "specification_index": 66,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def PytestWarns(warning: int) -> int:\n    # Since Dafny uses 'int' as a placeholder for types and objects,\n    # and the spec does not specify any constraints or behavior,\n    # we simply return the input as the output.\n    return warning"
+    },
+    {
+      "source_file": "program_067.py",
+      "specification_index": 67,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "from typing import Sequence\n\ndef CheckK(testTup: Sequence[int], K: int) -> bool:\n    \"\"\"\n    Returns True iff there exists an index i such that 0 <= i < len(testTup) and testTup[i] == K.\n    \"\"\"\n    i = 0\n    while i < len(testTup):\n        if testTup[i] == K:\n            return True\n        i += 1\n    return False"
+    },
+    {
+      "source_file": "program_076.py",
+      "specification_index": 76,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def CheckMonthnum(monthname1: str) -> bool:\n    return monthname1 == \"February\""
+    },
+    {
+      "source_file": "program_084.py",
+      "specification_index": 84,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def BinomialCoeff(n: int, k: int) -> int:\n    if n < 0 or k < 0:\n        raise ValueError(\"n and k must be non-negative integers\")\n    if n < k:\n        return 0\n    if k == 0 or k == n:\n        return 1\n    # Use iterative DP for efficiency and to avoid recursion depth issues\n    if k > n - k:\n        k = n - k  # Take advantage of symmetry\n    res = 1\n    for i in range(1, k + 1):\n        res = res * (n - i + 1) // i\n    return res"
+    },
+    {
+      "source_file": "program_095.py",
+      "specification_index": 95,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def MaximumSegments(n: int, a: int, b: int, c: int) -> int:\n    if n < 0:\n        raise ValueError(\"n must be >= 0\")\n    if a <= 0 or b <= 0 or c <= 0:\n        raise ValueError(\"a, b, c must be > 0\")\n\n    dp = [-1] * (n + 1)\n    dp[0] = 0\n    for i in range(1, n + 1):\n        max_val = -1\n        for seg in (a, b, c):\n            if i - seg >= 0 and dp[i - seg] != -1:\n                max_val = max(max_val, dp[i - seg] + 1)\n        dp[i] = max_val\n    return dp[n]"
+    },
+    {
+      "source_file": "program_098.py",
+      "specification_index": 98,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def DecimalToOctal(deciNum: int) -> int:\n    if deciNum < 0:\n        raise ValueError(\"deciNum must be non-negative\")\n    if deciNum == 0:\n        return 0\n    octal_digits = []\n    n = deciNum\n    while n > 0:\n        octal_digits.append(str(n % 8))\n        n //= 8\n    octal_str = ''.join(reversed(octal_digits))\n    octalNum = int(octal_str)\n    return octalNum"
+    },
+    {
+      "source_file": "program_101.py",
+      "specification_index": 101,
+      "transformation": "json_combined_reorder_condition_20251029_114220",
+      "regenerated_code": "def EvenNum(x: int) -> bool:\n    return x % 2 == 0"
+    },
+    {
+      "source_file": "program_105.py",
+      "specification_index": 105,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def FindDivisor(x: int, y: int) -> int:\n    if y == x:\n        return y\n    else:\n        return 2"
+    },
+    {
+      "source_file": "program_131.py",
+      "specification_index": 131,
+      "transformation": "reorder_condition",
+      "regenerated_code": "from typing import List, Set, Tuple\n\ndef FindWords(board: List[List[str]], words: List[List[str]]) -> Set[Tuple[str, ...]]:\n    if not board or not board[0]:\n        raise ValueError(\"Precondition failed: board must be non-empty and board[0] must be non-empty.\")\n\n    ROWS, COLS = len(board), len(board[0])\n    word_set = set(tuple(w) for w in words)\n    found: Set[Tuple[str, ...]] = set()\n    prefix_set = set()\n    for w in words:\n        for i in range(1, len(w)+1):\n            prefix_set.add(tuple(w[:i]))\n\n    def dfs(r: int, c: int, path: List[str], visited: Set[Tuple[int, int]]):\n        t_path = tuple(path)\n        if t_path not in prefix_set:\n            return\n        if t_path in word_set:\n            found.add(t_path)\n        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:\n            nr, nc = r+dr, c+dc\n            if 0 <= nr < ROWS and 0 <= nc < COLS and (nr, nc) not in visited:\n                path.append(board[nr][nc])\n                visited.add((nr, nc))\n                dfs(nr, nc, path, visited)\n                visited.remove((nr, nc))\n                path.pop()\n\n    for r in range(ROWS):\n        for c in range(COLS):\n            dfs(r, c, [board[r][c]], {(r, c)})\n\n    return found"
+    },
+    {
+      "source_file": "program_134.py",
+      "specification_index": 134,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def CheckEquality(s):\n    if len(s) < 1:\n        raise ValueError(\"Precondition violated: |s| >= 1\")\n    if s[-1] == s[0]:\n        return ['E', 'q', 'u', 'a', 'l']\n    else:\n        return ['N', 'o']"
+    },
+    {
+      "source_file": "program_140.py",
+      "specification_index": 140,
+      "transformation": "reorder_condition",
+      "regenerated_code": "import math\n\ndef FirstFactorialDivisibleNumber(x: int) -> int:\n    if x <= 0:\n        raise ValueError(\"Precondition violated: x must be > 0\")\n    factorial = 1\n    for res in range(1, x + 1):\n        factorial *= res\n        if factorial % x == 0:\n            return res\n    # The function must return within the loop due to the guarantees of the problem\n    raise RuntimeError(\"No result found, which should be impossible for x > 0\")"
+    },
+    {
+      "source_file": "program_153.py",
+      "specification_index": 153,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def MedianNumbers(a: int, b: int, c: int) -> int:\n    # Compute the median of three numbers\n    # The median is the value that is neither the maximum nor the minimum\n    if (a <= b <= c) or (c <= b <= a):\n        return b\n    elif (b <= a <= c) or (c <= a <= b):\n        return a\n    else:\n        return c"
+    },
+    {
+      "source_file": "program_161.py",
+      "specification_index": 161,
+      "transformation": "reorder_condition",
+      "regenerated_code": "from typing import List\n\ndef NegNos(list1: List[int]) -> int:\n    # If there is at least one negative number, return one of them (the first found)\n    for x in list1:\n        if x < 0:\n            return x\n    # If there is no negative number, return 0 (or any non-negative, but 0 is conventional)\n    return 0"
+    },
+    {
+      "source_file": "program_172.py",
+      "specification_index": 172,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def IsUndulating(n):\n    if len(n) <= 2:\n        return False\n    for i in range(2, len(n)):\n        if n[i] != n[i - 2]:\n            return False\n    return True"
+    },
+    {
+      "source_file": "program_173.py",
+      "specification_index": 173,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def CheckValidity(a: int, b: int, c: int) -> bool:\n    if b + c <= a or a + c <= b or a + b <= c:\n        return False\n    return True"
+    },
+    {
+      "source_file": "program_191.py",
+      "specification_index": 191,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def Ngcd(x: int, y: int) -> int:\n    if not (x > 0 and y > 0):\n        raise ValueError(\"Precondition violated: x > 0 and y > 0 required.\")\n    a, b = x, y\n    while b != 0:\n        a, b = b, a % b\n    return a"
+    },
+    {
+      "source_file": "program_193.py",
+      "specification_index": 193,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def RealPower(apparentPower: float, powerFactor: float) -> float:\n    if not (-1.0 <= powerFactor <= 1.0):\n        raise ValueError(\"powerFactor must be between -1.0 and 1.0 inclusive\")\n    return apparentPower * powerFactor"
+    },
+    {
+      "source_file": "program_221.py",
+      "specification_index": 221,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def CheckMonthnumbNumber(monthnum2: int) -> bool:\n    return monthnum2 in {1, 3, 5, 7, 8, 10, 12}"
+    },
+    {
+      "source_file": "program_227.py",
+      "specification_index": 227,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def CheckSolution(a: int, b: int, c: int) -> str:\n    if c == a:\n        return \"Yes\"\n    else:\n        return \"No\""
+    },
+    {
+      "source_file": "program_230.py",
+      "specification_index": 230,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def Zeller(dateInput: list) -> list:\n    # Preconditions\n    if len(dateInput) != 10:\n        raise ValueError(\"Input must be length 10\")\n    for i in [0,1,3,4,6,7,8,9]:\n        if not ('0' <= dateInput[i] <= '9'):\n            raise ValueError(\"Date digits must be between '0' and '9'\")\n    if dateInput[2] != '-' or dateInput[5] != '-':\n        raise ValueError(\"Date must be in format 'DD-MM-YYYY'\")\n\n    # Parse day, month, year\n    day = int(\"\".join(dateInput[0:2]))\n    month = int(\"\".join(dateInput[3:5]))\n    year = int(\"\".join(dateInput[6:10]))\n\n    # Zeller's congruence algorithm (for Gregorian calendar)\n    # Adjust months and years\n    if month < 3:\n        month += 12\n        year -= 1\n\n    q = day\n    m = month\n    K = year % 100\n    J = year // 100\n\n    h = (q + ((13*(m+1))//5) + K + (K//4) + (J//4) + 5*J) % 7\n\n    # Map result to day name\n    days = [\"Saturday\", \"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\"]\n    day_name = days[h]\n\n    return list(day_name)"
+    },
+    {
+      "source_file": "program_238.py",
+      "specification_index": 238,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def GetNoOfWays(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        # Since the Dafny spec is incomplete, but based on the signature and base cases,\n        # it is likely a Fibonacci-like recurrence (e.g., climbing stairs problem).\n        a, b = 0, 1\n        for _ in range(2, n + 1):\n            a, b = b, a + b\n        return b"
+    },
+    {
+      "source_file": "program_247.py",
+      "specification_index": 247,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def CountSetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    nn = n + 1\n    powerOf2 = 2\n    cnt = nn // 2\n    while nn >= powerOf2:\n        cnt += (nn // powerOf2) * (powerOf2 // 2)\n        powerOf2 *= 2\n    return cnt"
+    },
+    {
+      "source_file": "program_250.py",
+      "specification_index": 250,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def CountVowels(testStr):\n    if len(testStr) < 2:\n        raise ValueError(\"Precondition violated: |testStr| >= 2\")\n    vowList = ['a', 'e', 'i', 'o', 'u']\n    res = 0\n    for ch in testStr:\n        if ch in vowList:\n            res += 1\n    return res"
+    },
+    {
+      "source_file": "program_253.py",
+      "specification_index": 253,
+      "transformation": "reorder_condition",
+      "regenerated_code": "def CheckMonthNumb(monthname2: str) -> bool:\n    if not isinstance(monthname2, str):\n        raise TypeError(\"monthname2 must be a string\")\n    valid_months = {\n        \"December\", \"October\", \"Augest\", \"July\", \"March\",\n        \"May\", \"February\", \"April\", \"January\", \"June\",\n        \"September\", \"November\"\n    }\n    return monthname2 in valid_months"
+    }
+  ]
+}

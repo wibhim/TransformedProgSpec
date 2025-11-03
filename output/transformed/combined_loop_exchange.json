@@ -1,0 +1,1366 @@
+[
+  {
+    "task_id": "002",
+    "filename": "program_002.py",
+    "code": "def find_triplet_array(A, arr_size, sum):\n    i = 0\n    while i < arr_size - 2:\n        j = i + 1\n        while j < arr_size - 1:\n            k = j + 1\n            while k < arr_size:\n                if A[i] + A[j] + A[k] == sum:\n                    return (A[i], A[j], A[k])\n                    return True\n                k += 1\n            j += 1\n        i += 1\n    return False",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_002__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "006",
+    "filename": "program_006.py",
+    "code": "def multi_list(rownum, colnum):\n    multi_list = [[0 for col in range(colnum)] for row in range(rownum)]\n    row = 0\n    while row < rownum:\n        col = 0\n        while col < colnum:\n            multi_list[row][col] = row * col\n            col += 1\n        row += 1\n    return multi_list",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_006__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "010",
+    "filename": "program_010.py",
+    "code": "def count_char(string, char):\n    count = 0\n    i = 0\n    while i < len(string):\n        if string[i] == char:\n            count = count + 1\n        i += 1\n    return count",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_010__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "011",
+    "filename": "program_011.py",
+    "code": "def three_sum(array):\n    \"\"\"\n    :param array: List[int]\n    :return: Set[ Tuple[int, int, int] ]\n    \"\"\"\n    res = set()\n    array.sort()\n    i = 0\n    while i < len(array) - 2:\n        if i > 0 and array[i] == array[i - 1]:\n            continue\n        l, r = (i + 1, len(array) - 1)\n        while l < r:\n            s = array[i] + array[l] + array[r]\n            if s > 0:\n                r -= 1\n            elif s < 0:\n                l += 1\n            else:\n                res.add((array[i], array[l], array[r]))\n                while l < r and array[l] == array[l + 1]:\n                    l += 1\n                while l < r and array[r] == array[r - 1]:\n                    r -= 1\n                l += 1\n                r -= 1\n        i += 1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_011__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "015",
+    "filename": "program_015.py",
+    "code": "def min_Swaps(s1, s2):\n    c0 = 0\n    c1 = 0\n    i = 0\n    while i < len(s1):\n        if s1[i] == '0' and s2[i] == '1':\n            c0 += 1\n        elif s1[i] == '1' and s2[i] == '0':\n            c1 += 1\n        i += 1\n    result = c0 // 2 + c1 // 2\n    if c0 % 2 == 0 and c1 % 2 == 0:\n        return result\n    elif (c0 + c1) % 2 == 0:\n        return result + 2\n    else:\n        return -1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_015__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "018",
+    "filename": "program_018.py",
+    "code": "def first_Element(arr, n, k):\n    count_map = {}\n    i = 0\n    while i < n:\n        if arr[i] in count_map.keys():\n            count_map[arr[i]] += 1\n        else:\n            count_map[arr[i]] = 1\n        i += 1\n        i += 1\n    i = 0\n    while i < n:\n        if count_map[arr[i]] == k:\n            return arr[i]\n        i += 1\n        i += 1\n    return -1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_018__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "019",
+    "filename": "program_019.py",
+    "code": "def count_no(A, N, L, R):\n    count = 0\n    i = L\n    while i < R + 1:\n        if i % A != 0:\n            count += 1\n        if count == N:\n            break\n        i += 1\n    return i",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_019__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "020",
+    "filename": "program_020.py",
+    "code": "def new_generation(cells: list[list[int]]) -> list[list[int]]:\n    \"\"\"\n    Generates the next generation for a given state of Conway's Game of Life.\n    >>> new_generation(BLINKER)\n    [[0, 0, 0], [1, 1, 1], [0, 0, 0]]\n    \"\"\"\n    next_generation = []\n    i = 0\n    while i < len(cells):\n        next_generation_row = []\n        j = 0\n        while j < len(cells[i]):\n            neighbour_count = 0\n            if i > 0 and j > 0:\n                neighbour_count += cells[i - 1][j - 1]\n            if i > 0:\n                neighbour_count += cells[i - 1][j]\n            if i > 0 and j < len(cells[i]) - 1:\n                neighbour_count += cells[i - 1][j + 1]\n            if j > 0:\n                neighbour_count += cells[i][j - 1]\n            if j < len(cells[i]) - 1:\n                neighbour_count += cells[i][j + 1]\n            if i < len(cells) - 1 and j > 0:\n                neighbour_count += cells[i + 1][j - 1]\n            if i < len(cells) - 1:\n                neighbour_count += cells[i + 1][j]\n            if i < len(cells) - 1 and j < len(cells[i]) - 1:\n                neighbour_count += cells[i + 1][j + 1]\n            alive = cells[i][j] == 1\n            if alive and 2 <= neighbour_count <= 3 or (not alive and neighbour_count == 3):\n                next_generation_row.append(1)\n            else:\n                next_generation_row.append(0)\n            j += 1\n        next_generation.append(next_generation_row)\n        i += 1\n    return next_generation",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_020__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "024",
+    "filename": "program_024.py",
+    "code": "def octal_to_binary(octal_number: str) -> str:\n    \"\"\"\n    Convert an Octal number to Binary.\n\n    >>> octal_to_binary(\"17\")\n    '001111'\n    >>> octal_to_binary(\"7\")\n    '111'\n    >>> octal_to_binary(\"Av\")\n    Traceback (most recent call last):\n        ...\n    ValueError: Non-octal value was passed to the function\n    >>> octal_to_binary(\"@#\")\n    Traceback (most recent call last):\n        ...\n    ValueError: Non-octal value was passed to the function\n    >>> octal_to_binary(\"\")\n    Traceback (most recent call last):\n        ...\n    ValueError: Empty string was passed to the function\n    \"\"\"\n    if not octal_number:\n        raise ValueError('Empty string was passed to the function')\n    binary_number = ''\n    octal_digits = '01234567'\n    for digit in octal_number:\n        if digit not in octal_digits:\n            raise ValueError('Non-octal value was passed to the function')\n        binary_digit = ''\n        value = int(digit)\n        _ = 0\n        while _ < 3:\n            binary_digit = str(value % 2) + binary_digit\n            value //= 2\n            _ += 1\n        binary_number += binary_digit\n    return binary_number",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_024__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "025",
+    "filename": "program_025.py",
+    "code": "def magic_square_test(my_matrix):\n    iSize = len(my_matrix[0])\n    sum_list = []\n    sum_list.extend([sum(lines) for lines in my_matrix])\n    col = 0\n    while col < iSize:\n        sum_list.append(sum((row[col] for row in my_matrix)))\n        col += 1\n    result1 = 0\n    i = 0\n    while i < iSize:\n        result1 += my_matrix[i][i]\n        i += 1\n    sum_list.append(result1)\n    result2 = 0\n    i = iSize - 1\n    while i > -1:\n        result2 += my_matrix[i][i]\n        i += -1\n    sum_list.append(result2)\n    if len(set(sum_list)) > 1:\n        return False\n    return True",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_025__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "027",
+    "filename": "program_027.py",
+    "code": "def remove_odd(str1):\n    str2 = ''\n    i = 1\n    while i < len(str1) + 1:\n        if i % 2 == 0:\n            str2 = str2 + str1[i - 1]\n        i += 1\n    return str2",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_027__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "028",
+    "filename": "program_028.py",
+    "code": "def max_Product(arr):\n    arr_len = len(arr)\n    if arr_len < 2:\n        return 'No pairs exists'\n    x = arr[0]\n    y = arr[1]\n    i = 0\n    while i < arr_len:\n        j = i + 1\n        while j < arr_len:\n            if arr[i] * arr[j] > x * y:\n                x = arr[i]\n                y = arr[j]\n            j += 1\n        i += 1\n    return (x, y)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_028__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "032",
+    "filename": "program_032.py",
+    "code": "def common_prefix(arr, n):\n    prefix = arr[0]\n    i = 1\n    while i < n:\n        prefix = common_prefix_util(prefix, arr[i])\n        i += 1\n    return prefix",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_032__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "033",
+    "filename": "program_033.py",
+    "code": "def no_of_subsequences(arr, k):\n    n = len(arr)\n    dp = [[0 for i in range(n + 1)] for j in range(k + 1)]\n    i = 1\n    while i < k + 1:\n        j = 1\n        while j < n + 1:\n            dp[i][j] = dp[i][j - 1]\n            if arr[j - 1] <= i and arr[j - 1] > 0:\n                dp[i][j] += dp[i // arr[j - 1]][j - 1] + 1\n            j += 1\n        i += 1\n    return dp[k][n]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_033__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "034",
+    "filename": "program_034.py",
+    "code": "def swap_count(s):\n    chars = s\n    count_left = 0\n    count_right = 0\n    swap = 0\n    imbalance = 0\n    i = 0\n    while i < len(chars):\n        if chars[i] == '[':\n            count_left += 1\n            if imbalance > 0:\n                swap += imbalance\n                imbalance -= 1\n        elif chars[i] == ']':\n            count_right += 1\n            imbalance = count_right - count_left\n        i += 1\n    return swap",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_034__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "041",
+    "filename": "program_041.py",
+    "code": "def count_bidirectional(test_list):\n    res = 0\n    idx = 0\n    while idx < len(test_list):\n        iidx = idx + 1\n        while iidx < len(test_list):\n            if test_list[iidx][0] == test_list[idx][1] and test_list[idx][1] == test_list[iidx][0]:\n                res += 1\n            iidx += 1\n        idx += 1\n    return str(res)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_041__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "042",
+    "filename": "program_042.py",
+    "code": "def run_length_encode(text: str) -> list:\n    \"\"\"\n    Performs Run Length Encoding\n    >>> run_length_encode(\"AAAABBBCCDAA\")\n    [('A', 4), ('B', 3), ('C', 2), ('D', 1), ('A', 2)]\n    >>> run_length_encode(\"A\")\n    [('A', 1)]\n    >>> run_length_encode(\"AA\")\n    [('A', 2)]\n    >>> run_length_encode(\"AAADDDDDDFFFCCCAAVVVV\")\n    [('A', 3), ('D', 6), ('F', 3), ('C', 3), ('A', 2), ('V', 4)]\n    \"\"\"\n    encoded = []\n    count = 1\n    i = 0\n    while i < len(text):\n        if i + 1 < len(text) and text[i] == text[i + 1]:\n            count += 1\n        else:\n            encoded.append((text[i], count))\n            count = 1\n        i += 1\n    return encoded",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_042__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "044",
+    "filename": "program_044.py",
+    "code": "def find_demlo(s):\n    l = len(s)\n    res = ''\n    i = 1\n    while i < l + 1:\n        res = res + str(i)\n        i += 1\n    i = l - 1\n    while i > 0:\n        res = res + str(i)\n        i += -1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_044__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "050",
+    "filename": "program_050.py",
+    "code": "def bin_coff(n, r):\n    val = 1\n    if r > n - r:\n        r = n - r\n    i = 0\n    while i < r:\n        val *= n - i\n        val //= i + 1\n        i += 1\n    return val",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_050__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "051",
+    "filename": "program_051.py",
+    "code": "def int_to_roman(num):\n    val = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]\n    syb = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']\n    roman_num = ''\n    i = 0\n    while num > 0:\n        _ = 0\n        while _ < num // val[i]:\n            roman_num += syb[i]\n            num -= val[i]\n            _ += 1\n        i += 1\n    return roman_num",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_051__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "053",
+    "filename": "program_053.py",
+    "code": "def lower_upper_decomposition(table: np.ndarray) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"\n    Perform LU decomposition on a given matrix and raises an error if the matrix\n    isn't square or if no such decomposition exists\n\n    >>> matrix = np.array([[2, -2, 1], [0, 1, 2], [5, 3, 1]])\n    >>> lower_mat, upper_mat = lower_upper_decomposition(matrix)\n    >>> lower_mat\n    array([[1. , 0. , 0. ],\n           [0. , 1. , 0. ],\n           [2.5, 8. , 1. ]])\n    >>> upper_mat\n    array([[  2. ,  -2. ,   1. ],\n           [  0. ,   1. ,   2. ],\n           [  0. ,   0. , -17.5]])\n\n    >>> matrix = np.array([[4, 3], [6, 3]])\n    >>> lower_mat, upper_mat = lower_upper_decomposition(matrix)\n    >>> lower_mat\n    array([[1. , 0. ],\n           [1.5, 1. ]])\n    >>> upper_mat\n    array([[ 4. ,  3. ],\n           [ 0. , -1.5]])\n\n    >>> # Matrix is not square\n    >>> matrix = np.array([[2, -2, 1], [0, 1, 2]])\n    >>> lower_mat, upper_mat = lower_upper_decomposition(matrix)\n    Traceback (most recent call last):\n        ...\n    ValueError: 'table' has to be of square shaped array but got a 2x3 array:\n    [[ 2 -2  1]\n     [ 0  1  2]]\n\n    >>> # Matrix is invertible, but its first leading principal minor is 0\n    >>> matrix = np.array([[0, 1], [1, 0]])\n    >>> lower_mat, upper_mat = lower_upper_decomposition(matrix)\n    Traceback (most recent call last):\n    ...\n    ArithmeticError: No LU decomposition exists\n\n    >>> # Matrix is singular, but its first leading principal minor is 1\n    >>> matrix = np.array([[1, 0], [1, 0]])\n    >>> lower_mat, upper_mat = lower_upper_decomposition(matrix)\n    >>> lower_mat\n    array([[1., 0.],\n           [1., 1.]])\n    >>> upper_mat\n    array([[1., 0.],\n           [0., 0.]])\n\n    >>> # Matrix is singular, but its first leading principal minor is 0\n    >>> matrix = np.array([[0, 1], [0, 1]])\n    >>> lower_mat, upper_mat = lower_upper_decomposition(matrix)\n    Traceback (most recent call last):\n    ...\n    ArithmeticError: No LU decomposition exists\n    \"\"\"\n    rows, columns = np.shape(table)\n    if rows != columns:\n        msg = f\"'table' has to be of square shaped array but got a {rows}x{columns} array:\\n{table}\"\n        raise ValueError(msg)\n    lower = np.zeros((rows, columns))\n    upper = np.zeros((rows, columns))\n    i = 0\n    while i < columns:\n        j = 0\n        while j < i:\n            total = np.sum(lower[i, :i] * upper[:i, j])\n            if upper[j][j] == 0:\n                raise ArithmeticError('No LU decomposition exists')\n            lower[i][j] = (table[i][j] - total) / upper[j][j]\n            j += 1\n        lower[i][i] = 1\n        j = i\n        while j < columns:\n            total = np.sum(lower[i, :i] * upper[:i, j])\n            upper[i][j] = table[i][j] - total\n            j += 1\n        i += 1\n    return (lower, upper)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_053__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "054",
+    "filename": "program_054.py",
+    "code": "def coin_change(S, m, n):\n    table = [[0 for x in range(m)] for x in range(n + 1)]\n    i = 0\n    while i < m:\n        table[0][i] = 1\n        i += 1\n    i = 1\n    while i < n + 1:\n        j = 0\n        while j < m:\n            x = table[i - S[j]][j] if i - S[j] >= 0 else 0\n            y = table[i][j - 1] if j >= 1 else 0\n            table[i][j] = x + y\n            j += 1\n        i += 1\n    return table[n][m - 1]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_054__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "064",
+    "filename": "program_064.py",
+    "code": "def longest_common_substring(text1: str, text2: str) -> str:\n    \"\"\"\n    Finds the longest common substring between two strings.\n\n    >>> longest_common_substring(\"\", \"\")\n    ''\n    >>> longest_common_substring(\"a\",\"\")\n    ''\n    >>> longest_common_substring(\"\", \"a\")\n    ''\n    >>> longest_common_substring(\"a\", \"a\")\n    'a'\n    >>> longest_common_substring(\"abcdef\", \"bcd\")\n    'bcd'\n    >>> longest_common_substring(\"abcdef\", \"xabded\")\n    'ab'\n    >>> longest_common_substring(\"GeeksforGeeks\", \"GeeksQuiz\")\n    'Geeks'\n    >>> longest_common_substring(\"abcdxyz\", \"xyzabcd\")\n    'abcd'\n    >>> longest_common_substring(\"zxabcdezy\", \"yzabcdezx\")\n    'abcdez'\n    >>> longest_common_substring(\"OldSite:GeeksforGeeks.org\", \"NewSite:GeeksQuiz.com\")\n    'Site:Geeks'\n    >>> longest_common_substring(1, 1)\n    Traceback (most recent call last):\n        ...\n    ValueError: longest_common_substring() takes two strings for inputs\n    \"\"\"\n    if not (isinstance(text1, str) and isinstance(text2, str)):\n        raise ValueError('longest_common_substring() takes two strings for inputs')\n    if not text1 or not text2:\n        return ''\n    text1_length = len(text1)\n    text2_length = len(text2)\n    dp = [[0] * (text2_length + 1) for _ in range(text1_length + 1)]\n    end_pos = 0\n    max_length = 0\n    i = 1\n    while i < text1_length + 1:\n        j = 1\n        while j < text2_length + 1:\n            if text1[i - 1] == text2[j - 1]:\n                dp[i][j] = 1 + dp[i - 1][j - 1]\n                if dp[i][j] > max_length:\n                    end_pos = i\n                    max_length = dp[i][j]\n            j += 1\n        i += 1\n    return text1[end_pos - max_length:end_pos]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_064__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "065",
+    "filename": "program_065.py",
+    "code": "def count_Unset_Bits(n):\n    cnt = 0\n    i = 1\n    while i < n + 1:\n        temp = i\n        while temp:\n            if temp % 2 == 0:\n                cnt += 1\n            temp = temp // 2\n        i += 1\n    return cnt",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_065__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "066",
+    "filename": "program_066.py",
+    "code": "def longest_increasing_subsequence(arr):\n    n = len(arr)\n    longest_increasing_subsequence = [1] * n\n    i = 1\n    while i < n:\n        j = 0\n        while j < i:\n            if arr[i] > arr[j] and longest_increasing_subsequence[i] < longest_increasing_subsequence[j] + 1:\n                longest_increasing_subsequence[i] = longest_increasing_subsequence[j] + 1\n            j += 1\n        i += 1\n    maximum = 0\n    i = 0\n    while i < n:\n        maximum = max(maximum, longest_increasing_subsequence[i])\n        i += 1\n    return maximum",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_066__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "068",
+    "filename": "program_068.py",
+    "code": "def find_longest_conseq_subseq(arr, n):\n    ans = 0\n    count = 0\n    arr.sort()\n    v = []\n    v.append(arr[0])\n    i = 1\n    while i < n:\n        if arr[i] != arr[i - 1]:\n            v.append(arr[i])\n        i += 1\n    i = 0\n    while i < len(v):\n        if i > 0 and v[i] == v[i - 1] + 1:\n            count += 1\n        else:\n            count = 1\n        ans = max(ans, count)\n        i += 1\n    return ans",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_068__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "074",
+    "filename": "program_074.py",
+    "code": "def combination_sum(candidates, target):\n\n    def dfs(nums, target, index, path, res):\n        if target < 0:\n            return\n        if target == 0:\n            res.append(path)\n            return\n        i = index\n        while i < len(nums):\n            dfs(nums, target - nums[i], i, path + [nums[i]], res)\n            i += 1\n    res = []\n    candidates.sort()\n    dfs(candidates, target, 0, [], res)\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_074__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "082",
+    "filename": "program_082.py",
+    "code": "def find_longest_repeating_subseq(str):\n    n = len(str)\n    dp = [[0 for k in range(n + 1)] for l in range(n + 1)]\n    i = 1\n    while i < n + 1:\n        j = 1\n        while j < n + 1:\n            if str[i - 1] == str[j - 1] and i != j:\n                dp[i][j] = 1 + dp[i - 1][j - 1]\n            else:\n                dp[i][j] = max(dp[i][j - 1], dp[i - 1][j])\n            j += 1\n        i += 1\n    return dp[n][n]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_082__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "089",
+    "filename": "program_089.py",
+    "code": "def find_Element(arr, ranges, rotations, index):\n    i = rotations - 1\n    while i > -1:\n        left = ranges[i][0]\n        right = ranges[i][1]\n        if left <= index and right >= index:\n            if index == left:\n                index = right\n            else:\n                index = index - 1\n        i += -1\n    return arr[index]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_089__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "096",
+    "filename": "program_096.py",
+    "code": "def ncr_modp(n, r, p):\n    C = [0 for i in range(r + 1)]\n    C[0] = 1\n    i = 1\n    while i < n + 1:\n        j = min(i, r)\n        while j > 0:\n            C[j] = (C[j] + C[j - 1]) % p\n            j += -1\n        i += 1\n    return C[r]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_096__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "101",
+    "filename": "program_101.py",
+    "code": "def rearrange_bigger(n):\n    nums = list(str(n))\n    i = len(nums) - 2\n    while i > -1:\n        if nums[i] < nums[i + 1]:\n            z = nums[i:]\n            y = min(filter(lambda x: x > z[0], z))\n            z.remove(y)\n            z.sort()\n            nums[i:] = [y] + z\n            return int(''.join(nums))\n        i += -1\n    return False",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_101__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "102",
+    "filename": "program_102.py",
+    "code": "def frequency_Of_Smallest(n, arr):\n    mn = arr[0]\n    freq = 1\n    i = 1\n    while i < n:\n        if arr[i] < mn:\n            mn = arr[i]\n            freq = 1\n        elif arr[i] == mn:\n            freq += 1\n        i += 1\n    return freq",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_102__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "105",
+    "filename": "program_105.py",
+    "code": "def find_Min_Diff(arr, n):\n    arr = sorted(arr)\n    diff = 10 ** 20\n    i = 0\n    while i < n - 1:\n        if arr[i + 1] - arr[i] < diff:\n            diff = arr[i + 1] - arr[i]\n        i += 1\n    return diff",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_105__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "112",
+    "filename": "program_112.py",
+    "code": "def get_maxgold(gold, m, n):\n    goldTable = [[0 for i in range(n)] for j in range(m)]\n    col = n - 1\n    while col > -1:\n        row = 0\n        while row < m:\n            if col == n - 1:\n                right = 0\n            else:\n                right = goldTable[row][col + 1]\n            if row == 0 or col == n - 1:\n                right_up = 0\n            else:\n                right_up = goldTable[row - 1][col + 1]\n            if row == m - 1 or col == n - 1:\n                right_down = 0\n            else:\n                right_down = goldTable[row + 1][col + 1]\n            goldTable[row][col] = gold[row][col] + max(right, right_up, right_down)\n            row += 1\n        col += -1\n    res = goldTable[0][0]\n    i = 1\n    while i < m:\n        res = max(res, goldTable[i][0])\n        i += 1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_112__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "117",
+    "filename": "program_117.py",
+    "code": "def longest_non_repeat_v1(string):\n    \"\"\"\n    Find the length of the longest substring\n    without repeating characters.\n    \"\"\"\n    if string is None:\n        return 0\n    dict = {}\n    max_length = 0\n    j = 0\n    i = 0\n    while i < len(string):\n        if string[i] in dict:\n            j = max(dict[string[i]], j)\n        dict[string[i]] = i + 1\n        max_length = max(max_length, i - j + 1)\n        i += 1\n    return max_length",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_117__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "118",
+    "filename": "program_118.py",
+    "code": "def factorial(start, end):\n    res = 1\n    i = start\n    while i < end + 1:\n        res *= i\n        i += 1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_118__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "119",
+    "filename": "program_119.py",
+    "code": "def reverse_floyd(n):\n    \"\"\"\n\n    Print the lower half of a diamond pattern with '*' characters.\n\n    Args:\n\n        n (int): Size of the pattern.\n\n    Examples:\n\n        >>> reverse_floyd(3)\n\n        '* * * \\\\n * * \\\\n  * \\\\n   '\n\n        >>> reverse_floyd(5)\n\n        '* * * * * \\\\n * * * * \\\\n  * * * \\\\n   * * \\\\n    * \\\\n     '\n\n    \"\"\"\n    result = ''\n    i = n\n    while i > 0:\n        _ = i\n        while _ > 0:\n            result += '* '\n            _ += -1\n        result += '\\n'\n        _ = n - i + 1\n        while _ > 0:\n            result += ' '\n            _ += -1\n        i += -1\n    return result",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_119__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "127",
+    "filename": "program_127.py",
+    "code": "def find_Min_Swaps(arr, n):\n    noOfZeroes = [0] * n\n    count = 0\n    noOfZeroes[n - 1] = 1 - arr[n - 1]\n    i = n - 2\n    while i > -1:\n        noOfZeroes[i] = noOfZeroes[i + 1]\n        if arr[i] == 0:\n            noOfZeroes[i] = noOfZeroes[i] + 1\n        i += -1\n    i = 0\n    while i < n:\n        if arr[i] == 1:\n            count = count + noOfZeroes[i]\n        i += 1\n    return count",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_127__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "129",
+    "filename": "program_129.py",
+    "code": "def max_volume(s):\n    maxvalue = 0\n    i = 1\n    i = 0\n    while i < s - 1:\n        j = 1\n        j = 0\n        while j < s:\n            k = s - i - j\n            maxvalue = max(maxvalue, i * j * k)\n            j += 1\n        i += 1\n    return maxvalue",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_129__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "130",
+    "filename": "program_130.py",
+    "code": "def match_word_pattern(pattern: str, input_string: str) -> bool:\n    \"\"\"\n    Determine if a given pattern matches a string using backtracking.\n\n    pattern: The pattern to match.\n    input_string: The string to match against the pattern.\n    return: True if the pattern matches the string, False otherwise.\n\n    >>> match_word_pattern(\"aba\", \"GraphTreesGraph\")\n    True\n\n    >>> match_word_pattern(\"xyx\", \"PythonRubyPython\")\n    True\n\n    >>> match_word_pattern(\"GG\", \"PythonJavaPython\")\n    False\n    \"\"\"\n\n    def backtrack(pattern_index: int, str_index: int) -> bool:\n        \"\"\"\n        >>> backtrack(0, 0)\n        True\n\n        >>> backtrack(0, 1)\n        True\n\n        >>> backtrack(0, 4)\n        False\n        \"\"\"\n        if pattern_index == len(pattern) and str_index == len(input_string):\n            return True\n        if pattern_index == len(pattern) or str_index == len(input_string):\n            return False\n        char = pattern[pattern_index]\n        if char in pattern_map:\n            mapped_str = pattern_map[char]\n            if input_string.startswith(mapped_str, str_index):\n                return backtrack(pattern_index + 1, str_index + len(mapped_str))\n            else:\n                return False\n        end = str_index + 1\n        while end < len(input_string) + 1:\n            substr = input_string[str_index:end]\n            if substr in str_map:\n                continue\n            pattern_map[char] = substr\n            str_map[substr] = char\n            if backtrack(pattern_index + 1, end):\n                return True\n            del pattern_map[char]\n            del str_map[substr]\n            end += 1\n        return False\n    pattern_map: dict[str, str] = {}\n    str_map: dict[str, str] = {}\n    return backtrack(0, 0)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_130__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "131",
+    "filename": "program_131.py",
+    "code": "def get_Inv_Count(arr, n):\n    inv_count = 0\n    i = 0\n    while i < n:\n        j = i + 1\n        while j < n:\n            if arr[i] > arr[j]:\n                inv_count += 1\n            j += 1\n        i += 1\n    return inv_count",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_131__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "133",
+    "filename": "program_133.py",
+    "code": "def frequency_Of_Largest(n, arr):\n    mn = arr[0]\n    freq = 1\n    i = 1\n    while i < n:\n        if arr[i] > mn:\n            mn = arr[i]\n            freq = 1\n        elif arr[i] == mn:\n            freq += 1\n        i += 1\n    return freq",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_133__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "140",
+    "filename": "program_140.py",
+    "code": "def count(s, c):\n    res = 0\n    i = 0\n    while i < len(s):\n        if s[i] == c:\n            res = res + 1\n        i += 1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_140__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "141",
+    "filename": "program_141.py",
+    "code": "def find_Max_Len_Even(str):\n    n = len(str)\n    i = 0\n    currlen = 0\n    maxlen = 0\n    st = -1\n    for i in range(0, n, 1):\n        if str[i] == ' ':\n            if currlen % 2 == 0:\n                if maxlen < currlen:\n                    maxlen = currlen\n                    st = i - currlen\n            currlen = 0\n        else:\n            currlen += 1\n    if currlen % 2 == 0:\n        if maxlen < currlen:\n            maxlen = currlen\n            st = i - currlen\n    if st == -1:\n        return '-1'\n    return str[st:st + maxlen]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_141__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "142",
+    "filename": "program_142.py",
+    "code": "def unique_Characters(str):\n    i = 0\n    while i < len(str):\n        j = i + 1\n        while j < len(str):\n            if str[i] == str[j]:\n                return False\n            j += 1\n        i += 1\n    return True",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_142__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "144",
+    "filename": "program_144.py",
+    "code": "def glob_to_regex_pattern(glob: str) -> str:\n    tokens = ['^']\n    in_group = False\n    i = 0\n    for i in range(0, len(glob), 1):\n        c = glob[i]\n        if c == '\\\\' and i + 1 < len(glob):\n            char = glob[i + 1]\n            tokens.append('\\\\' + char if char in escaped_chars else char)\n            i += 1\n        elif c == '*':\n            before_deep = glob[i - 1] if i > 0 else None\n            star_count = 1\n            while i + 1 < len(glob) and glob[i + 1] == '*':\n                star_count += 1\n                i += 1\n            after_deep = glob[i + 1] if i + 1 < len(glob) else None\n            is_deep = star_count > 1 and (before_deep == '/' or before_deep is None) and (after_deep == '/' or after_deep is None)\n            if is_deep:\n                tokens.append('((?:[^/]*(?:/|$))*)')\n                i += 1\n            else:\n                tokens.append('([^/]*)')\n        elif c == '{':\n            in_group = True\n            tokens.append('(')\n        elif c == '}':\n            in_group = False\n            tokens.append(')')\n        elif c == ',':\n            if in_group:\n                tokens.append('|')\n            else:\n                tokens.append('\\\\' + c)\n        else:\n            tokens.append('\\\\' + c if c in escaped_chars else c)\n    tokens.append('$')\n    return ''.join(tokens)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_144__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "145",
+    "filename": "program_145.py",
+    "code": "def min_Swaps(str1, str2):\n    count = 0\n    i = 0\n    while i < len(str1):\n        if str1[i] != str2[i]:\n            count += 1\n        i += 1\n    if count % 2 == 0:\n        return count // 2\n    else:\n        return 'Not Possible'",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_145__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "154",
+    "filename": "program_154.py",
+    "code": "def upper_ctr(str):\n    upper_ctr = 0\n    i = 0\n    while i < len(str):\n        if str[i] >= 'A' and str[i] <= 'Z':\n            upper_ctr += 1\n        return upper_ctr\n        i += 1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_154__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "156",
+    "filename": "program_156.py",
+    "code": "def sort_tuple(tup):\n    lst = len(tup)\n    i = 0\n    while i < lst:\n        j = 0\n        while j < lst - i - 1:\n            if tup[j][-1] > tup[j + 1][-1]:\n                temp = tup[j]\n                tup[j] = tup[j + 1]\n                tup[j + 1] = temp\n            j += 1\n        i += 1\n    return tup",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_156__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "169",
+    "filename": "program_169.py",
+    "code": "def maximum_segments(n, a, b, c):\n    dp = [-1] * (n + 10)\n    dp[0] = 0\n    i = 0\n    while i < n:\n        if dp[i] != -1:\n            if i + a <= n:\n                dp[i + a] = max(dp[i] + 1, dp[i + a])\n            if i + b <= n:\n                dp[i + b] = max(dp[i] + 1, dp[i + b])\n            if i + c <= n:\n                dp[i + c] = max(dp[i] + 1, dp[i + c])\n        i += 1\n    return dp[n]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_169__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "176",
+    "filename": "program_176.py",
+    "code": "def first_Missing_Positive(arr, n):\n    ptr = 0\n    i = 0\n    while i < n:\n        if arr[i] == 1:\n            ptr = 1\n            break\n        i += 1\n    if ptr == 0:\n        return 1\n    i = 0\n    while i < n:\n        if arr[i] <= 0 or arr[i] > n:\n            arr[i] = 1\n        i += 1\n    i = 0\n    while i < n:\n        arr[(arr[i] - 1) % n] += n\n        i += 1\n    i = 0\n    while i < n:\n        if arr[i] <= n:\n            return i + 1\n        i += 1\n    return n + 1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_176__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "181",
+    "filename": "program_181.py",
+    "code": "def get_output_shapes(model_data):\n    \"\"\"Returns a list of output shapes in the tflite model data.\"\"\"\n    model = schema_fb.Model.GetRootAsModel(model_data, 0)\n    output_shapes = []\n    subgraph_idx = 0\n    while subgraph_idx < model.SubgraphsLength():\n        subgraph = model.Subgraphs(subgraph_idx)\n        output_idx = 0\n        while output_idx < subgraph.OutputsLength():\n            output_tensor_idx = subgraph.Outputs(output_idx)\n            output_tensor = subgraph.Tensors(output_tensor_idx)\n            output_shapes.append(output_tensor.ShapeAsNumpy().tolist())\n            output_idx += 1\n        subgraph_idx += 1\n    return output_shapes",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_181__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "187",
+    "filename": "program_187.py",
+    "code": "def topological_sort(graph: dict[int, list[int]]) -> list[int] | None:\n    \"\"\"\n    Perform topological sorting of a Directed Acyclic Graph (DAG)\n    using Kahn's Algorithm via Breadth-First Search (BFS).\n\n    Topological sorting is a linear ordering of vertices in a graph such that for\n    every directed edge u \u2192 v, vertex u comes before vertex v in the ordering.\n\n    Parameters:\n    graph: Adjacency list representing the directed graph where keys are\n           vertices, and values are lists of adjacent vertices.\n\n    Returns:\n    The topologically sorted order of vertices if the graph is a DAG.\n    Returns None if the graph contains a cycle.\n\n    Example:\n    >>> graph = {0: [1, 2], 1: [3], 2: [3], 3: [4, 5], 4: [], 5: []}\n    >>> topological_sort(graph)\n    [0, 1, 2, 3, 4, 5]\n\n    >>> graph_with_cycle = {0: [1], 1: [2], 2: [0]}\n    >>> topological_sort(graph_with_cycle)\n    \"\"\"\n    indegree = [0] * len(graph)\n    queue = []\n    topo_order = []\n    processed_vertices_count = 0\n    for values in graph.values():\n        for i in values:\n            indegree[i] += 1\n    i = 0\n    while i < len(indegree):\n        if indegree[i] == 0:\n            queue.append(i)\n        i += 1\n    while queue:\n        vertex = queue.pop(0)\n        processed_vertices_count += 1\n        topo_order.append(vertex)\n        for neighbor in graph[vertex]:\n            indegree[neighbor] -= 1\n            if indegree[neighbor] == 0:\n                queue.append(neighbor)\n    if processed_vertices_count != len(graph):\n        return None\n    return topo_order",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_187__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "189",
+    "filename": "program_189.py",
+    "code": "import math\n\ndef max_Prime_Factors(n):\n    maxPrime = -1\n    while n % 2 == 0:\n        maxPrime = 2\n        n >>= 1\n    i = 3\n    while i < int(math.sqrt(n)) + 1:\n        while n % i == 0:\n            maxPrime = i\n            n = n / i\n        i += 2\n    if n > 2:\n        maxPrime = n\n    return int(maxPrime)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_189__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "200",
+    "filename": "program_200.py",
+    "code": "def allocation_num(number_of_bytes: int, partitions: int) -> list[str]:\n    \"\"\"\n    Divide a number of bytes into x partitions.\n    :param number_of_bytes: the total of bytes.\n    :param partitions: the number of partition need to be allocated.\n    :return: list of bytes to be assigned to each worker thread\n\n    >>> allocation_num(16647, 4)\n    ['1-4161', '4162-8322', '8323-12483', '12484-16647']\n    >>> allocation_num(50000, 5)\n    ['1-10000', '10001-20000', '20001-30000', '30001-40000', '40001-50000']\n    >>> allocation_num(888, 999)\n    Traceback (most recent call last):\n        ...\n    ValueError: partitions can not > number_of_bytes!\n    >>> allocation_num(888, -4)\n    Traceback (most recent call last):\n        ...\n    ValueError: partitions must be a positive number!\n    \"\"\"\n    if partitions <= 0:\n        raise ValueError('partitions must be a positive number!')\n    if partitions > number_of_bytes:\n        raise ValueError('partitions can not > number_of_bytes!')\n    bytes_per_partition = number_of_bytes // partitions\n    allocation_list = []\n    i = 0\n    while i < partitions:\n        start_bytes = i * bytes_per_partition + 1\n        end_bytes = number_of_bytes if i == partitions - 1 else (i + 1) * bytes_per_partition\n        allocation_list.append(f'{start_bytes}-{end_bytes}')\n        i += 1\n    return allocation_list",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_200__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "203",
+    "filename": "program_203.py",
+    "code": "def amicable_numbers_sum(limit):\n    if not isinstance(limit, int):\n        return 'Input is not an integer!'\n    if limit < 1:\n        return 'Input must be bigger than 0!'\n    amicables = set()\n    num = 2\n    while num < limit + 1:\n        if num in amicables:\n            continue\n        sum_fact = sum([fact for fact in range(1, num) if num % fact == 0])\n        sum_fact2 = sum([fact for fact in range(1, sum_fact) if sum_fact % fact == 0])\n        if num == sum_fact2 and num != sum_fact:\n            amicables.add(num)\n            amicables.add(sum_fact2)\n        num += 1\n    return sum(amicables)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_203__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "206",
+    "filename": "program_206.py",
+    "code": "def lcp_w_suffix_str(array, s):\n    N = len(array)\n    lcp_array = [0] * N\n    inv_suffix = [0] * N\n    index = 0\n    while index < N:\n        inv_suffix[array[index]] = index\n        index += 1\n    maxLen = 0\n    index = 0\n    while index < N:\n        if inv_suffix[index] == N - 1:\n            maxLen = 0\n            continue\n        index_j = array[inv_suffix[index] + 1]\n        while index + maxLen < N and index_j + maxLen < N and (s[index + maxLen] == s[index_j + maxLen]):\n            maxLen += 1\n        lcp_array[inv_suffix[index]] = maxLen\n        if maxLen > 0:\n            maxLen -= 1\n        index += 1\n    return lcp_array",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_206__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "208",
+    "filename": "program_208.py",
+    "code": "def divisor(n):\n    i = 0\n    while i < n:\n        x = len([i for i in range(1, n + 1) if not n % i])\n        i += 1\n    return x",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_208__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "217",
+    "filename": "program_217.py",
+    "code": "def reverse_bit(number: int) -> str:\n    \"\"\"\n    Take in an 32 bit integer, reverse its bits,\n    return a string of reverse bits\n\n    result of a reverse_bit and operation on the integer provided.\n\n    >>> reverse_bit(25)\n    '00000000000000000000000000011001'\n    >>> reverse_bit(37)\n    '00000000000000000000000000100101'\n    >>> reverse_bit(21)\n    '00000000000000000000000000010101'\n    >>> reverse_bit(58)\n    '00000000000000000000000000111010'\n    >>> reverse_bit(0)\n    '00000000000000000000000000000000'\n    >>> reverse_bit(256)\n    '00000000000000000000000100000000'\n    >>> reverse_bit(-1)\n    Traceback (most recent call last):\n        ...\n    ValueError: the value of input must be positive\n\n    >>> reverse_bit(1.1)\n    Traceback (most recent call last):\n        ...\n    TypeError: Input value must be a 'int' type\n\n    >>> reverse_bit(\"0\")\n    Traceback (most recent call last):\n        ...\n    TypeError: '<' not supported between instances of 'str' and 'int'\n    \"\"\"\n    if number < 0:\n        raise ValueError('the value of input must be positive')\n    elif isinstance(number, float):\n        raise TypeError(\"Input value must be a 'int' type\")\n    elif isinstance(number, str):\n        raise TypeError(\"'<' not supported between instances of 'str' and 'int'\")\n    result = 0\n    _ = 1\n    while _ < 33:\n        result = result << 1\n        end_bit = number % 2\n        number = number >> 1\n        result = result | end_bit\n        _ += 1\n    return get_reverse_bit_string(result)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_217__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "224",
+    "filename": "program_224.py",
+    "code": "import sys\n\ndef next_smallest_palindrome(num):\n    numstr = str(num)\n    i = num + 1\n    while i < sys.maxsize:\n        if str(i) == str(i)[::-1]:\n            return i\n        i += 1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_224__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "227",
+    "filename": "program_227.py",
+    "code": "def min_steps_to_one(number: int) -> int:\n    \"\"\"\n    Minimum steps to 1 implemented using tabulation.\n    >>> min_steps_to_one(10)\n    3\n    >>> min_steps_to_one(15)\n    4\n    >>> min_steps_to_one(6)\n    2\n\n    :param number:\n    :return int:\n    \"\"\"\n    if number <= 0:\n        msg = f'n must be greater than 0. Got n = {number}'\n        raise ValueError(msg)\n    table = [number + 1] * (number + 1)\n    table[1] = 0\n    i = 1\n    while i < number:\n        table[i + 1] = min(table[i + 1], table[i] + 1)\n        if i * 2 <= number:\n            table[i * 2] = min(table[i * 2], table[i] + 1)\n        if i * 3 <= number:\n            table[i * 3] = min(table[i * 3], table[i] + 1)\n        i += 1\n    return table[number]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_227__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "228",
+    "filename": "program_228.py",
+    "code": "def inverse_of_matrix(matrix: list[list[float]]) -> list[list[float]]:\n    \"\"\"\n\n    A matrix multiplied with its inverse gives the identity matrix.\n\n    This function finds the inverse of a 2x2 and 3x3 matrix.\n\n    If the determinant of a matrix is 0, its inverse does not exist.\n\n    Sources for fixing inaccurate float arithmetic:\n\n    https://stackoverflow.com/questions/6563058/how-do-i-use-accurate-float-arithmetic-in-python\n\n    https://docs.python.org/3/library/decimal.html\n\n    Doctests for 2x2\n\n    >>> inverse_of_matrix([[2, 5], [2, 0]])\n\n    [[0.0, 0.5], [0.2, -0.2]]\n\n    >>> inverse_of_matrix([[2.5, 5], [1, 2]])\n\n    Traceback (most recent call last):\n\n        ...\n\n    ValueError: This matrix has no inverse.\n\n    >>> inverse_of_matrix([[12, -16], [-9, 0]])\n\n    [[0.0, -0.1111111111111111], [-0.0625, -0.08333333333333333]]\n\n    >>> inverse_of_matrix([[12, 3], [16, 8]])\n\n    [[0.16666666666666666, -0.0625], [-0.3333333333333333, 0.25]]\n\n    >>> inverse_of_matrix([[10, 5], [3, 2.5]])\n\n    [[0.25, -0.5], [-0.3, 1.0]]\n\n    Doctests for 3x3\n\n    >>> inverse_of_matrix([[2, 5, 7], [2, 0, 1], [1, 2, 3]])\n\n    [[2.0, 5.0, -4.0], [1.0, 1.0, -1.0], [-5.0, -12.0, 10.0]]\n\n    >>> inverse_of_matrix([[1, 2, 2], [1, 2, 2], [3, 2, -1]])\n\n    Traceback (most recent call last):\n\n        ...\n\n    ValueError: This matrix has no inverse.\n\n    >>> inverse_of_matrix([[],[]])\n\n    Traceback (most recent call last):\n\n        ...\n\n    ValueError: Please provide a matrix of size 2x2 or 3x3.\n\n    >>> inverse_of_matrix([[1, 2], [3, 4], [5, 6]])\n\n    Traceback (most recent call last):\n\n        ...\n\n    ValueError: Please provide a matrix of size 2x2 or 3x3.\n\n    >>> inverse_of_matrix([[1, 2, 1], [0,3, 4]])\n\n    Traceback (most recent call last):\n\n        ...\n\n    ValueError: Please provide a matrix of size 2x2 or 3x3.\n\n    >>> inverse_of_matrix([[1, 2, 3], [7, 8, 9], [7, 8, 9]])\n\n    Traceback (most recent call last):\n\n        ...\n\n    ValueError: This matrix has no inverse.\n\n    >>> inverse_of_matrix([[1, 0, 0], [0, 1, 0], [0, 0, 1]])\n\n    [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]]\n\n    \"\"\"\n    d = Decimal\n    if len(matrix) == 2 and len(matrix[0]) == 2 and (len(matrix[1]) == 2):\n        determinant = float(d(matrix[0][0]) * d(matrix[1][1]) - d(matrix[1][0]) * d(matrix[0][1]))\n        if determinant == 0:\n            raise ValueError('This matrix has no inverse.')\n        swapped_matrix = [[0.0, 0.0], [0.0, 0.0]]\n        swapped_matrix[0][0], swapped_matrix[1][1] = (matrix[1][1], matrix[0][0])\n        swapped_matrix[1][0], swapped_matrix[0][1] = (-matrix[1][0], -matrix[0][1])\n        return [[float(d(n)) / determinant or 0.0 for n in row] for row in swapped_matrix]\n    elif len(matrix) == 3 and len(matrix[0]) == 3 and (len(matrix[1]) == 3) and (len(matrix[2]) == 3):\n        determinant = float(d(matrix[0][0]) * d(matrix[1][1]) * d(matrix[2][2]) + d(matrix[0][1]) * d(matrix[1][2]) * d(matrix[2][0]) + d(matrix[0][2]) * d(matrix[1][0]) * d(matrix[2][1]) - (d(matrix[0][2]) * d(matrix[1][1]) * d(matrix[2][0]) + d(matrix[0][1]) * d(matrix[1][0]) * d(matrix[2][2]) + d(matrix[0][0]) * d(matrix[1][2]) * d(matrix[2][1])))\n        if determinant == 0:\n            raise ValueError('This matrix has no inverse.')\n        cofactor_matrix = [[d(0.0), d(0.0), d(0.0)], [d(0.0), d(0.0), d(0.0)], [d(0.0), d(0.0), d(0.0)]]\n        cofactor_matrix[0][0] = d(matrix[1][1]) * d(matrix[2][2]) - d(matrix[1][2]) * d(matrix[2][1])\n        cofactor_matrix[0][1] = -(d(matrix[1][0]) * d(matrix[2][2]) - d(matrix[1][2]) * d(matrix[2][0]))\n        cofactor_matrix[0][2] = d(matrix[1][0]) * d(matrix[2][1]) - d(matrix[1][1]) * d(matrix[2][0])\n        cofactor_matrix[1][0] = -(d(matrix[0][1]) * d(matrix[2][2]) - d(matrix[0][2]) * d(matrix[2][1]))\n        cofactor_matrix[1][1] = d(matrix[0][0]) * d(matrix[2][2]) - d(matrix[0][2]) * d(matrix[2][0])\n        cofactor_matrix[1][2] = -(d(matrix[0][0]) * d(matrix[2][1]) - d(matrix[0][1]) * d(matrix[2][0]))\n        cofactor_matrix[2][0] = d(matrix[0][1]) * d(matrix[1][2]) - d(matrix[0][2]) * d(matrix[1][1])\n        cofactor_matrix[2][1] = -(d(matrix[0][0]) * d(matrix[1][2]) - d(matrix[0][2]) * d(matrix[1][0]))\n        cofactor_matrix[2][2] = d(matrix[0][0]) * d(matrix[1][1]) - d(matrix[0][1]) * d(matrix[1][0])\n        adjoint_matrix = array(cofactor_matrix)\n        i = 0\n        while i < 3:\n            j = 0\n            while j < 3:\n                adjoint_matrix[i][j] = cofactor_matrix[j][i]\n                j += 1\n            i += 1\n        inverse_matrix = array(cofactor_matrix)\n        i = 0\n        while i < 3:\n            j = 0\n            while j < 3:\n                inverse_matrix[i][j] /= d(determinant)\n                j += 1\n            i += 1\n        return [[float(d(n)) or 0.0 for n in row] for row in inverse_matrix]\n    raise ValueError('Please provide a matrix of size 2x2 or 3x3.')",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_228__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "229",
+    "filename": "program_229.py",
+    "code": "def num_islands(grid):\n    count = 0\n    i = 0\n    while i < len(grid):\n        for j, col in enumerate(grid[i]):\n            if col == 1:\n                dfs(grid, i, j)\n                count += 1\n        i += 1\n    return count",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_229__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "230",
+    "filename": "program_230.py",
+    "code": "def max_ones_index(arr):\n    n = len(arr)\n    max_count = 0\n    max_index = 0\n    prev_zero = -1\n    prev_prev_zero = -1\n    curr = 0\n    while curr < n:\n        if arr[curr] == 0:\n            if curr - prev_prev_zero > max_count:\n                max_count = curr - prev_prev_zero\n                max_index = prev_zero\n            prev_prev_zero = prev_zero\n            prev_zero = curr\n        curr += 1\n    if n - prev_prev_zero > max_count:\n        max_index = prev_zero\n    return max_index",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_230__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "232",
+    "filename": "program_232.py",
+    "code": "def is_sum_subset(arr: list[int], required_sum: int) -> bool:\n    \"\"\"\n    >>> is_sum_subset([2, 4, 6, 8], 5)\n    False\n    >>> is_sum_subset([2, 4, 6, 8], 14)\n    True\n    \"\"\"\n    arr_len = len(arr)\n    subset = [[False] * (required_sum + 1) for _ in range(arr_len + 1)]\n    i = 0\n    while i < arr_len + 1:\n        subset[i][0] = True\n        i += 1\n    i = 1\n    while i < required_sum + 1:\n        subset[0][i] = False\n        i += 1\n    i = 1\n    while i < arr_len + 1:\n        j = 1\n        while j < required_sum + 1:\n            if arr[i - 1] > j:\n                subset[i][j] = subset[i - 1][j]\n            if arr[i - 1] <= j:\n                subset[i][j] = subset[i - 1][j] or subset[i - 1][j - arr[i - 1]]\n            j += 1\n        i += 1\n    return subset[arr_len][required_sum]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_232__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "235",
+    "filename": "program_235.py",
+    "code": "def factors_of_a_number(num: int) -> list:\n    \"\"\"\n    >>> factors_of_a_number(1)\n    [1]\n    >>> factors_of_a_number(5)\n    [1, 5]\n    >>> factors_of_a_number(24)\n    [1, 2, 3, 4, 6, 8, 12, 24]\n    >>> factors_of_a_number(-24)\n    []\n    \"\"\"\n    facs: list[int] = []\n    if num < 1:\n        return facs\n    facs.append(1)\n    if num == 1:\n        return facs\n    facs.append(num)\n    i = 2\n    while i < int(sqrt(num)) + 1:\n        if num % i == 0:\n            facs.append(i)\n            d = num // i\n            if d != i:\n                facs.append(d)\n        i += 1\n    facs.sort()\n    return facs",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_235__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "236",
+    "filename": "program_236.py",
+    "code": "def find_words(board, words):\n\n    def backtrack(board, i, j, trie, pre, used, result):\n        \"\"\"\n        backtrack tries to build each words from\n        the board and return all words found\n\n        @param: board, the passed in board of characters\n        @param: i, the row index\n        @param: j, the column index\n        @param: trie, a trie of the passed in words\n        @param: pre, a buffer of currently build string that differs\n                by recursion stack\n        @param: used, a replica of the board except in booleans\n                to state whether a character has been used\n        @param: result, the resulting set that contains all words found\n\n        @return: list of words found\n        \"\"\"\n        if '#' in trie:\n            result.add(pre)\n        if i < 0 or i >= len(board) or j < 0 or (j >= len(board[0])):\n            return\n        if not used[i][j] and board[i][j] in trie:\n            used[i][j] = True\n            backtrack(board, i + 1, j, trie[board[i][j]], pre + board[i][j], used, result)\n            backtrack(board, i, j + 1, trie[board[i][j]], pre + board[i][j], used, result)\n            backtrack(board, i - 1, j, trie[board[i][j]], pre + board[i][j], used, result)\n            backtrack(board, i, j - 1, trie[board[i][j]], pre + board[i][j], used, result)\n            used[i][j] = False\n    trie = {}\n    for word in words:\n        curr_trie = trie\n        for char in word:\n            if char not in curr_trie:\n                curr_trie[char] = {}\n            curr_trie = curr_trie[char]\n        curr_trie['#'] = '#'\n    result = set()\n    used = [[False] * len(board[0]) for _ in range(len(board))]\n    i = 0\n    while i < len(board):\n        j = 0\n        while j < len(board[0]):\n            backtrack(board, i, j, trie, '', used, result)\n            j += 1\n        i += 1\n    return list(result)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_236__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "245",
+    "filename": "program_245.py",
+    "code": "def max_sub_array_sum_repeated(a, n, k):\n    max_so_far = -2147483648\n    max_ending_here = 0\n    i = 0\n    while i < n * k:\n        max_ending_here = max_ending_here + a[i % n]\n        if max_so_far < max_ending_here:\n            max_so_far = max_ending_here\n        if max_ending_here < 0:\n            max_ending_here = 0\n        i += 1\n    return max_so_far",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_245__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "247",
+    "filename": "program_247.py",
+    "code": "def max_sum_pair_diff_lessthan_K(arr, N, K):\n    arr.sort()\n    dp = [0] * N\n    dp[0] = 0\n    i = 1\n    while i < N:\n        dp[i] = dp[i - 1]\n        if arr[i] - arr[i - 1] < K:\n            if i >= 2:\n                dp[i] = max(dp[i], dp[i - 2] + arr[i] + arr[i - 1])\n            else:\n                dp[i] = max(dp[i], arr[i] + arr[i - 1])\n        i += 1\n    return dp[N - 1]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_247__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "250",
+    "filename": "program_250.py",
+    "code": "def first_Factorial_Divisible_Number(x):\n    i = 1\n    fact = 1\n    i = 1\n    while i < x:\n        fact = fact * i\n        if fact % x == 0:\n            break\n        i += 1\n    return i",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_250__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "259",
+    "filename": "program_259.py",
+    "code": "def re_arrange_array(arr, n):\n    j = 0\n    i = 0\n    while i < n:\n        if arr[i] < 0:\n            temp = arr[i]\n            arr[i] = arr[j]\n            arr[j] = temp\n            j = j + 1\n        i += 1\n    return arr",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_259__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "261",
+    "filename": "program_261.py",
+    "code": "def get_total_number_of_sequences(m, n):\n    T = [[0 for i in range(n + 1)] for i in range(m + 1)]\n    i = 0\n    while i < m + 1:\n        j = 0\n        while j < n + 1:\n            if i == 0 or j == 0:\n                T[i][j] = 0\n            elif i < j:\n                T[i][j] = 0\n            elif j == 1:\n                T[i][j] = i\n            else:\n                T[i][j] = T[i - 1][j] + T[i // 2][j - 1]\n            j += 1\n        i += 1\n    return T[m][n]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_261__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "266",
+    "filename": "program_266.py",
+    "code": "def minimum_Length(s):\n    maxOcc = 0\n    n = len(s)\n    arr = [0] * 26\n    i = 0\n    while i < n:\n        arr[ord(s[i]) - ord('a')] += 1\n        i += 1\n    i = 0\n    while i < 26:\n        if arr[i] > maxOcc:\n            maxOcc = arr[i]\n        i += 1\n    return n - maxOcc",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_266__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "267",
+    "filename": "program_267.py",
+    "code": "def count_char_position(str1):\n    count_chars = 0\n    i = 0\n    while i < len(str1):\n        if i == ord(str1[i]) - ord('A') or i == ord(str1[i]) - ord('a'):\n            count_chars += 1\n        i += 1\n    return count_chars",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_267__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "272",
+    "filename": "program_272.py",
+    "code": "def even_Power_Sum(n):\n    sum = 0\n    i = 1\n    while i < n + 1:\n        j = 2 * i\n        sum = sum + j * j * j * j * j\n        i += 1\n    return sum",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_272__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "274",
+    "filename": "program_274.py",
+    "code": "def count_no_of_ways(n, k):\n    dp = [0] * (n + 1)\n    total = k\n    mod = 1000000007\n    dp[1] = k\n    dp[2] = k * k\n    i = 3\n    while i < n + 1:\n        dp[i] = (k - 1) * (dp[i - 1] + dp[i - 2]) % mod\n        i += 1\n    return dp[n]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_274__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "282",
+    "filename": "program_282.py",
+    "code": "import math as mt\n\ndef get_Position(a, n, m):\n    i = 0\n    while i < n:\n        a[i] = a[i] // m + (a[i] % m != 0)\n        i += 1\n    result, maxx = (-1, -1)\n    i = n - 1\n    while i > -1:\n        if maxx < a[i]:\n            maxx = a[i]\n            result = i\n        i += -1\n    return result + 1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_282__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "285",
+    "filename": "program_285.py",
+    "code": "def Odd_Length_Sum(arr):\n    Sum = 0\n    l = len(arr)\n    i = 0\n    while i < l:\n        Sum += ((i + 1) * (l - i) + 1) // 2 * arr[i]\n        i += 1\n    return Sum",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_285__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "288",
+    "filename": "program_288.py",
+    "code": "def bin_to_hexadecimal(binary_str: str) -> str:\n    \"\"\"\n    Converting a binary string into hexadecimal using Grouping Method\n\n    >>> bin_to_hexadecimal('101011111')\n    '0x15f'\n    >>> bin_to_hexadecimal(' 1010   ')\n    '0x0a'\n    >>> bin_to_hexadecimal('-11101')\n    '-0x1d'\n    >>> bin_to_hexadecimal('a')\n    Traceback (most recent call last):\n        ...\n    ValueError: Non-binary value was passed to the function\n    >>> bin_to_hexadecimal('')\n    Traceback (most recent call last):\n        ...\n    ValueError: Empty string was passed to the function\n    \"\"\"\n    binary_str = str(binary_str).strip()\n    if not binary_str:\n        raise ValueError('Empty string was passed to the function')\n    is_negative = binary_str[0] == '-'\n    binary_str = binary_str[1:] if is_negative else binary_str\n    if not all((char in '01' for char in binary_str)):\n        raise ValueError('Non-binary value was passed to the function')\n    binary_str = '0' * (4 * (divmod(len(binary_str), 4)[0] + 1) - len(binary_str)) + binary_str\n    hexadecimal = []\n    x = 0\n    while x < len(binary_str):\n        hexadecimal.append(BITS_TO_HEX[binary_str[x:x + 4]])\n        x += 4\n    hexadecimal_str = '0x' + ''.join(hexadecimal)\n    return '-' + hexadecimal_str if is_negative else hexadecimal_str",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_288__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "294",
+    "filename": "program_294.py",
+    "code": "def pacific_atlantic(matrix):\n    \"\"\"\n    :type matrix: List[List[int]]\n    :rtype: List[List[int]]\n    \"\"\"\n    n = len(matrix)\n    if not n:\n        return []\n    m = len(matrix[0])\n    if not m:\n        return []\n    res = []\n    atlantic = [[False for _ in range(n)] for _ in range(m)]\n    pacific = [[False for _ in range(n)] for _ in range(m)]\n    i = 0\n    while i < n:\n        dfs(pacific, matrix, float('-inf'), i, 0)\n        dfs(atlantic, matrix, float('-inf'), i, m - 1)\n        i += 1\n    i = 0\n    while i < m:\n        dfs(pacific, matrix, float('-inf'), 0, i)\n        dfs(atlantic, matrix, float('-inf'), n - 1, i)\n        i += 1\n    i = 0\n    while i < n:\n        j = 0\n        while j < m:\n            if pacific[i][j] and atlantic[i][j]:\n                res.append([i, j])\n            j += 1\n        i += 1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_294__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "313",
+    "filename": "program_313.py",
+    "code": "def removals(arr, n, k):\n    ans = n - 1\n    arr.sort()\n    i = 0\n    while i < n:\n        j = find_ind(arr[i], i, n, k, arr)\n        if j != -1:\n            ans = min(ans, n - (j - i + 1))\n        i += 1\n    return ans",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_313__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "315",
+    "filename": "program_315.py",
+    "code": "def prime_num(num):\n    if num >= 1:\n        i = 2\n        while i < num // 2:\n            if num % i == 0:\n                return False\n            else:\n                return True\n            i += 1\n    else:\n        return False",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_315__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "316",
+    "filename": "program_316.py",
+    "code": "def is_undulating(n):\n    if len(n) <= 2:\n        return False\n    i = 2\n    while i < len(n):\n        if n[i - 2] != n[i]:\n            return False\n        i += 1\n    return True",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_316__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "324",
+    "filename": "program_324.py",
+    "code": "def count_Rectangles(radius):\n    rectangles = 0\n    diameter = 2 * radius\n    diameterSquare = diameter * diameter\n    a = 1\n    while a < 2 * radius:\n        b = 1\n        while b < 2 * radius:\n            diagnalLengthSquare = a * a + b * b\n            if diagnalLengthSquare <= diameterSquare:\n                rectangles += 1\n            b += 1\n        a += 1\n    return rectangles",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_324__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "325",
+    "filename": "program_325.py",
+    "code": "def breakSum(n):\n    dp = [0] * (n + 1)\n    dp[0] = 0\n    dp[1] = 1\n    i = 2\n    while i < n + 1:\n        dp[i] = max(dp[int(i / 2)] + dp[int(i / 3)] + dp[int(i / 4)], i)\n        i += 1\n    return dp[n]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_325__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "327",
+    "filename": "program_327.py",
+    "code": "def find_Min_Sum(a, b, n):\n    a.sort()\n    b.sort()\n    sum = 0\n    i = 0\n    while i < n:\n        sum = sum + abs(a[i] - b[i])\n        i += 1\n    return sum",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_327__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "328",
+    "filename": "program_328.py",
+    "code": "def longest_palindromic_subsequence(input_string: str) -> int:\n    \"\"\"\n    This function returns the longest palindromic subsequence in a string\n    >>> longest_palindromic_subsequence(\"bbbab\")\n    4\n    >>> longest_palindromic_subsequence(\"bbabcbcab\")\n    7\n    \"\"\"\n    n = len(input_string)\n    rev = input_string[::-1]\n    m = len(rev)\n    dp = [[-1] * (m + 1) for i in range(n + 1)]\n    i = 0\n    while i < n + 1:\n        dp[i][0] = 0\n        i += 1\n    i = 0\n    while i < m + 1:\n        dp[0][i] = 0\n        i += 1\n    i = 1\n    while i < n + 1:\n        j = 1\n        while j < m + 1:\n            if input_string[i - 1] == rev[j - 1]:\n                dp[i][j] = 1 + dp[i - 1][j - 1]\n            else:\n                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])\n            j += 1\n        i += 1\n    return dp[n][m]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_328__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "329",
+    "filename": "program_329.py",
+    "code": "def previous_palindrome(num):\n    x = num - 1\n    while x > 0:\n        if str(x) == str(x)[::-1]:\n            return x\n        x += -1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_329__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "336",
+    "filename": "program_336.py",
+    "code": "def palindromic_substrings_iter(s):\n    \"\"\"\n    A slightly more Pythonic approach with a recursive generator\n    \"\"\"\n    if not s:\n        yield []\n        return\n    i = len(s)\n    while i > 0:\n        sub = s[:i]\n        if sub == sub[::-1]:\n            for rest in palindromic_substrings_iter(s[i:]):\n                yield ([sub] + rest)\n        i += -1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_336__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "352",
+    "filename": "program_352.py",
+    "code": "def remove_even(str1):\n    str2 = ''\n    i = 1\n    while i < len(str1) + 1:\n        if i % 2 != 0:\n            str2 = str2 + str1[i - 1]\n        i += 1\n    return str2",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_352__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "354",
+    "filename": "program_354.py",
+    "code": "def are_Equal(arr1, arr2, n, m):\n    if n != m:\n        return False\n    arr1.sort()\n    arr2.sort()\n    i = 0\n    while i < n - 1:\n        if arr1[i] != arr2[i]:\n            return False\n        i += 1\n    return True",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_354__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "357",
+    "filename": "program_357.py",
+    "code": "def find_missing_number(nums: list[int]) -> int:\n    \"\"\"\n    Finds the missing number in a list of consecutive integers.\n\n    Args:\n        nums: A list of integers.\n\n    Returns:\n        The missing number.\n\n    Example:\n        >>> find_missing_number([0, 1, 3, 4])\n        2\n        >>> find_missing_number([4, 3, 1, 0])\n        2\n        >>> find_missing_number([-4, -3, -1, 0])\n        -2\n        >>> find_missing_number([-2, 2, 1, 3, 0])\n        -1\n        >>> find_missing_number([1, 3, 4, 5, 6])\n        2\n        >>> find_missing_number([6, 5, 4, 2, 1])\n        3\n        >>> find_missing_number([6, 1, 5, 3, 4])\n        2\n    \"\"\"\n    low = min(nums)\n    high = max(nums)\n    missing_number = high\n    i = low\n    while i < high:\n        missing_number ^= i ^ nums[i - low]\n        i += 1\n    return missing_number",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_357__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "358",
+    "filename": "program_358.py",
+    "code": "def check_permutation(str1, str2):\n    n1 = len(str1)\n    n2 = len(str2)\n    if n1 != n2:\n        return False\n    a = sorted(str1)\n    str1 = ' '.join(a)\n    b = sorted(str2)\n    str2 = ' '.join(b)\n    i = 0\n    while i < n1:\n        if str1[i] != str2[i]:\n            return False\n        i += 1\n    return True",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_358__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "368",
+    "filename": "program_368.py",
+    "code": "import math\n\ndef sumofFactors(n):\n    if n % 2 != 0:\n        return 0\n    res = 1\n    i = 2\n    while i < int(math.sqrt(n)) + 1:\n        count = 0\n        curr_sum = 1\n        curr_term = 1\n        while n % i == 0:\n            count = count + 1\n            n = n // i\n            if i == 2 and count == 1:\n                curr_sum = 0\n            curr_term = curr_term * i\n            curr_sum = curr_sum + curr_term\n        res = res * curr_sum\n        i += 1\n    if n >= 2:\n        res = res * (1 + n)\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_368__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "372",
+    "filename": "program_372.py",
+    "code": "def re_order(A):\n    k = 0\n    for i in A:\n        if i:\n            A[k] = i\n            k = k + 1\n    i = k\n    while i < len(A):\n        A[i] = 0\n        i += 1\n    return A",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_372__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "373",
+    "filename": "program_373.py",
+    "code": "def count_alpha_dig_spl(string):\n    alphabets = digits = special = 0\n    i = 0\n    while i < len(string):\n        if string[i].isalpha():\n            alphabets = alphabets + 1\n        elif string[i].isdigit():\n            digits = digits + 1\n        else:\n            special = special + 1\n        i += 1\n    return (alphabets, digits, special)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_373__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "378",
+    "filename": "program_378.py",
+    "code": "def permute_unique(nums):\n    perms = [[]]\n    for n in nums:\n        new_perms = []\n        for l in perms:\n            i = 0\n            while i < len(l) + 1:\n                new_perms.append(l[:i] + [n] + l[i:])\n                if i < len(l) and l[i] == n:\n                    break\n                i += 1\n        perms = new_perms\n    return perms",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_378__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "379",
+    "filename": "program_379.py",
+    "code": "def permutation_coefficient(n, k):\n    P = [[0 for i in range(k + 1)] for j in range(n + 1)]\n    i = 0\n    while i < n + 1:\n        j = 0\n        while j < min(i, k) + 1:\n            if j == 0:\n                P[i][j] = 1\n            else:\n                P[i][j] = P[i - 1][j] + j * P[i - 1][j - 1]\n            if j < k:\n                P[i][j + 1] = 0\n            j += 1\n        i += 1\n    return P[n][k]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_379__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "381",
+    "filename": "program_381.py",
+    "code": "def prod_Square(n):\n    i = 2\n    while i < n + 1:\n        if i * i < n + 1:\n            j = 2\n            while j < n + 1:\n                if i * i * j * j == n:\n                    return True\n                j += 1\n        i += 1\n    return False",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_381__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "383",
+    "filename": "program_383.py",
+    "code": "def find_Product(arr, n):\n    arr.sort()\n    prod = 1\n    i = 0\n    while i < n:\n        if arr[i - 1] != arr[i]:\n            prod = prod * arr[i]\n        i += 1\n    return prod",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_383__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "386",
+    "filename": "program_386.py",
+    "code": "def lbs(arr):\n    n = len(arr)\n    lis = [1 for i in range(n + 1)]\n    i = 1\n    while i < n:\n        j = 0\n        while j < i:\n            if arr[i] > arr[j] and lis[i] < lis[j] + 1:\n                lis[i] = lis[j] + 1\n            j += 1\n        i += 1\n    lds = [1 for i in range(n + 1)]\n    for i in reversed(range(n - 1)):\n        for j in reversed(range(i - 1, n)):\n            if arr[i] > arr[j] and lds[i] < lds[j] + 1:\n                lds[i] = lds[j] + 1\n    maximum = lis[0] + lds[0] - 1\n    i = 1\n    while i < n:\n        maximum = max(lis[i] + lds[i] - 1, maximum)\n        i += 1\n    return maximum",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_386__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "390",
+    "filename": "program_390.py",
+    "code": "def highest_Power_of_2(n):\n    res = 0\n    i = n\n    while i > 0:\n        if i & i - 1 == 0:\n            res = i\n            break\n        i += -1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_390__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "395",
+    "filename": "program_395.py",
+    "code": "def radix_sort(nums):\n    RADIX = 10\n    placement = 1\n    max_digit = max(nums)\n    while placement < max_digit:\n        buckets = [list() for _ in range(RADIX)]\n        for i in nums:\n            tmp = int(i / placement % RADIX)\n            buckets[tmp].append(i)\n        a = 0\n        b = 0\n        while b < RADIX:\n            buck = buckets[b]\n            for i in buck:\n                nums[a] = i\n                a += 1\n            b += 1\n        placement *= RADIX\n    return nums",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_395__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "398",
+    "filename": "program_398.py",
+    "code": "def ascii_value_string(str1):\n    i = 0\n    while i < len(str1):\n        return ord(str1[i])\n        i += 1",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_398__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "399",
+    "filename": "program_399.py",
+    "code": "def find_Odd_Pair(A, N):\n    oddPair = 0\n    i = 0\n    while i < N:\n        j = i + 1\n        while j < N:\n            if (A[i] ^ A[j]) % 2 != 0:\n                oddPair += 1\n            j += 1\n        i += 1\n    return oddPair",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_399__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "400",
+    "filename": "program_400.py",
+    "code": "def max_sum_increasing_subseq(a, n, index, k):\n    dp = [[0 for i in range(n)] for i in range(n)]\n    i = 0\n    while i < n:\n        if a[i] > a[0]:\n            dp[0][i] = a[i] + a[0]\n        else:\n            dp[0][i] = a[i]\n        i += 1\n    i = 1\n    while i < n:\n        j = 0\n        while j < n:\n            if a[j] > a[i] and j > i:\n                if dp[i - 1][i] + a[j] > dp[i - 1][j]:\n                    dp[i][j] = dp[i - 1][i] + a[j]\n                else:\n                    dp[i][j] = dp[i - 1][j]\n            else:\n                dp[i][j] = dp[i - 1][j]\n            j += 1\n        i += 1\n    return dp[index][k]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_400__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "406",
+    "filename": "program_406.py",
+    "code": "def get_gcd(l):\n    num1 = l[0]\n    num2 = l[1]\n    gcd = find_gcd(num1, num2)\n    i = 2\n    while i < len(l):\n        gcd = find_gcd(gcd, l[i])\n        i += 1\n    return gcd",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_406__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "409",
+    "filename": "program_409.py",
+    "code": "def count_Rotation(arr, n):\n    i = 1\n    while i < n:\n        if arr[i] < arr[i - 1]:\n            return i\n        i += 1\n    return 0",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_409__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "414",
+    "filename": "program_414.py",
+    "code": "def sum_Of_Series(n):\n    sum = 0\n    i = 1\n    while i < n + 1:\n        sum += i * i * i\n        i += 1\n    return sum",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_414__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "421",
+    "filename": "program_421.py",
+    "code": "def length_Of_Last_Word(a):\n    l = 0\n    x = a.strip()\n    i = 0\n    while i < len(x):\n        if x[i] == ' ':\n            l = 0\n        else:\n            l += 1\n        i += 1\n    return l",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_421__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "450",
+    "filename": "program_450.py",
+    "code": "def find_even_Pair(A, N):\n    evenPair = 0\n    i = 0\n    while i < N:\n        j = i + 1\n        while j < N:\n            if (A[i] ^ A[j]) % 2 == 0:\n                evenPair += 1\n            j += 1\n        i += 1\n    return evenPair",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_450__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "451",
+    "filename": "program_451.py",
+    "code": "import math\n\ndef sum_of_odd_Factors(n):\n    res = 1\n    while n % 2 == 0:\n        n = n // 2\n    i = 3\n    while i < int(math.sqrt(n) + 1):\n        count = 0\n        curr_sum = 1\n        curr_term = 1\n        while n % i == 0:\n            count += 1\n            n = n // i\n            curr_term *= i\n            curr_sum += curr_term\n        res *= curr_sum\n        i += 1\n    if n >= 2:\n        res *= 1 + n\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_451__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "452",
+    "filename": "program_452.py",
+    "code": "def roman_to_int(s):\n    rom_val = {'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}\n    int_val = 0\n    i = 0\n    while i < len(s):\n        if i > 0 and rom_val[s[i]] > rom_val[s[i - 1]]:\n            int_val += rom_val[s[i]] - 2 * rom_val[s[i - 1]]\n        else:\n            int_val += rom_val[s[i]]\n        i += 1\n    return int_val",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_452__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "453",
+    "filename": "program_453.py",
+    "code": "def prefix_sum(array: list[int], queries: list[tuple[int, int]]) -> list[int]:\n    \"\"\"\n    >>> prefix_sum([1, 4, 6, 2, 61, 12], [(2, 5), (1, 5), (3, 4)])\n    [81, 85, 63]\n    >>> prefix_sum([4, 2, 1, 6, 3], [(3, 4), (1, 3), (0, 2)])\n    [9, 9, 7]\n    \"\"\"\n    dp = [0] * len(array)\n    dp[0] = array[0]\n    i = 1\n    while i < len(array):\n        dp[i] = dp[i - 1] + array[i]\n        i += 1\n    result = []\n    for query in queries:\n        left, right = query\n        res = dp[right]\n        if left > 0:\n            res -= dp[left - 1]\n        result.append(res)\n    return result",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_453__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "455",
+    "filename": "program_455.py",
+    "code": "def throw_dice(num_throws: int, num_dice: int=2) -> list[float]:\n    \"\"\"\n    Return probability list of all possible sums when throwing dice.\n\n    >>> random.seed(0)\n    >>> throw_dice(10, 1)\n    [10.0, 0.0, 30.0, 50.0, 10.0, 0.0]\n    >>> throw_dice(100, 1)\n    [19.0, 17.0, 17.0, 11.0, 23.0, 13.0]\n    >>> throw_dice(1000, 1)\n    [18.8, 15.5, 16.3, 17.6, 14.2, 17.6]\n    >>> throw_dice(10000, 1)\n    [16.35, 16.89, 16.93, 16.6, 16.52, 16.71]\n    >>> throw_dice(10000, 2)\n    [2.74, 5.6, 7.99, 11.26, 13.92, 16.7, 14.44, 10.63, 8.05, 5.92, 2.75]\n    \"\"\"\n    dices = [Dice() for i in range(num_dice)]\n    count_of_sum = [0] * (len(dices) * Dice.NUM_SIDES + 1)\n    _ = 0\n    while _ < num_throws:\n        count_of_sum[sum((dice.roll() for dice in dices))] += 1\n        _ += 1\n    probability = [round(count * 100 / num_throws, 2) for count in count_of_sum]\n    return probability[num_dice:]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_455__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "457",
+    "filename": "program_457.py",
+    "code": "def modular_sum(arr, n, m):\n    if n > m:\n        return True\n    DP = [False for i in range(m)]\n    i = 0\n    while i < n:\n        if DP[0]:\n            return True\n        temp = [False for i in range(m)]\n        j = 0\n        while j < m:\n            if DP[j] == True:\n                if DP[(j + arr[i]) % m] == False:\n                    temp[(j + arr[i]) % m] = True\n            j += 1\n        j = 0\n        while j < m:\n            if temp[j]:\n                DP[j] = True\n            j += 1\n        DP[arr[i] % m] = True\n        i += 1\n    return DP[0]",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_457__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "461",
+    "filename": "program_461.py",
+    "code": "from heapq import heappop, heappush\n\ndef find_minimum_range(list):\n    high = float('-inf')\n    p = (0, float('inf'))\n    pq = []\n    i = 0\n    while i < len(list):\n        heappush(pq, Node(list[i][0], i, 0))\n        high = max(high, list[i][0])\n        i += 1\n    while True:\n        top = heappop(pq)\n        low = top.value\n        i = top.list_num\n        j = top.index\n        if high - low < p[1] - p[0]:\n            p = (low, high)\n        if j == len(list[i]) - 1:\n            return p\n        heappush(pq, Node(list[i][j + 1], i, j + 1))\n        high = max(high, list[i][j + 1])",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_461__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "467",
+    "filename": "program_467.py",
+    "code": "def get_Pairs_Count(arr, n, sum):\n    count = 0\n    i = 0\n    while i < n:\n        j = i + 1\n        while j < n:\n            if arr[i] + arr[j] == sum:\n                count += 1\n            j += 1\n        i += 1\n    return count",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_467__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "468",
+    "filename": "program_468.py",
+    "code": "from collections import defaultdict\n\ndef count_Substrings(s, n):\n    count, sum = (0, 0)\n    mp = defaultdict(lambda: 0)\n    mp[0] += 1\n    i = 0\n    while i < n:\n        sum += ord(s[i]) - ord('0')\n        count += mp[sum - (i + 1)]\n        mp[sum - (i + 1)] += 1\n        i += 1\n    return count",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_468__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "473",
+    "filename": "program_473.py",
+    "code": "def find_length(string, n):\n    current_sum = 0\n    max_sum = 0\n    i = 0\n    while i < n:\n        current_sum += 1 if string[i] == '0' else -1\n        if current_sum < 0:\n            current_sum = 0\n        max_sum = max(current_sum, max_sum)\n        i += 1\n    return max_sum if max_sum else 0",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_473__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "479",
+    "filename": "program_479.py",
+    "code": "def count_vowels(test_str):\n    res = 0\n    vow_list = ['a', 'e', 'i', 'o', 'u']\n    idx = 1\n    while idx < len(test_str) - 1:\n        if test_str[idx] not in vow_list and (test_str[idx - 1] in vow_list or test_str[idx + 1] in vow_list):\n            res += 1\n        idx += 1\n    if test_str[0] not in vow_list and test_str[1] in vow_list:\n        res += 1\n    if test_str[-1] not in vow_list and test_str[-2] in vow_list:\n        res += 1\n    return res",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_479__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "483",
+    "filename": "program_483.py",
+    "code": "def sum_range_list(list1, m, n):\n    sum_range = 0\n    i = m\n    while i < n + 1:\n        sum_range += list1[i]\n        i += 1\n    return sum_range",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_483__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "485",
+    "filename": "program_485.py",
+    "code": "def max_product(arr):\n    arr_len = len(arr)\n    if arr_len < 2:\n        return None\n    x = arr[0]\n    y = arr[1]\n    i = 0\n    while i < arr_len:\n        j = i + 1\n        while j < arr_len:\n            if arr[i] * arr[j] > x * y:\n                x = arr[i]\n                y = arr[j]\n            j += 1\n        i += 1\n    return (x, y)",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_485__loop_exchange.py",
+    "transformation_error": null
+  },
+  {
+    "task_id": "498",
+    "filename": "program_498.py",
+    "code": "def shell_sort(my_list):\n    gap = len(my_list) // 2\n    while gap > 0:\n        i = gap\n        while i < len(my_list):\n            current_item = my_list[i]\n            j = i\n            while j >= gap and my_list[j - gap] > current_item:\n                my_list[j] = my_list[j - gap]\n                j -= gap\n            my_list[j] = current_item\n            i += 1\n        gap //= 2\n    return my_list",
+    "transformation_type": "loop_exchange",
+    "applied_transformers": [
+      "loop_exchange"
+    ],
+    "output_filename": "program_498__loop_exchange.py",
+    "transformation_error": null
+  }
+]

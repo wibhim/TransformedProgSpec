@@ -1,0 +1,568 @@
+{
+  "results": [
+    {
+      "source_file": "program_001.py",
+      "specification_index": 1,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckAlphanumeric(s):\n    if not isinstance(s, (list, tuple, str)):\n        raise TypeError(\"Input must be a sequence of characters.\")\n    found = False\n    for c in s:\n        if isinstance(c, str):\n            if len(c) != 1:\n                raise ValueError(\"Each element must be a single character.\")\n            if c.isalnum():\n                found = True\n                break\n        else:\n            raise ValueError(\"Each element must be a character (string of length 1).\")\n    if found:\n        return list(\"Accept\")\n    else:\n        return list(\"Discard\")"
+    },
+    {
+      "source_file": "program_004.py",
+      "specification_index": 4,
+      "transformation": "variable_naming",
+      "regenerated_code": "import re\n\ndef IsValidURL(s):\n    \"\"\"\n    Returns True if s is not empty and matches a simple URL pattern.\n    s: sequence of characters (e.g., list or string)\n    \"\"\"\n    # Convert input to string if it's a sequence of chars\n    if isinstance(s, str):\n        s_str = s\n    else:\n        s_str = ''.join(s)\n    if len(s_str) == 0:\n        return False\n    # Simple URL pattern: starts with http:// or https://, followed by at least one non-space character\n    pattern = re.compile(r'^(http://|https://)[^\\s]+$')\n    return bool(pattern.match(s_str))"
+    },
+    {
+      "source_file": "program_021.py",
+      "specification_index": 21,
+      "transformation": "variable_naming",
+      "regenerated_code": "def TnAp(a: int, n: int, d: int) -> int:\n    if n < 1:\n        raise ValueError(\"Precondition violated: n >= 1\")\n    return a + (n - 1) * d"
+    },
+    {
+      "source_file": "program_023.py",
+      "specification_index": 23,
+      "transformation": "variable_naming",
+      "regenerated_code": "def EvenOrOdd(N):\n    if len(N) == 0:\n        raise ValueError(\"Precondition violated: |N| > 0\")\n    last = N[-1]\n    even_digits = {'0', '2', '4', '6', '8', 'A', 'C', 'E'}\n    if last in even_digits:\n        return ['E', 'v', 'e', 'n']\n    else:\n        return ['O', 'd', 'd']"
+    },
+    {
+      "source_file": "program_026.py",
+      "specification_index": 26,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef Extract(lst: List[List[int]]) -> List[int]:\n    if not all(len(s) > 0 for s in lst):\n        raise ValueError(\"All inner lists must be non-empty\")\n    return [s[-1] for s in lst]"
+    },
+    {
+      "source_file": "program_029.py",
+      "specification_index": 29,
+      "transformation": "variable_naming",
+      "regenerated_code": "def MaxOfTwo(x: int, y: int) -> int:\n    if x > y:\n        return x\n    else:\n        return y"
+    },
+    {
+      "source_file": "program_031.py",
+      "specification_index": 31,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef MulList(nums1: List[int], nums2: List[int]) -> List[int]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Precondition failed: nums1 and nums2 must have the same length.\")\n    return [a * b for a, b in zip(nums1, nums2)]"
+    },
+    {
+      "source_file": "program_038.py",
+      "specification_index": 38,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List, Dict\n\ndef ConvertListDictionary(l1: List[int], l2: List[int], l3: List[int]) -> List[Dict[int, Dict[int, int]]]:\n    if not (len(l1) == len(l2) and len(l2) == len(l3)):\n        raise ValueError(\"Precondition failed: lengths of l1, l2, l3 must be equal\")\n    res = []\n    for a, b, c in zip(l1, l2, l3):\n        res.append({a: {b: c}})\n    return res"
+    },
+    {
+      "source_file": "program_052.py",
+      "specification_index": 52,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ConnectionRequiresHttpTunnel(\n    proxyUrlIsNone: bool,\n    proxyUrlSchemeIsHttps: bool,\n    proxyConfigIsNone: bool,\n    proxyConfigUseForwardingForHttps: bool,\n    destinationSchemeIsHttps: bool\n) -> bool:\n    \"\"\"\n    Implements the logic for determining if an HTTP tunnel is required for a connection.\n    \"\"\"\n    if proxyUrlIsNone or proxyConfigIsNone:\n        return False\n    if destinationSchemeIsHttps:\n        if proxyUrlSchemeIsHttps:\n            return False\n        if proxyConfigUseForwardingForHttps:\n            return False\n        return True\n    return False"
+    },
+    {
+      "source_file": "program_056.py",
+      "specification_index": 56,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef DivList(nums1: List[float], nums2: List[float]) -> List[float]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Input lists must have the same length\")\n    if any(x == 0.0 for x in nums2):\n        raise ZeroDivisionError(\"All elements of nums2 must be nonzero\")\n    return [a / b for a, b in zip(nums1, nums2)]"
+    },
+    {
+      "source_file": "program_061.py",
+      "specification_index": 61,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckIsosceles(x: int, y: int, z: int) -> bool:\n    return x != y and y != z and z != x"
+    },
+    {
+      "source_file": "program_065.py",
+      "specification_index": 65,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CountUnsetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    count = 0\n    i = 1\n    while i <= n:\n        if (n & i) == 0:\n            count += 1\n        i <<= 1\n    return count"
+    },
+    {
+      "source_file": "program_069.py",
+      "specification_index": 69,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ValidityTriangle(a: int, b: int, c: int) -> bool:\n    return a + b + c == 180"
+    },
+    {
+      "source_file": "program_076.py",
+      "specification_index": 76,
+      "transformation": "variable_naming",
+      "regenerated_code": "def GetItem(tup1, index):\n    if not (0 <= index < len(tup1)):\n        raise IndexError(\"index out of range\")\n    return tup1[index]"
+    },
+    {
+      "source_file": "program_080.py",
+      "specification_index": 80,
+      "transformation": "variable_naming",
+      "regenerated_code": "def Maximum(a: int, b: int) -> int:\n    if a >= b:\n        return a\n    else:\n        return b"
+    },
+    {
+      "source_file": "program_090.py",
+      "specification_index": 90,
+      "transformation": "variable_naming",
+      "regenerated_code": "def RectangleArea(l: int, b: int) -> int:\n    return l * b"
+    },
+    {
+      "source_file": "program_091.py",
+      "specification_index": 91,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ClosestNum(N: int) -> int:\n    return N - 1"
+    },
+    {
+      "source_file": "program_095.py",
+      "specification_index": 95,
+      "transformation": "variable_naming",
+      "regenerated_code": "def StringLength(str1):\n    if not isinstance(str1, (str, list, tuple)):\n        raise TypeError(\"str1 must be a sequence of characters\")\n    len_acc = 0\n    i = 0\n    n = len(str1)\n    while i < n:\n        len_acc += 1\n        i += 1\n    return len_acc"
+    },
+    {
+      "source_file": "program_109.py",
+      "specification_index": 109,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef SubstractElements(testTup1: List[List[int]], testTup2: List[List[int]]) -> List[List[int]]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input outer lists must have the same length\")\n    for i in range(len(testTup1)):\n        if len(testTup1[i]) != len(testTup2[i]):\n            raise ValueError(f\"Inner lists at index {i} must have the same length\")\n    res = []\n    for i in range(len(testTup1)):\n        inner_res = []\n        for j in range(len(testTup1[i])):\n            inner_res.append(testTup1[i][j] - testTup2[i][j])\n        res.append(inner_res)\n    return res"
+    },
+    {
+      "source_file": "program_114.py",
+      "specification_index": 114,
+      "transformation": "variable_naming",
+      "regenerated_code": "def DoesContainB(a: int, b: int, c: int) -> bool:\n    if a == b:\n        return True\n    if c == 0:\n        return False\n    diff = b - a\n    if diff % c != 0:\n        return False\n    if (diff // c) > 0:\n        return True\n    return False"
+    },
+    {
+      "source_file": "program_121.py",
+      "specification_index": 121,
+      "transformation": "variable_naming",
+      "regenerated_code": "def DegreeRadian(radian: float) -> float:\n    return radian * (180.0 / 3.141592653589793238462643383279)"
+    },
+    {
+      "source_file": "program_122.py",
+      "specification_index": 122,
+      "transformation": "variable_naming",
+      "regenerated_code": "def PytestWarns(warningIsNone: bool) -> bool:\n    \"\"\"\n    warningIsNone == True means 'warning is None'\n    noWarn == True means NoWarningsChecker is returned\n    noWarn == False otherwise\n    \"\"\"\n    return warningIsNone"
+    },
+    {
+      "source_file": "program_124.py",
+      "specification_index": 124,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import Sequence\n\ndef CheckK(testTup: Sequence[int], K: int) -> bool:\n    i = 0\n    while i < len(testTup):\n        if testTup[i] == K:\n            return True\n        i += 1\n    return False"
+    },
+    {
+      "source_file": "program_136.py",
+      "specification_index": 136,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckMonthNum(monthname1: str) -> bool:\n    return monthname1 == \"February\""
+    },
+    {
+      "source_file": "program_137.py",
+      "specification_index": 137,
+      "transformation": "variable_naming",
+      "regenerated_code": "def MergeDictionariesThree(dict1: dict[int, int], dict2: dict[int, int], dict3: dict[int, int]) -> dict[int, int]:\n    if dict1 is None or dict2 is None or dict3 is None:\n        raise ValueError(\"Input dictionaries must not be None\")\n    res = dict()\n    # Add from dict1\n    for k, v in dict1.items():\n        res[k] = v\n    # Add from dict2, overwrite if key exists\n    for k, v in dict2.items():\n        res[k] = v\n    # Add from dict3, overwrite if key exists\n    for k, v in dict3.items():\n        res[k] = v\n    return res"
+    },
+    {
+      "source_file": "program_138.py",
+      "specification_index": 138,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ShowPhaseResponse(samplerate: int):\n    if samplerate < 512:\n        raise ValueError(\"samplerate must be >= 512\")\n    # Placeholder for visualization and side effects.\n    pass"
+    },
+    {
+      "source_file": "program_143.py",
+      "specification_index": 143,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef RearExtract(test_list: List[List[int]]) -> List[int]:\n    if not all(len(s) > 0 for s in test_list):\n        raise ValueError(\"All inner lists must be non-empty\")\n    return [s[-1] for s in test_list]"
+    },
+    {
+      "source_file": "program_159.py",
+      "specification_index": 159,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef DivisionElements(testTup1: List[int], testTup2: List[int]) -> List[int]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input sequences must have the same length\")\n    if any(x == 0 for x in testTup2):\n        raise ZeroDivisionError(\"Division by zero encountered in testTup2\")\n    return [a // b for a, b in zip(testTup1, testTup2)]"
+    },
+    {
+      "source_file": "program_163.py",
+      "specification_index": 163,
+      "transformation": "variable_naming",
+      "regenerated_code": "def IsDecimal(num: str) -> bool:\n    if num == \"\":\n        return False\n    parts = num.split('.')\n    if len(parts) > 2:\n        return False\n    if not parts[0].isdigit():\n        return False\n    if len(parts) == 2:\n        if not parts[1].isdigit():\n            return False\n        if len(parts[1]) > 2:\n            return False\n    return True"
+    },
+    {
+      "source_file": "program_166.py",
+      "specification_index": 166,
+      "transformation": "variable_naming",
+      "regenerated_code": "def IsSuccess(code: int) -> bool:\n    return 200 <= code <= 299"
+    },
+    {
+      "source_file": "program_169.py",
+      "specification_index": 169,
+      "transformation": "variable_naming",
+      "regenerated_code": "def MaximumSegments(n: int, a: int, b: int, c: int) -> int:\n    if n < 0:\n        raise ValueError(\"n must be >= 0\")\n    if a <= 0 or b <= 0 or c <= 0:\n        raise ValueError(\"a, b, c must be > 0\")\n    # DP approach: var_0[i] = max number of segments to get length i\n    var_0 = [-1] * (n + 10)\n    var_0[0] = 0\n    for i in range(1, n + 1):\n        max_val = -1\n        for seg in (a, b, c):\n            if i - seg >= 0 and var_0[i - seg] != -1:\n                max_val = max(max_val, var_0[i - seg] + 1)\n        var_0[i] = max_val\n    return var_0[n]"
+    },
+    {
+      "source_file": "program_170.py",
+      "specification_index": 170,
+      "transformation": "variable_naming",
+      "regenerated_code": "def AsciiValue(k: str) -> int:\n    if not isinstance(k, str) or len(k) != 1:\n        raise ValueError(\"k must be a single character string\")\n    return ord(k)"
+    },
+    {
+      "source_file": "program_173.py",
+      "specification_index": 173,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef SubList(nums1: List[int], nums2: List[int]) -> List[int]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Precondition violated: nums1 and nums2 must have the same length.\")\n    return nums1.copy()"
+    },
+    {
+      "source_file": "program_175.py",
+      "specification_index": 175,
+      "transformation": "variable_naming",
+      "regenerated_code": "def DecimalToOctal(deciNum: int) -> int:\n    if deciNum < 0:\n        raise ValueError(\"deciNum must be non-negative\")\n    if deciNum == 0:\n        return 0\n    octal = 0\n    place = 1\n    n = deciNum\n    while n > 0:\n        rem = n % 8\n        octal += rem * place\n        n //= 8\n        place *= 10\n    return octal"
+    },
+    {
+      "source_file": "program_179.py",
+      "specification_index": 179,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import Sequence\n\ndef BigDiff(nums: Sequence[int]) -> int:\n    if len(nums) == 0:\n        raise ValueError(\"nums must have at least one element\")\n    mx = max(nums)\n    mn = min(nums)\n    diff = mx - mn\n    return diff"
+    },
+    {
+      "source_file": "program_182.py",
+      "specification_index": 182,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ListTuple(listx):\n    if not isinstance(listx, (list, tuple)):\n        raise TypeError(\"listx must be a sequence of integers\")\n    if not all(isinstance(x, int) for x in listx):\n        raise TypeError(\"All elements of listx must be integers\")\n    return listx"
+    },
+    {
+      "source_file": "program_183.py",
+      "specification_index": 183,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ToggleString(s: str) -> str:\n    \"\"\"\n    Returns a string t of the same length as s, where each lowercase letter is converted to its uppercase\n    counterpart, each uppercase letter to its lowercase counterpart, and all other characters are unchanged.\n    \"\"\"\n    if not isinstance(s, str):\n        raise TypeError(\"Input must be a string\")\n    t = []\n    for c in s:\n        if 'a' <= c <= 'z':\n            t.append(chr(ord('A') + (ord(c) - ord('a'))))\n        elif 'A' <= c <= 'Z':\n            t.append(chr(ord('a') + (ord(c) - ord('A'))))\n        else:\n            t.append(c)\n    return ''.join(t)"
+    },
+    {
+      "source_file": "program_184.py",
+      "specification_index": 184,
+      "transformation": "variable_naming",
+      "regenerated_code": "def EvenNum(x: int) -> bool:\n    return x % 2 == 0"
+    },
+    {
+      "source_file": "program_185.py",
+      "specification_index": 185,
+      "transformation": "variable_naming",
+      "regenerated_code": "def SumNatural(n: int) -> int:\n    return n * (n + 1)"
+    },
+    {
+      "source_file": "program_186.py",
+      "specification_index": 186,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef MinCostTickets(days: List[int], costs: List[int]) -> int:\n    if len(costs) != 3:\n        raise ValueError(\"costs must have length 3\")\n    if any(c < 0 for c in costs):\n        raise ValueError(\"all costs must be non-negative\")\n    if any(d < 0 for d in days):\n        raise ValueError(\"all days must be non-negative\")\n    if sorted(days) != days:\n        raise ValueError(\"days must be sorted in non-decreasing order\")\n    if len(days) == 0:\n        return 0\n\n    dayset = set(days)\n    last_day = days[-1]\n    dp = [0] * (last_day + 1)\n    for i in range(1, last_day + 1):\n        if i not in dayset:\n            dp[i] = dp[i-1]\n        else:\n            cost1 = dp[i-1] + costs[0]\n            cost7 = dp[max(0, i-7)] + costs[1]\n            cost30 = dp[max(0, i-30)] + costs[2]\n            dp[i] = min(cost1, cost7, cost30)\n    return dp[last_day]"
+    },
+    {
+      "source_file": "program_190.py",
+      "specification_index": 190,
+      "transformation": "variable_naming",
+      "regenerated_code": "def FindDivisor(x: int, y: int) -> int:\n    if x == y:\n        return y\n    else:\n        return 2"
+    },
+    {
+      "source_file": "program_195.py",
+      "specification_index": 195,
+      "transformation": "variable_naming",
+      "regenerated_code": "def RectanglePerimeter(l: int, b: int) -> int:\n    return 2 * (l + b)"
+    },
+    {
+      "source_file": "program_201.py",
+      "specification_index": 201,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ListifyList(list1):\n    if not isinstance(list1, (list, tuple)):\n        raise TypeError(\"list1 must be a sequence of sequences of integers\")\n    for sublist in list1:\n        if not isinstance(sublist, (list, tuple)):\n            raise TypeError(\"Each element of list1 must be a sequence of integers\")\n        for elem in sublist:\n            if not isinstance(elem, int):\n                raise TypeError(\"Each element of sublists must be an integer\")\n    return list1"
+    },
+    {
+      "source_file": "program_211.py",
+      "specification_index": 211,
+      "transformation": "variable_naming",
+      "regenerated_code": "def TextMatchOne(text: str) -> str:\n    if not isinstance(text, str):\n        raise TypeError(\"text must be a string\")\n    i = 0\n    while i < len(text):\n        if text[i] == 'a':\n            j = i + 1\n            while j < len(text) and text[j] == 'b':\n                j += 1\n            if j > i + 1:\n                return \"Found a match!\"\n        i += 1\n    return \"Not matched!\""
+    },
+    {
+      "source_file": "program_222.py",
+      "specification_index": 222,
+      "transformation": "variable_naming",
+      "regenerated_code": "def MakeFlip(ch: str) -> str:\n    if not (ch == '0' or ch == '1'):\n        raise ValueError(\"Precondition failed: ch must be '0' or '1'\")\n    if ch == '0':\n        return '1'\n    else:\n        return '0'"
+    },
+    {
+      "source_file": "program_242.py",
+      "specification_index": 242,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef CheckEquality(s: List[str]) -> List[str]:\n    if len(s) == 0:\n        raise ValueError(\"Precondition violated: |s| > 0\")\n    if s[0] == s[-1]:\n        return ['E', 'q', 'u', 'a', 'l']\n    else:\n        return ['N', 'o', 't', ' ', 'E', 'q', 'u', 'a', 'l']"
+    },
+    {
+      "source_file": "program_258.py",
+      "specification_index": 258,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef TupleModulo(testTup1: List[int], testTup2: List[int]) -> List[int]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input sequences must have the same length.\")\n    if any(x == 0 for x in testTup2):\n        raise ValueError(\"All elements of testTup2 must be non-zero.\")\n    return [a % b for a, b in zip(testTup1, testTup2)]"
+    },
+    {
+      "source_file": "program_263.py",
+      "specification_index": 263,
+      "transformation": "variable_naming",
+      "regenerated_code": "def AddTuple(test_list, test_tup):\n    if not isinstance(test_list, (list, tuple)) or not isinstance(test_tup, (list, tuple)):\n        raise TypeError(\"Arguments must be sequences of integers\")\n    if not all(isinstance(x, int) for x in test_list):\n        raise TypeError(\"All elements of test_list must be integers\")\n    if not all(isinstance(x, int) for x in test_tup):\n        raise TypeError(\"All elements of test_tup must be integers\")\n    return list(test_list) + list(test_tup)"
+    },
+    {
+      "source_file": "program_270.py",
+      "specification_index": 270,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List, Tuple\n\ndef MostCommonElem(s: List[int], a: int) -> List[Tuple[int, int]]:\n    if a < 0:\n        raise ValueError(\"Precondition violated: a >= 0\")\n    from collections import Counter\n\n    counts = Counter(s)\n    # Each element is (elem, count)\n    freq_list = [(elem, cnt) for elem, cnt in counts.items() if cnt > 0]\n    # Sort by count descending, then by element ascending\n    freq_list.sort(key=lambda x: (-x[1], x[0]))\n    # Take at most 'a' elements\n    res = freq_list[:a]\n    return res"
+    },
+    {
+      "source_file": "program_277.py",
+      "specification_index": 277,
+      "transformation": "variable_naming",
+      "regenerated_code": "def MedianNumbers(a: int, b: int, c: int) -> int:\n    # The median is the value that is neither the maximum nor the minimum\n    # among a, b, c. If two or more values are equal, the repeated value(s)\n    # may be the median.\n    nums = [a, b, c]\n    nums.sort()\n    return nums[1]"
+    },
+    {
+      "source_file": "program_278.py",
+      "specification_index": 278,
+      "transformation": "variable_naming",
+      "regenerated_code": "# No concrete Dafny specification or types are provided.\n# Therefore, no Python code can be generated from this spec."
+    },
+    {
+      "source_file": "program_280.py",
+      "specification_index": 280,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef ModDivList(nums1: List[int], nums2: List[int]) -> List[int]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Input lists must have the same length\")\n    if any(n == 0 for n in nums2):\n        raise ZeroDivisionError(\"All elements in nums2 must be nonzero\")\n    return [a % b for a, b in zip(nums1, nums2)]"
+    },
+    {
+      "source_file": "program_289.py",
+      "specification_index": 289,
+      "transformation": "variable_naming",
+      "regenerated_code": "def ClearLruCaches():\n    pass"
+    },
+    {
+      "source_file": "program_290.py",
+      "specification_index": 290,
+      "transformation": "variable_naming",
+      "regenerated_code": "def MergeDict(d1: dict[int, int], d2: dict[int, int]) -> dict[int, int]:\n    if not all(isinstance(k, int) and isinstance(v, int) for k, v in d1.items()):\n        raise TypeError(\"All keys and values in d1 must be integers\")\n    if not all(isinstance(k, int) and isinstance(v, int) for k, v in d2.items()):\n        raise TypeError(\"All keys and values in d2 must be integers\")\n    res = d1.copy()\n    res.update(d2)\n    return res"
+    },
+    {
+      "source_file": "program_292.py",
+      "specification_index": 292,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef TextMatch(text: List[str]) -> List[str]:\n    # The specification is truncated, but from the name and the possible results,\n    # we infer that it checks whether the input text matches a certain pattern.\n    # Since only two possible outputs are allowed, we assume the pattern is fixed.\n    # Let's assume the pattern is the string \"match\" (case-sensitive).\n\n    pattern = ['m', 'a', 't', 'c', 'h']\n    text_len = len(text)\n    pattern_len = len(pattern)\n\n    # Search for the pattern in the text\n    found = False\n    for i in range(text_len - pattern_len + 1):\n        if text[i:i+pattern_len] == pattern:\n            found = True\n            break\n\n    if found:\n        return ['F','o','u','n','d',' ','a',' ','m','a','t','c','h','!']\n    else:\n        return ['N','o','t',' ','m','a','t','c','h','.']"
+    },
+    {
+      "source_file": "program_296.py",
+      "specification_index": 296,
+      "transformation": "variable_naming",
+      "regenerated_code": "def NegNos(list1):\n    if not isinstance(list1, (list, tuple)):\n        raise TypeError(\"list1 must be a sequence\")\n    for x in list1:\n        if not isinstance(x, int):\n            raise TypeError(\"All elements of list1 must be integers\")\n    # If there is any negative number, return one of them (the first found)\n    for n in list1:\n        if n < 0:\n            return n\n    # Otherwise, return 0\n    return 0"
+    },
+    {
+      "source_file": "program_299.py",
+      "specification_index": 299,
+      "transformation": "variable_naming",
+      "regenerated_code": "def Base10To85(d: int) -> list:\n    if d < 0:\n        raise ValueError(\"Precondition violated: d >= 0\")\n    if d == 0:\n        return []\n    chars = []\n    while d > 0:\n        c = d % 85\n        char_code = c + 33\n        chars.append(chr(char_code))\n        d //= 85\n    chars.reverse()\n    return chars"
+    },
+    {
+      "source_file": "program_304.py",
+      "specification_index": 304,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef RemoveDatatype(testTuple: List[int], dataTypeIsInt: bool) -> List[int]:\n    if not isinstance(testTuple, list):\n        raise TypeError(\"testTuple must be a list of ints\")\n    if not isinstance(dataTypeIsInt, bool):\n        raise TypeError(\"dataTypeIsInt must be a bool\")\n    if dataTypeIsInt:\n        return []\n    else:\n        return testTuple.copy()"
+    },
+    {
+      "source_file": "program_306.py",
+      "specification_index": 306,
+      "transformation": "variable_naming",
+      "regenerated_code": "def Slope(x1: float, y1: float, x2: float, y2: float) -> float:\n    if x2 == x1:\n        raise ValueError(\"Precondition violated: x2 must not be equal to x1.\")\n    return (y2 - y1) / (x2 - x1)"
+    },
+    {
+      "source_file": "program_316.py",
+      "specification_index": 316,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef IsUndulating(n: List[int]) -> bool:\n    if len(n) <= 2:\n        return False\n    for i in range(2, len(n)):\n        if n[i] != n[i - 2]:\n            return False\n    return True"
+    },
+    {
+      "source_file": "program_317.py",
+      "specification_index": 317,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckValidity(a: int, b: int, c: int) -> bool:\n    return (a + b > c) and (a + c > b) and (b + c > a)"
+    },
+    {
+      "source_file": "program_319.py",
+      "specification_index": 319,
+      "transformation": "variable_naming",
+      "regenerated_code": "import random\n\ndef RandomPivot(lst):\n    if len(lst) <= 0:\n        raise ValueError(\"Precondition violated: lst must be non-empty\")\n    i = random.randrange(len(lst))\n    return lst[i]"
+    },
+    {
+      "source_file": "program_325.py",
+      "specification_index": 325,
+      "transformation": "variable_naming",
+      "regenerated_code": "def BreakSum(n: int) -> int:\n    if n < 1:\n        raise ValueError(\"Precondition violated: n >= 1\")\n    arr = [0] * (n + 1)\n    arr[0] = 0\n    arr[1] = 1\n    i = 2\n    while i <= n:\n        # The Dafny spec is incomplete, but let's assume arr[i] = arr[i-1] + 1\n        arr[i] = arr[i - 1] + 1\n        i += 1\n    res = arr[n]\n    # Postcondition: res >= n\n    if res < n:\n        raise RuntimeError(\"Postcondition violated: res >= n\")\n    return res"
+    },
+    {
+      "source_file": "program_353.py",
+      "specification_index": 353,
+      "transformation": "variable_naming",
+      "regenerated_code": "import re\n\ndef Match(text):\n    if not isinstance(text, (list, tuple, str)):\n        raise TypeError(\"text must be a sequence of characters\")\n    # Convert to string if needed\n    s = ''.join(text) if not isinstance(text, str) else text\n    # Regex: one or more uppercase, then one or more lowercase, at end of string\n    pattern = re.compile(r'[A-Z]+[a-z]+$')\n    if pattern.search(s):\n        return ['Y', 'e', 's']\n    else:\n        return ['N', 'o']"
+    },
+    {
+      "source_file": "program_363.py",
+      "specification_index": 363,
+      "transformation": "variable_naming",
+      "regenerated_code": "def RealPower(apparentPower: float, powerFactor: float) -> float:\n    if not (-1.0 <= powerFactor <= 1.0):\n        raise ValueError(\"powerFactor must be between -1.0 and 1.0 inclusive\")\n    return apparentPower * powerFactor"
+    },
+    {
+      "source_file": "program_364.py",
+      "specification_index": 364,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List, Tuple\n\ndef MaxLength(list1: List[List[int]]) -> Tuple[int, List[int]]:\n    if len(list1) == 0:\n        raise ValueError(\"Precondition violated: list1 must not be empty\")\n    maxLen = -1\n    maxSeq = []\n    for seq in list1:\n        if len(seq) > maxLen:\n            maxLen = len(seq)\n            maxSeq = seq\n    return maxLen, maxSeq"
+    },
+    {
+      "source_file": "program_365.py",
+      "specification_index": 365,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef AddNestedTuples(testTup1: List[List[int]], testTup2: List[List[int]]) -> List[List[int]]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input outer lists must have the same length\")\n    res = []\n    for i in range(len(testTup1)):\n        inner1 = testTup1[i]\n        inner2 = testTup2[i]\n        if len(inner1) != len(inner2):\n            raise ValueError(f\"Inner lists at index {i} must have the same length\")\n        res.append([inner1[j] + inner2[j] for j in range(len(inner1))])\n    return res"
+    },
+    {
+      "source_file": "program_369.py",
+      "specification_index": 369,
+      "transformation": "variable_naming",
+      "regenerated_code": "def SumOfProperDivisors(n: int) -> int:\n    if n <= 1:\n        return 0\n    total = 1\n    sqrt_n = int(n ** 0.5)\n    for i in range(2, sqrt_n + 1):\n        if n % i == 0:\n            total += i\n            other = n // i\n            if other != i and other != n:\n                total += other\n    return total\n\ndef IsAbundant(n: int) -> bool:\n    if n <= 0:\n        raise ValueError(\"Precondition violated: n > 0\")\n    return SumOfProperDivisors(n) > n"
+    },
+    {
+      "source_file": "program_373.py",
+      "specification_index": 373,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import Tuple\n\ndef CountAlphaDigSpl(s: str) -> Tuple[int, int, int]:\n    \"\"\"\n    Counts the number of alphabetic, digit, and other characters in the string s.\n    Returns a tuple (nAlpha, nDigit, nOther).\n    Preconditions:\n        - s must be a string (sequence of characters).\n    Postconditions:\n        - nAlpha >= 0, nDigit >= 0, nOther >= 0\n        - nAlpha + nDigit + nOther == len(s)\n    \"\"\"\n    if not isinstance(s, str):\n        raise TypeError(\"Input must be a string\")\n    nAlpha = 0\n    nDigit = 0\n    nOther = 0\n    for c in s:\n        if c.isalpha():\n            nAlpha += 1\n        elif c.isdigit():\n            nDigit += 1\n        else:\n            nOther += 1\n    return nAlpha, nDigit, nOther"
+    },
+    {
+      "source_file": "program_384.py",
+      "specification_index": 384,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CountIntegralPoints(x1: int, y1: int, x2: int, y2: int) -> int:\n    return (y2 - y1 - 1) * (x2 - x1 - 1)"
+    },
+    {
+      "source_file": "program_396.py",
+      "specification_index": 396,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef StrToList(s: str) -> List[str]:\n    # Precondition: s is a sequence of characters (str in Python)\n    if not isinstance(s, str):\n        raise TypeError(\"Input must be a string.\")\n    res = []\n    i = 0\n    while i < len(s):\n        res.append(s[i])\n        i += 1\n    return res"
+    },
+    {
+      "source_file": "program_398.py",
+      "specification_index": 398,
+      "transformation": "variable_naming",
+      "regenerated_code": "def AsciiValueString(str1):\n    if len(str1) < 0:\n        raise ValueError(\"Precondition violated: |str1| >= 0\")\n    if len(str1) == 0:\n        return 0\n    return ord(str1[0])"
+    },
+    {
+      "source_file": "program_404.py",
+      "specification_index": 404,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import Sequence, Tuple\n\ndef FrontAndRear(testTup: Sequence[int]) -> Tuple[int, int]:\n    if len(testTup) < 1:\n        raise ValueError(\"Precondition violated: |testTup| >= 1\")\n    return (testTup[0], testTup[-1])"
+    },
+    {
+      "source_file": "program_405.py",
+      "specification_index": 405,
+      "transformation": "variable_naming",
+      "regenerated_code": "def AccessKey(ditionary: list[int], key: int) -> int:\n    if not (0 <= key < len(ditionary)):\n        raise IndexError(\"key out of bounds\")\n    return ditionary[key]"
+    },
+    {
+      "source_file": "program_410.py",
+      "specification_index": 410,
+      "transformation": "variable_naming",
+      "regenerated_code": "def Last(n):\n    if len(n) <= 0:\n        raise ValueError(\"Precondition violated: input sequence must have length > 0\")\n    return n[len(n) - 1]"
+    },
+    {
+      "source_file": "program_411.py",
+      "specification_index": 411,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckTypeOfTriangle(a: int, b: int, c: int) -> str:\n    # Enforce triangle side constraints\n    if a <= 0 or b <= 0 or c <= 0:\n        raise ValueError(\"Sides must be positive integers\")\n    sides = sorted([a, b, c])\n    if sides[0] + sides[1] <= sides[2]:\n        raise ValueError(\"Triangle inequality violated\")\n\n    x, y, z = sides  # x <= y <= z\n    x2 = x * x\n    y2 = y * y\n    z2 = z * z\n\n    if x2 + y2 == z2:\n        return \"Right-angled Triangle\"\n    elif x2 + y2 < z2:\n        return \"Obtuse-angled Triangle\"\n    else:\n        return \"Acute-angled Triangle\""
+    },
+    {
+      "source_file": "program_412.py",
+      "specification_index": 412,
+      "transformation": "variable_naming",
+      "regenerated_code": "def GetDemoGraph(index: int) -> dict[int, list[int]]:\n    if not (0 <= index < 4):\n        raise ValueError(\"index must be in range 0 <= index < 4\")\n    if index == 0:\n        return {\n            0: [1, 2],\n            1: [0, 2],\n            2: [0, 1, 3, 5],\n            3: [2, 4],\n            4: [3, 5],\n            5: [2, 4]\n        }\n    elif index == 1:\n        return {\n            0: [1],\n            1: [0, 2],\n            2: [1, 3],\n            3: [2]\n        }\n    elif index == 2:\n        return {\n            0: [1, 3],\n            1: [0, 2],\n            2: [1, 3],\n            3: [0, 2]\n        }\n    elif index == 3:\n        return {\n            0: [1, 2, 3],\n            1: [0, 2, 3],\n            2: [0, 1, 3],\n            3: [0, 1, 2]\n        }"
+    },
+    {
+      "source_file": "program_420.py",
+      "specification_index": 420,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckMonthnumbNumber(monthnum2: int) -> bool:\n    return monthnum2 in {1, 3, 5, 7, 8, 10, 12}"
+    },
+    {
+      "source_file": "program_421.py",
+      "specification_index": 421,
+      "transformation": "variable_naming",
+      "regenerated_code": "def LengthOfLastWord(a: list) -> int:\n    if not all(isinstance(c, str) and len(c) == 1 for c in a):\n        raise ValueError(\"Input must be a sequence of single-character strings.\")\n    n = len(a)\n    i = n - 1\n    # Trim trailing spaces\n    while i >= 0 and a[i] == ' ':\n        i -= 1\n    # All spaces or empty\n    if i < 0:\n        return 0\n    # Count length of last word\n    length = 0\n    while i >= 0 and a[i] != ' ':\n        length += 1\n        i -= 1\n    return length"
+    },
+    {
+      "source_file": "program_429.py",
+      "specification_index": 429,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import Callable, Dict, List, Tuple\n\ndef DispatchHook(\n    key: int,\n    hooks: Dict[int, List[Callable[[int, int], int]]],\n    hookData: int\n) -> int:\n    if key not in hooks:\n        raise KeyError(\"Key not found in hooks\")\n    hook_list = hooks[key]\n    if not hook_list:\n        raise ValueError(\"No hooks for the given key\")\n    result = hookData\n    for hook in hook_list:\n        result = hook(result, key)\n    return result"
+    },
+    {
+      "source_file": "program_431.py",
+      "specification_index": 431,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef ParseStrings(strs: List[str]) -> List[str]:\n    if any(s == \"\" for s in strs):\n        raise ValueError(\"All input strings must be non-empty.\")\n    # Since the postcondition only requires non-empty strings in res and |res| <= |strs|,\n    # we can simply return strs as is.\n    return list(strs)"
+    },
+    {
+      "source_file": "program_432.py",
+      "specification_index": 432,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckSolution(a: int, b: int, c: int) -> str:\n    if a == c:\n        return \"Yes\"\n    else:\n        return \"No\""
+    },
+    {
+      "source_file": "program_437.py",
+      "specification_index": 437,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CountList(inputList):\n    if inputList is None:\n        raise ValueError(\"inputList must not be None\")\n    return len(inputList)"
+    },
+    {
+      "source_file": "program_440.py",
+      "specification_index": 440,
+      "transformation": "variable_naming",
+      "regenerated_code": "import re\n\ndef ExtractDate(url):\n    \"\"\"\n    Extracts all date matches from the input url (sequence of characters).\n    Each match is a sequence of 3 groups: [year, month, day], each itself a sequence of characters.\n    Returns a sequence of such matches.\n    \"\"\"\n    # Convert Dafny seq<char> to Python string\n    if not isinstance(url, (list, tuple, str)):\n        raise TypeError(\"url must be a sequence of characters\")\n    if isinstance(url, str):\n        s = url\n    else:\n        s = ''.join(url)\n\n    # Regex to match YYYY-MM-DD or YYYY/MM/DD, capturing groups\n    pattern = re.compile(r'(\\d{4})[-/](\\d{2})[-/](\\d{2})')\n    result = []\n    for match in pattern.finditer(s):\n        # Each group is a sequence of characters\n        groups = [list(match.group(1)), list(match.group(2)), list(match.group(3))]\n        result.append(groups)\n    return result"
+    },
+    {
+      "source_file": "program_452.py",
+      "specification_index": 452,
+      "transformation": "variable_naming",
+      "regenerated_code": "def RomanToInt(s):\n    if not isinstance(s, (str, list, tuple)):\n        raise TypeError(\"Input must be a sequence of characters.\")\n    n = len(s)\n    if n < 0:\n        raise ValueError(\"Length of s must be non-negative.\")\n    valid = {'I', 'V', 'X', 'L', 'C', 'D', 'M'}\n    for i in range(n):\n        c = s[i]\n        if c not in valid:\n            raise ValueError(f\"Invalid Roman numeral character: {c}\")\n    # Roman numeral values\n    values = {'I': 1, 'V': 5, 'X': 10, 'L': 50,\n              'C': 100, 'D': 500, 'M': 1000}\n    res = 0\n    i = 0\n    while i < n:\n        curr = values[s[i]]\n        if i + 1 < n and values[s[i]] < values[s[i + 1]]:\n            res += values[s[i + 1]] - values[s[i]]\n            i += 2\n        else:\n            res += curr\n            i += 1\n    if res < 0:\n        # Defensive: should not happen, but per ensures\n        res = 0\n    return res"
+    },
+    {
+      "source_file": "program_458.py",
+      "specification_index": 458,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List, Tuple\nfrom collections import Counter\n\ndef CountCommon(words: List[str]) -> List[Tuple[str, int]]:\n    if words is None:\n        raise ValueError(\"Input list cannot be None\")\n    counter = Counter(words)\n    # Filter out items with count <= 0 (though Counter never gives <=0)\n    items = [(word, count) for word, count in counter.items() if count > 0]\n    # Return at most 4 items\n    return items[:4]"
+    },
+    {
+      "source_file": "program_460.py",
+      "specification_index": 460,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef SumList(lst1: List[int], lst2: List[int]) -> List[int]:\n    if len(lst1) != len(lst2):\n        raise ValueError(\"Input lists must have the same length\")\n    return [a + b for a, b in zip(lst1, lst2)]"
+    },
+    {
+      "source_file": "program_465.py",
+      "specification_index": 465,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef ExtractRear(testTuple: List[List[int]]) -> List[int]:\n    if any(len(sub) == 0 for sub in testTuple):\n        raise ValueError(\"All subsequences must have length > 0\")\n    return [sub[-1] for sub in testTuple]"
+    },
+    {
+      "source_file": "program_479.py",
+      "specification_index": 479,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CountVowels(testStr):\n    if len(testStr) < 2:\n        raise ValueError(\"Precondition violated: |testStr| >= 2\")\n    vowels = {'a', 'e', 'i', 'o', 'u'}\n    count = 0\n    for ch in testStr:\n        if ch in vowels:\n            count += 1\n    return count"
+    },
+    {
+      "source_file": "program_486.py",
+      "specification_index": 486,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckIP(Ip):\n    \"\"\"\n    Checks if the input sequence of characters represents a valid IPv4 address.\n    Returns \"Valid IP address\" or \"Invalid IP address\".\n    \"\"\"\n    if not isinstance(Ip, (str, list, tuple)):\n        raise TypeError(\"Ip must be a sequence of characters\")\n    # Convert to string if necessary\n    if not isinstance(Ip, str):\n        Ip = ''.join(Ip)\n    parts = Ip.split('.')\n    if len(parts) != 4:\n        return \"Invalid IP address\"\n    for part in parts:\n        if not part.isdigit():\n            return \"Invalid IP address\"\n        if len(part) > 1 and part[0] == '0':\n            return \"Invalid IP address\"\n        num = int(part)\n        if num < 0 or num > 255:\n            return \"Invalid IP address\"\n    return \"Valid IP address\""
+    },
+    {
+      "source_file": "program_490.py",
+      "specification_index": 490,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List, Tuple\n\ndef MaximumValue(test_list: List[List[int]]) -> List[Tuple[int, int]]:\n    if any(len(s) == 0 for s in test_list):\n        raise ValueError(\"All inner lists must be non-empty.\")\n    res = []\n    for s in test_list:\n        max_val = s[0]\n        idx = 0\n        for i, v in enumerate(s):\n            if v > max_val:\n                max_val = v\n                idx = i\n        res.append((max_val, idx))\n    return res"
+    },
+    {
+      "source_file": "program_492.py",
+      "specification_index": 492,
+      "transformation": "variable_naming",
+      "regenerated_code": "def CheckMonthNumb(monthname2: str) -> bool:\n    valid_months = {\n        \"January\", \"March\", \"May\", \"July\", \"August\", \"October\", \"December\"\n    }\n    return monthname2 in valid_months"
+    },
+    {
+      "source_file": "program_493.py",
+      "specification_index": 493,
+      "transformation": "variable_naming",
+      "regenerated_code": "from typing import List\n\ndef LeftRotate(s: List[int], d: int) -> List[int]:\n    if not (0 <= d <= len(s)):\n        raise ValueError(\"Precondition violated: 0 <= d <= len(s)\")\n    return s[d:] + s[:d]"
+    },
+    {
+      "source_file": "program_496.py",
+      "specification_index": 496,
+      "transformation": "variable_naming",
+      "regenerated_code": "def LogprobSpecifyShape(op: int, values: list[int], innerRv: int, shapes: list[int]) -> int:\n    if len(values) != 1:\n        raise ValueError(\"Precondition violated: |values| == 1\")\n    # No other requirements or postconditions specified\n    # Return a default int value (e.g., 0)\n    return 0"
+    }
+  ]
+}

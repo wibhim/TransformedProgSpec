@@ -1,0 +1,1817 @@
+{
+  "metadata": {
+    "summary": {
+      "total_programs": 94,
+      "api_requests": 94,
+      "cached_results": 0,
+      "errors": 0,
+      "success_rate": "100.0%"
+    },
+    "timing": {
+      "total_duration_seconds": 255.996,
+      "total_duration_formatted": "4m 16.0s",
+      "average_per_request_seconds": 2.723
+    },
+    "tokens": {
+      "total": 26618,
+      "input": 17750,
+      "output": 8868,
+      "average_per_request": 283.2
+    },
+    "cost": {
+      "total_usd": 0.106444,
+      "average_per_request_usd": 0.001132,
+      "cost_per_token_usd": 4e-06
+    },
+    "model": "gpt-4.1",
+    "generation_timestamp": "2025-10-29T15:39:55.137777"
+  },
+  "specifications": [
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckAlphanumeric(s: seq<char>) returns (res: seq<char>)\n  // Accepts a string and returns \"Accept\" if it contains an alphanumeric character, else \"Discard\"\n  ensures res == ['A','c','...",
+      "program_specification": "def CheckAlphanumeric(s):\n    if not isinstance(s, (list, tuple, str)):\n        raise TypeError(\"Input must be a sequence of characters.\")\n    found = False\n    for c in s:\n        if isinstance(c, str):\n            if len(c) != 1:\n                raise ValueError(\"Each element must be a single character.\")\n            if c.isalnum():\n                found = True\n                break\n        else:\n            raise ValueError(\"Each element must be a character (string of length 1).\")\n    if found:\n        return list(\"Accept\")\n    else:\n        return list(\"Discard\")\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.774,
+        "duration_formatted": "2.77s",
+        "tokens": {
+          "input": 176,
+          "output": 128,
+          "total": 304
+        },
+        "cost_usd": 0.001376,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:27:48.520931"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod IsValidURL(s: seq<char>) returns (ok: bool)\n  // Minimal specification: returns true if s is not empty and matches a simple URL pattern\n  ensures (|s| == 0) ==> ok == false\n  ensures (...",
+      "program_specification": "```python\nimport re\n\ndef IsValidURL(s):\n    \"\"\"\n    Returns True if s is not empty and matches a simple URL pattern.\n    s: sequence of characters (e.g., list or string)\n    \"\"\"\n    # Convert input to string if it's a sequence of chars\n    if isinstance(s, str):\n        s_str = s\n    else:\n        s_str = ''.join(s)\n    if len(s_str) == 0:\n        return False\n    # Simple URL pattern: starts with http:// or https://, followed by at least one non-space character\n    pattern = re.compile(r'^(http://|https://)[^\\s]+$')\n    return bool(pattern.match(s_str))\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.143,
+        "duration_formatted": "3.14s",
+        "tokens": {
+          "input": 180,
+          "output": 147,
+          "total": 327
+        },
+        "cost_usd": 0.001536,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:27:56.700123"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod TnAp(a: int, n: int, d: int) returns (tn: int)\n  requires n >= 1\n  ensures tn == a + (n - 1) * d\n{\n  tn := a + (n - 1) * d;\n}\n```",
+      "program_specification": "def TnAp(a: int, n: int, d: int) -> int:\n    if n < 1:\n        raise ValueError(\"Precondition violated: n >= 1\")\n    return a + (n - 1) * d\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.296,
+        "duration_formatted": "1.30s",
+        "tokens": {
+          "input": 189,
+          "output": 53,
+          "total": 242
+        },
+        "cost_usd": 0.000802,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:03.031531"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod EvenOrOdd(N: seq<char>) returns (result: seq<char>)\n  requires |N| > 0\n  ensures result == ['E','v','e','n'] || result == ['O','d','d']\n  ensures (N[|N|-1] in ['0','2','4','6','8','A',...",
+      "program_specification": "```python\ndef EvenOrOdd(N):\n    if len(N) == 0:\n        raise ValueError(\"Precondition violated: |N| > 0\")\n    last = N[-1]\n    even_digits = {'0', '2', '4', '6', '8', 'A', 'C', 'E'}\n    if last in even_digits:\n        return ['E', 'v', 'e', 'n']\n    else:\n        return ['O', 'd', 'd']\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.861,
+        "duration_formatted": "1.86s",
+        "tokens": {
+          "input": 199,
+          "output": 105,
+          "total": 304
+        },
+        "cost_usd": 0.001238,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:09.926236"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod Extract(lst: seq<seq<int>>) returns (res: seq<int>)\n  requires forall s :: s in lst ==> |s| > 0\n  ensures |res| == |lst|\n  ensures forall i :: 0 <= i < |lst| ==> res[i] == lst[i][|lst[...",
+      "program_specification": "```python\nfrom typing import List\n\ndef Extract(lst: List[List[int]]) -> List[int]:\n    if not all(len(s) > 0 for s in lst):\n        raise ValueError(\"All inner lists must be non-empty\")\n    return [s[-1] for s in lst]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.582,
+        "duration_formatted": "1.58s",
+        "tokens": {
+          "input": 193,
+          "output": 61,
+          "total": 254
+        },
+        "cost_usd": 0.000874,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:16.542375"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MaxOfTwo(x: int, y: int) returns (m: int)\n  ensures (m == x || m == y)\n  ensures m >= x && m >= y\n  ensures (x > y) ==> m == x\n  ensures (y >= x) ==> m == y\n{\n  if x > y {\n    m := x;\n...",
+      "program_specification": "```python\ndef MaxOfTwo(x: int, y: int) -> int:\n    if x > y:\n        return x\n    else:\n        return y\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.227,
+        "duration_formatted": "1.23s",
+        "tokens": {
+          "input": 203,
+          "output": 36,
+          "total": 239
+        },
+        "cost_usd": 0.000694,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:22.801505"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MulList(nums1: seq<int>, nums2: seq<int>) returns (res: seq<int>)\n  requires |nums1| == |nums2|\n  ensures |res| == |nums1|\n  ensures forall i :: 0 <= i < |nums1| ==> res[i] == nums1[i]...",
+      "program_specification": "```python\nfrom typing import List\n\ndef MulList(nums1: List[int], nums2: List[int]) -> List[int]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Precondition failed: nums1 and nums2 must have the same length.\")\n    return [a * b for a, b in zip(nums1, nums2)]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.401,
+        "duration_formatted": "1.40s",
+        "tokens": {
+          "input": 194,
+          "output": 77,
+          "total": 271
+        },
+        "cost_usd": 0.001004,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:29.249071"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ConvertListDictionary(l1: seq<int>, l2: seq<int>, l3: seq<int>) returns (res: seq<map<int, map<int, int>>>)\n  requires |l1| == |l2| && |l2| == |l3|\n  ensures |res| == |l1|\n  // Each re...",
+      "program_specification": "```python\nfrom typing import List, Dict\n\ndef ConvertListDictionary(l1: List[int], l2: List[int], l3: List[int]) -> List[Dict[int, Dict[int, int]]]:\n    if not (len(l1) == len(l2) and len(l2) == len(l3)):\n        raise ValueError(\"Precondition failed: lengths of l1, l2, l3 must be equal\")\n    res = []\n    for a, b, c in zip(l1, l2, l3):\n        res.append({a: {b: c}})\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.487,
+        "duration_formatted": "2.49s",
+        "tokens": {
+          "input": 200,
+          "output": 128,
+          "total": 328
+        },
+        "cost_usd": 0.001424,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:36.771647"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ConnectionRequiresHttpTunnel(\n    proxyUrlIsNone: bool,\n    proxyUrlSchemeIsHttps: bool,\n    proxyConfigIsNone: bool,\n    proxyConfigUseForwardingForHttps: bool,\n    destinationSchemeI...",
+      "program_specification": "```python\ndef ConnectionRequiresHttpTunnel(\n    proxyUrlIsNone: bool,\n    proxyUrlSchemeIsHttps: bool,\n    proxyConfigIsNone: bool,\n    proxyConfigUseForwardingForHttps: bool,\n    destinationSchemeIsHttps: bool\n) -> bool:\n    \"\"\"\n    Implements the logic for determining if an HTTP tunnel is required for a connection.\n    \"\"\"\n    if proxyUrlIsNone or proxyConfigIsNone:\n        return False\n    if destinationSchemeIsHttps:\n        if proxyUrlSchemeIsHttps:\n            return False\n        if proxyConfigUseForwardingForHttps:\n            return False\n        return True\n    return False\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.505,
+        "duration_formatted": "2.50s",
+        "tokens": {
+          "input": 174,
+          "output": 135,
+          "total": 309
+        },
+        "cost_usd": 0.001428,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:44.310052"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod DivList(nums1: seq<real>, nums2: seq<real>) returns (res: seq<real>)\n  requires |nums1| == |nums2|\n  requires forall i :: 0 <= i < |nums2| ==> nums2[i] != 0.0\n  ensures |res| == |nums1...",
+      "program_specification": "```python\nfrom typing import List\n\ndef DivList(nums1: List[float], nums2: List[float]) -> List[float]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Input lists must have the same length\")\n    if any(x == 0.0 for x in nums2):\n        raise ZeroDivisionError(\"All elements of nums2 must be nonzero\")\n    return [a / b for a, b in zip(nums1, nums2)]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.441,
+        "duration_formatted": "2.44s",
+        "tokens": {
+          "input": 198,
+          "output": 104,
+          "total": 302
+        },
+        "cost_usd": 0.001228,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:51.783331"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckIsosceles(x: int, y: int, z: int) returns (res: bool)\n  ensures res <==> (x != y && y != z && z != x)\n{\n  if x != y && y != z && z != x {\n    res := true;\n  } else {\n    res := fa...",
+      "program_specification": "```python\ndef CheckIsosceles(x: int, y: int, z: int) -> bool:\n    return x != y and y != z and z != x\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.357,
+        "duration_formatted": "1.36s",
+        "tokens": {
+          "input": 199,
+          "output": 39,
+          "total": 238
+        },
+        "cost_usd": 0.00071,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:28:58.184245"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CountUnsetBits(n: int) returns (count: int)\n  requires n >= 0\n  ensures count >= 0\n{\n  count := 0;\n  var i := 1;\n  while i <= n\n    invariant 1 <= i <= n + 1\n    invariant count >= 0\n ...",
+      "program_specification": "```python\ndef CountUnsetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    count = 0\n    i = 1\n    while i <= n:\n        if (n & i) == 0:\n            count += 1\n        i <<= 1\n    return count\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.497,
+        "duration_formatted": "1.50s",
+        "tokens": {
+          "input": 195,
+          "output": 81,
+          "total": 276
+        },
+        "cost_usd": 0.001038,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:04.711477"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ValidityTriangle(a: int, b: int, c: int) returns (res: bool)\n  ensures res <==> a + b + c == 180\n{\n  if a + b + c == 180 {\n    res := true;\n  } else {\n    res := false;\n  }\n}\n```",
+      "program_specification": "```python\ndef ValidityTriangle(a: int, b: int, c: int) -> bool:\n    return a + b + c == 180\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.202,
+        "duration_formatted": "1.20s",
+        "tokens": {
+          "input": 195,
+          "output": 34,
+          "total": 229
+        },
+        "cost_usd": 0.000662,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:10.939694"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod GetItem(tup1: seq<int>, index: int) returns (item: int)\n  requires 0 <= index < |tup1|\n  ensures item == tup1[index]\n{\n  item := tup1[index];\n}\n```",
+      "program_specification": "def GetItem(tup1, index):\n    if not (0 <= index < len(tup1)):\n        raise IndexError(\"index out of range\")\n    return tup1[index]\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.54,
+        "duration_formatted": "1.54s",
+        "tokens": {
+          "input": 178,
+          "output": 38,
+          "total": 216
+        },
+        "cost_usd": 0.00066,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:17.512801"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod Maximum(a: int, b: int) returns (m: int)\n  ensures (m == a || m == b)\n  ensures m >= a && m >= b\n  ensures (a >= b) ==> m == a\n  ensures (b >  a) ==> m == b\n{\n  if a >= b {\n    m := a;...",
+      "program_specification": "```python\ndef Maximum(a: int, b: int) -> int:\n    if a >= b:\n        return a\n    else:\n        return b\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.297,
+        "duration_formatted": "1.30s",
+        "tokens": {
+          "input": 202,
+          "output": 34,
+          "total": 236
+        },
+        "cost_usd": 0.000676,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:23.840220"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod RectangleArea(l: int, b: int) returns (area: int)\n  ensures area == l * b\n{\n  area := l * b;\n}\n```",
+      "program_specification": "def RectangleArea(l: int, b: int) -> int:\n    return l * b\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.102,
+        "duration_formatted": "1.10s",
+        "tokens": {
+          "input": 163,
+          "output": 20,
+          "total": 183
+        },
+        "cost_usd": 0.000486,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:29.975918"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ClosestNum(N: int) returns (res: int)\n  ensures res == N - 1\n{\n  res := N - 1;\n}\n```",
+      "program_specification": "def ClosestNum(N: int) -> int:\n    return N - 1\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.096,
+        "duration_formatted": "1.10s",
+        "tokens": {
+          "input": 162,
+          "output": 18,
+          "total": 180
+        },
+        "cost_usd": 0.000468,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:36.103662"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod StringLength(str1: seq<char>) returns (len: int)\n  ensures len == |str1|\n  ensures len >= 0\n{\n  var len_acc := 0;\n  var i := 0;\n  while i < |str1|\n    invariant 0 <= i <= |str1|\n    in...",
+      "program_specification": "def StringLength(str1):\n    if not isinstance(str1, (str, list, tuple)):\n        raise TypeError(\"str1 must be a sequence of characters\")\n    len_acc = 0\n    i = 0\n    n = len(str1)\n    while i < n:\n        len_acc += 1\n        i += 1\n    return len_acc\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.6,
+        "duration_formatted": "1.60s",
+        "tokens": {
+          "input": 195,
+          "output": 78,
+          "total": 273
+        },
+        "cost_usd": 0.001014,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:42.734798"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod SubstractElements(testTup1: seq<seq<int>>, testTup2: seq<seq<int>>) returns (res: seq<seq<int>>)\n  requires |testTup1| == |testTup2|\n  requires forall i :: 0 <= i < |testTup1| ==> |tes...",
+      "program_specification": "```python\nfrom typing import List\n\ndef SubstractElements(testTup1: List[List[int]], testTup2: List[List[int]]) -> List[List[int]]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input outer lists must have the same length\")\n    for i in range(len(testTup1)):\n        if len(testTup1[i]) != len(testTup2[i]):\n            raise ValueError(f\"Inner lists at index {i} must have the same length\")\n    res = []\n    for i in range(len(testTup1)):\n        inner_res = []\n        for j in range(len(testTup1[i])):\n            inner_res.append(testTup1[i][j] - testTup2[i][j])\n        res.append(inner_res)\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.341,
+        "duration_formatted": "2.34s",
+        "tokens": {
+          "input": 196,
+          "output": 175,
+          "total": 371
+        },
+        "cost_usd": 0.001792,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:50.100862"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod DoesContainB(a: int, b: int, c: int) returns (res: bool)\n  ensures res ==> (a == b || (c != 0 && (b - a) % c == 0 && (b - a) / c > 0))\n  ensures (a == b) ==> res\n  ensures (c != 0 && (...",
+      "program_specification": "```python\ndef DoesContainB(a: int, b: int, c: int) -> bool:\n    if a == b:\n        return True\n    if c == 0:\n        return False\n    diff = b - a\n    if diff % c != 0:\n        return False\n    if (diff // c) > 0:\n        return True\n    return False\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.196,
+        "duration_formatted": "2.20s",
+        "tokens": {
+          "input": 206,
+          "output": 83,
+          "total": 289
+        },
+        "cost_usd": 0.001076,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:29:57.326637"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod DegreeRadian(radian: real) returns (deg: real)\n  ensures deg == radian * (180.0 / 3.141592653589793238462643383279)\n{\n  deg := radian * (180.0 / 3.141592653589793238462643383279);\n}\n``...",
+      "program_specification": "```python\ndef DegreeRadian(radian: float) -> float:\n    return radian * (180.0 / 3.141592653589793238462643383279)\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.45,
+        "duration_formatted": "1.45s",
+        "tokens": {
+          "input": 197,
+          "output": 40,
+          "total": 237
+        },
+        "cost_usd": 0.000714,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:03.825615"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod PytestWarns(warningIsNone: bool) returns (noWarn: bool)\n  // warningIsNone == true means 'warning is None'\n  // noWarn == true means NoWarningsChecker is returned\n  // noWarn == false ...",
+      "program_specification": "```python\ndef PytestWarns(warningIsNone: bool) -> bool:\n    \"\"\"\n    warningIsNone == True means 'warning is None'\n    noWarn == True means NoWarningsChecker is returned\n    noWarn == False otherwise\n    \"\"\"\n    return warningIsNone\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.652,
+        "duration_formatted": "1.65s",
+        "tokens": {
+          "input": 179,
+          "output": 60,
+          "total": 239
+        },
+        "cost_usd": 0.000838,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:10.507425"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckK(testTup: seq<int>, K: int) returns (found: bool)\n  ensures found <==> (exists i :: 0 <= i < |testTup| && testTup[i] == K)\n{\n  found := false;\n  var i := 0;\n  while i < |testTup|...",
+      "program_specification": "```python\nfrom typing import Sequence\n\ndef CheckK(testTup: Sequence[int], K: int) -> bool:\n    i = 0\n    while i < len(testTup):\n        if testTup[i] == K:\n            return True\n        i += 1\n    return False\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.061,
+        "duration_formatted": "3.06s",
+        "tokens": {
+          "input": 199,
+          "output": 65,
+          "total": 264
+        },
+        "cost_usd": 0.000918,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:18.605815"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckMonthNum(monthname1: string) returns (res: bool)\n  ensures res <==> monthname1 == \"February\"\n{\n  if monthname1 == \"February\" {\n    res := true;\n  } else {\n    res := false;\n  }\n}\n...",
+      "program_specification": "def CheckMonthNum(monthname1: str) -> bool:\n    return monthname1 == \"February\"\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.048,
+        "duration_formatted": "2.05s",
+        "tokens": {
+          "input": 185,
+          "output": 22,
+          "total": 207
+        },
+        "cost_usd": 0.000546,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:25.685583"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MergeDictionariesThree(dict1: map<int, int>, dict2: map<int, int>, dict3: map<int, int>) returns (res: map<int, int>)\n  ensures forall k :: k in res <==> (k in dict1 || k in dict2 || k...",
+      "program_specification": "```python\ndef MergeDictionariesThree(dict1: dict[int, int], dict2: dict[int, int], dict3: dict[int, int]) -> dict[int, int]:\n    if dict1 is None or dict2 is None or dict3 is None:\n        raise ValueError(\"Input dictionaries must not be None\")\n    res = dict()\n    # Add from dict1\n    for k, v in dict1.items():\n        res[k] = v\n    # Add from dict2, overwrite if key exists\n    for k, v in dict2.items():\n        res[k] = v\n    # Add from dict3, overwrite if key exists\n    for k, v in dict3.items():\n        res[k] = v\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 5.243,
+        "duration_formatted": "5.24s",
+        "tokens": {
+          "input": 189,
+          "output": 159,
+          "total": 348
+        },
+        "cost_usd": 0.00165,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:35.980462"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ShowPhaseResponse(samplerate: int)\n  requires samplerate >= 512\n  ensures true\n{\n  // This method is a placeholder for visualization and side effects.\n  // No computation or output is ...",
+      "program_specification": "def ShowPhaseResponse(samplerate: int):\n    if samplerate < 512:\n        raise ValueError(\"samplerate must be >= 512\")\n    # Placeholder for visualization and side effects.\n    pass\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.317,
+        "duration_formatted": "2.32s",
+        "tokens": {
+          "input": 171,
+          "output": 44,
+          "total": 215
+        },
+        "cost_usd": 0.000694,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:43.335822"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod RearExtract(test_list: seq<seq<int>>) returns (res: seq<int>)\n  requires forall s :: s in test_list ==> |s| > 0\n  ensures |res| == |test_list|\n  ensures forall i :: 0 <= i < |test_list...",
+      "program_specification": "```python\nfrom typing import List\n\ndef RearExtract(test_list: List[List[int]]) -> List[int]:\n    if not all(len(s) > 0 for s in test_list):\n        raise ValueError(\"All inner lists must be non-empty\")\n    return [s[-1] for s in test_list]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.203,
+        "duration_formatted": "2.20s",
+        "tokens": {
+          "input": 186,
+          "output": 65,
+          "total": 251
+        },
+        "cost_usd": 0.000892,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:50.576597"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod DivisionElements(testTup1: seq<int>, testTup2: seq<int>) returns (res: seq<int>)\n  requires |testTup1| == |testTup2|\n  requires forall i :: 0 <= i < |testTup2| ==> testTup2[i] != 0\n  e...",
+      "program_specification": "```python\nfrom typing import List\n\ndef DivisionElements(testTup1: List[int], testTup2: List[int]) -> List[int]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input sequences must have the same length\")\n    if any(x == 0 for x in testTup2):\n        raise ZeroDivisionError(\"Division by zero encountered in testTup2\")\n    return [a // b for a, b in zip(testTup1, testTup2)]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.362,
+        "duration_formatted": "2.36s",
+        "tokens": {
+          "input": 198,
+          "output": 113,
+          "total": 311
+        },
+        "cost_usd": 0.0013,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:30:57.972637"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod IsDecimal(num: string) returns (ok: bool)\n  ensures ok ==> num != \"\"\n  // Weaker postcondition: if ok, then num consists of digits, possibly with one '.' and up to two digits after.\n{\n...",
+      "program_specification": "```python\ndef IsDecimal(num: str) -> bool:\n    if num == \"\":\n        return False\n    parts = num.split('.')\n    if len(parts) > 2:\n        return False\n    if not parts[0].isdigit():\n        return False\n    if len(parts) == 2:\n        if not parts[1].isdigit():\n            return False\n        if len(parts[1]) > 2:\n            return False\n    return True\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.107,
+        "duration_formatted": "2.11s",
+        "tokens": {
+          "input": 176,
+          "output": 97,
+          "total": 273
+        },
+        "cost_usd": 0.001128,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:31:05.121797"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod IsSuccess(code: int) returns (ok: bool)\n  ensures ok <==> 200 <= code <= 299\n{\n  ok := 200 <= code <= 299;\n}\n```",
+      "program_specification": "def IsSuccess(code: int) -> bool:\n    return 200 <= code <= 299\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.447,
+        "duration_formatted": "1.45s",
+        "tokens": {
+          "input": 169,
+          "output": 20,
+          "total": 189
+        },
+        "cost_usd": 0.000498,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:31:11.603691"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MaximumSegments(n: int, a: int, b: int, c: int) returns (res: int)\n  requires n >= 0\n  requires a > 0 && b > 0 && c > 0\n  ensures res >= -1\n{\n  var var_0 := new int[n + 10];\n  var i: i...",
+      "program_specification": "```python\ndef MaximumSegments(n: int, a: int, b: int, c: int) -> int:\n    if n < 0:\n        raise ValueError(\"n must be >= 0\")\n    if a <= 0 or b <= 0 or c <= 0:\n        raise ValueError(\"a, b, c must be > 0\")\n    # DP approach: var_0[i] = max number of segments to get length i\n    var_0 = [-1] * (n + 10)\n    var_0[0] = 0\n    for i in range(1, n + 1):\n        max_val = -1\n        for seg in (a, b, c):\n            if i - seg >= 0 and var_0[i - seg] != -1:\n                max_val = max(max_val, var_0[i - seg] + 1)\n        var_0[i] = max_val\n    return var_0[n]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 7.442,
+        "duration_formatted": "7.44s",
+        "tokens": {
+          "input": 203,
+          "output": 211,
+          "total": 414
+        },
+        "cost_usd": 0.002094,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:31:24.091435"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod AsciiValue(k: char) returns (v: int)\n  ensures v == k as int\n{\n  v := k as int;\n}\n```",
+      "program_specification": "def AsciiValue(k: str) -> int:\n    if not isinstance(k, str) or len(k) != 1:\n        raise ValueError(\"k must be a single character string\")\n    return ord(k)\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.656,
+        "duration_formatted": "1.66s",
+        "tokens": {
+          "input": 160,
+          "output": 45,
+          "total": 205
+        },
+        "cost_usd": 0.00068,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:31:30.777592"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod SubList(nums1: seq<int>, nums2: seq<int>) returns (res: seq<int>)\n  requires |nums1| == |nums2|\n  ensures |res| == |nums1|\n  ensures forall i :: 0 <= i < |nums1| ==> res[i] == nums1[i]...",
+      "program_specification": "```python\nfrom typing import List\n\ndef SubList(nums1: List[int], nums2: List[int]) -> List[int]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Precondition violated: nums1 and nums2 must have the same length.\")\n    return nums1.copy()\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.088,
+        "duration_formatted": "2.09s",
+        "tokens": {
+          "input": 194,
+          "output": 65,
+          "total": 259
+        },
+        "cost_usd": 0.000908,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:31:37.902600"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod DecimalToOctal(deciNum: int) returns (octal: int)\n  requires deciNum >= 0\n  ensures octal >= 0\n  // ensures octal is the decimal representation of the octal digits of deciNum\n{\n  var r...",
+      "program_specification": "```python\ndef DecimalToOctal(deciNum: int) -> int:\n    if deciNum < 0:\n        raise ValueError(\"deciNum must be non-negative\")\n    if deciNum == 0:\n        return 0\n    octal = 0\n    place = 1\n    n = deciNum\n    while n > 0:\n        rem = n % 8\n        octal += rem * place\n        n //= 8\n        place *= 10\n    return octal\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.13,
+        "duration_formatted": "3.13s",
+        "tokens": {
+          "input": 186,
+          "output": 115,
+          "total": 301
+        },
+        "cost_usd": 0.001292,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:31:46.068494"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod BigDiff(nums: seq<int>) returns (diff: int)\n  requires |nums| > 0\n  ensures diff == Max(nums) - Min(nums)\n{\n  var mx := Max(nums);\n  var mn := Min(nums);\n  diff := mx - mn;\n}\n\nfunction...",
+      "program_specification": "from typing import Sequence\n\ndef BigDiff(nums: Sequence[int]) -> int:\n    if len(nums) == 0:\n        raise ValueError(\"nums must have at least one element\")\n    mx = max(nums)\n    mn = min(nums)\n    diff = mx - mn\n    return diff\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.299,
+        "duration_formatted": "3.30s",
+        "tokens": {
+          "input": 186,
+          "output": 61,
+          "total": 247
+        },
+        "cost_usd": 0.00086,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:31:54.401111"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ListTuple(listx: seq<int>) returns (t: seq<int>)\n  ensures t == listx\n{\n  t := listx;\n}\n```",
+      "program_specification": "def ListTuple(listx):\n    if not isinstance(listx, (list, tuple)):\n        raise TypeError(\"listx must be a sequence of integers\")\n    if not all(isinstance(x, int) for x in listx):\n        raise TypeError(\"All elements of listx must be integers\")\n    return listx\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.718,
+        "duration_formatted": "1.72s",
+        "tokens": {
+          "input": 160,
+          "output": 67,
+          "total": 227
+        },
+        "cost_usd": 0.000856,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:01.164949"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ToggleString(s: seq<char>) returns (t: seq<char>)\n  ensures |t| == |s|\n  ensures forall i :: 0 <= i < |s| ==> (t[i] == if 'a' <= s[i] <= 'z' then ('A' as int + (s[i] as int - 'a' as in...",
+      "program_specification": "```python\ndef ToggleString(s: str) -> str:\n    \"\"\"\n    Returns a string t of the same length as s, where each lowercase letter is converted to its uppercase\n    counterpart, each uppercase letter to its lowercase counterpart, and all other characters are unchanged.\n    \"\"\"\n    if not isinstance(s, str):\n        raise TypeError(\"Input must be a string\")\n    t = []\n    for c in s:\n        if 'a' <= c <= 'z':\n            t.append(chr(ord('A') + (ord(c) - ord('a'))))\n        elif 'A' <= c <= 'Z':\n            t.append(chr(ord('a') + (ord(c) - ord('A'))))\n        else:\n            t.append(c)\n    return ''.join(t)\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.429,
+        "duration_formatted": "2.43s",
+        "tokens": {
+          "input": 202,
+          "output": 161,
+          "total": 363
+        },
+        "cost_usd": 0.001692,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:08.627176"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod EvenNum(x: int) returns (b: bool)\n  ensures b <==> x % 2 == 0\n{\n  if x % 2 == 0 {\n    b := true;\n  } else {\n    b := false;\n  }\n}\n```",
+      "program_specification": "def EvenNum(x: int) -> bool:\n    return x % 2 == 0\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.443,
+        "duration_formatted": "1.44s",
+        "tokens": {
+          "input": 184,
+          "output": 20,
+          "total": 204
+        },
+        "cost_usd": 0.000528,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:15.102083"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod SumNatural(n: int) returns (s: int)\n  ensures s == n * (n + 1)\n{\n  var var_0 := n * (n + 1);\n  s := var_0;\n}\n```",
+      "program_specification": "def SumNatural(n: int) -> int:\n    return n * (n + 1)\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.171,
+        "duration_formatted": "1.17s",
+        "tokens": {
+          "input": 177,
+          "output": 20,
+          "total": 197
+        },
+        "cost_usd": 0.000514,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:21.311106"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MinCostTickets(days: seq<int>, costs: seq<int>) returns (minCost: int)\n  requires |costs| == 3\n  requires forall c :: 0 <= c < |costs| ==> costs[c] >= 0\n  requires forall d :: 0 <= d <...",
+      "program_specification": "```python\nfrom typing import List\n\ndef MinCostTickets(days: List[int], costs: List[int]) -> int:\n    if len(costs) != 3:\n        raise ValueError(\"costs must have length 3\")\n    if any(c < 0 for c in costs):\n        raise ValueError(\"all costs must be non-negative\")\n    if any(d < 0 for d in days):\n        raise ValueError(\"all days must be non-negative\")\n    if sorted(days) != days:\n        raise ValueError(\"days must be sorted in non-decreasing order\")\n    if len(days) == 0:\n        return 0\n\n    dayset = set(days)\n    last_day = days[-1]\n    dp = [0] * (last_day + 1)\n    for i in range(1, last_day + 1):\n        if i not in dayset:\n            dp[i] = dp[i-1]\n        else:\n            cost1 = dp[i-1] + costs[0]\n            cost7 = dp[max(0, i-7)] + costs[1]\n            cost30 = dp[max(0, i-30)] + costs[2]\n            dp[i] = min(cost1, cost7, cost30)\n    return dp[last_day]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 5.345,
+        "duration_formatted": "5.34s",
+        "tokens": {
+          "input": 191,
+          "output": 269,
+          "total": 460
+        },
+        "cost_usd": 0.002534,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:31.695268"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod FindDivisor(x: int, y: int) returns (d: int)\n  ensures (x == y) ==> d == y\n  ensures (x != y) ==> d == 2\n{\n  if x == y {\n    d := y;\n  } else {\n    d := 2;\n  }\n}\n```",
+      "program_specification": "```python\ndef FindDivisor(x: int, y: int) -> int:\n    if x == y:\n        return y\n    else:\n        return 2\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.144,
+        "duration_formatted": "1.14s",
+        "tokens": {
+          "input": 197,
+          "output": 37,
+          "total": 234
+        },
+        "cost_usd": 0.00069,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:37.892975"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod RectanglePerimeter(l: int, b: int) returns (p: int)\n  ensures p == 2 * (l + b)\n{\n  p := 2 * (l + b);\n}\n```",
+      "program_specification": "```python\ndef RectanglePerimeter(l: int, b: int) -> int:\n    return 2 * (l + b)\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.458,
+        "duration_formatted": "1.46s",
+        "tokens": {
+          "input": 172,
+          "output": 29,
+          "total": 201
+        },
+        "cost_usd": 0.000576,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:44.385045"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ListifyList(list1: seq<seq<int>>) returns (res: seq<seq<int>>)\n  ensures |res| == |list1|\n  ensures forall i :: 0 <= i < |list1| ==> res[i] == list1[i]\n{\n  res := list1;\n}\n```",
+      "program_specification": "def ListifyList(list1):\n    if not isinstance(list1, (list, tuple)):\n        raise TypeError(\"list1 must be a sequence of sequences of integers\")\n    for sublist in list1:\n        if not isinstance(sublist, (list, tuple)):\n            raise TypeError(\"Each element of list1 must be a sequence of integers\")\n        for elem in sublist:\n            if not isinstance(elem, int):\n                raise TypeError(\"Each element of sublists must be an integer\")\n    return list1\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 7.704,
+        "duration_formatted": "7.70s",
+        "tokens": {
+          "input": 192,
+          "output": 107,
+          "total": 299
+        },
+        "cost_usd": 0.00124,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:32:57.122175"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod TextMatchOne(text: string) returns (res: string)\n  ensures res == \"Found a match!\" || res == \"Not matched!\"\n  // Weaker postcondition: if text contains 'a' followed by at least one 'b'...",
+      "program_specification": "def TextMatchOne(text: str) -> str:\n    if not isinstance(text, str):\n        raise TypeError(\"text must be a string\")\n    i = 0\n    while i < len(text):\n        if text[i] == 'a':\n            j = i + 1\n            while j < len(text) and text[j] == 'b':\n                j += 1\n            if j > i + 1:\n                return \"Found a match!\"\n        i += 1\n    return \"Not matched!\"\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.577,
+        "duration_formatted": "2.58s",
+        "tokens": {
+          "input": 179,
+          "output": 109,
+          "total": 288
+        },
+        "cost_usd": 0.00123,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:04.731631"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MakeFlip(ch: char) returns (res: char)\n  requires ch == '0' || ch == '1'\n  ensures (ch == '0' ==> res == '1') && (ch == '1' ==> res == '0')\n{\n  if ch == '0' {\n    res := '1';\n  } else ...",
+      "program_specification": "```python\ndef MakeFlip(ch: str) -> str:\n    if not (ch == '0' or ch == '1'):\n        raise ValueError(\"Precondition failed: ch must be '0' or '1'\")\n    if ch == '0':\n        return '1'\n    else:\n        return '0'\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.474,
+        "duration_formatted": "1.47s",
+        "tokens": {
+          "input": 199,
+          "output": 68,
+          "total": 267
+        },
+        "cost_usd": 0.000942,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:11.242584"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckEquality(s: seq<char>) returns (res: seq<char>)\n  requires |s| > 0\n  ensures (s[0] == s[|s| - 1]) ==> res == ['E', 'q', 'u', 'a', 'l']\n  ensures (s[0] != s[|s| - 1]) ==> res == ['...",
+      "program_specification": "```python\nfrom typing import List\n\ndef CheckEquality(s: List[str]) -> List[str]:\n    if len(s) == 0:\n        raise ValueError(\"Precondition violated: |s| > 0\")\n    if s[0] == s[-1]:\n        return ['E', 'q', 'u', 'a', 'l']\n    else:\n        return ['N', 'o', 't', ' ', 'E', 'q', 'u', 'a', 'l']\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.067,
+        "duration_formatted": "2.07s",
+        "tokens": {
+          "input": 208,
+          "output": 105,
+          "total": 313
+        },
+        "cost_usd": 0.001256,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:18.343020"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod TupleModulo(testTup1: seq<int>, testTup2: seq<int>) returns (res: seq<int>)\n  requires |testTup1| == |testTup2|\n  requires forall i :: 0 <= i < |testTup2| ==> testTup2[i] != 0\n  ensure...",
+      "program_specification": "```python\nfrom typing import List\n\ndef TupleModulo(testTup1: List[int], testTup2: List[int]) -> List[int]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input sequences must have the same length.\")\n    if any(x == 0 for x in testTup2):\n        raise ValueError(\"All elements of testTup2 must be non-zero.\")\n    return [a % b for a, b in zip(testTup1, testTup2)]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.483,
+        "duration_formatted": "2.48s",
+        "tokens": {
+          "input": 198,
+          "output": 114,
+          "total": 312
+        },
+        "cost_usd": 0.001308,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:25.866059"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod AddTuple(test_list: seq<int>, test_tup: seq<int>) returns (res: seq<int>)\n  ensures res == test_list + test_tup\n{\n  res := test_list + test_tup;\n}\n```",
+      "program_specification": "def AddTuple(test_list, test_tup):\n    if not isinstance(test_list, (list, tuple)) or not isinstance(test_tup, (list, tuple)):\n        raise TypeError(\"Arguments must be sequences of integers\")\n    if not all(isinstance(x, int) for x in test_list):\n        raise TypeError(\"All elements of test_list must be integers\")\n    if not all(isinstance(x, int) for x in test_tup):\n        raise TypeError(\"All elements of test_tup must be integers\")\n    return list(test_list) + list(test_tup)\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.978,
+        "duration_formatted": "1.98s",
+        "tokens": {
+          "input": 175,
+          "output": 120,
+          "total": 295
+        },
+        "cost_usd": 0.00131,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:32.881589"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MostCommonElem(s: seq<int>, a: int) returns (res: seq<(int, int)>)\n  requires a >= 0\n  ensures 0 <= |res| <= a\n  ensures forall i :: 0 <= i < |res| ==> res[i].1 > 0\n  ensures forall i,...",
+      "program_specification": "```python\nfrom typing import List, Tuple\n\ndef MostCommonElem(s: List[int], a: int) -> List[Tuple[int, int]]:\n    if a < 0:\n        raise ValueError(\"Precondition violated: a >= 0\")\n    from collections import Counter\n\n    counts = Counter(s)\n    # Each element is (elem, count)\n    freq_list = [(elem, cnt) for elem, cnt in counts.items() if cnt > 0]\n    # Sort by count descending, then by element ascending\n    freq_list.sort(key=lambda x: (-x[1], x[0]))\n    # Take at most 'a' elements\n    res = freq_list[:a]\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.38,
+        "duration_formatted": "3.38s",
+        "tokens": {
+          "input": 196,
+          "output": 149,
+          "total": 345
+        },
+        "cost_usd": 0.001584,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:41.295031"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MedianNumbers(a: int, b: int, c: int) returns (m: int)\n  ensures (m == a || m == b || m == c)\n  ensures (a <= m <= b || b <= m <= a || a <= m <= c || c <= m <= a || b <= m <= c || c <=...",
+      "program_specification": "```python\ndef MedianNumbers(a: int, b: int, c: int) -> int:\n    # The median is the value that is neither the maximum nor the minimum\n    # among a, b, c. If two or more values are equal, the repeated value(s)\n    # may be the median.\n    nums = [a, b, c]\n    nums.sort()\n    return nums[1]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.47,
+        "duration_formatted": "2.47s",
+        "tokens": {
+          "input": 199,
+          "output": 87,
+          "total": 286
+        },
+        "cost_usd": 0.001094,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:48.798474"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\n// Dafny does not support Python-style dynamic typing or isinstance checks.\n// We cannot directly translate this function without knowing the types Declaration, Variable, and their fields.\n//...",
+      "program_specification": "# No concrete Dafny specification or types are provided.\n# Therefore, no Python code can be generated from this spec.",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.406,
+        "duration_formatted": "1.41s",
+        "tokens": {
+          "input": 160,
+          "output": 24,
+          "total": 184
+        },
+        "cost_usd": 0.000512,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:33:55.257214"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ModDivList(nums1: seq<int>, nums2: seq<int>) returns (res: seq<int>)\n  requires |nums1| == |nums2|\n  requires forall i :: 0 <= i < |nums2| ==> nums2[i] != 0\n  ensures |res| == |nums1|\n...",
+      "program_specification": "```python\nfrom typing import List\n\ndef ModDivList(nums1: List[int], nums2: List[int]) -> List[int]:\n    if len(nums1) != len(nums2):\n        raise ValueError(\"Input lists must have the same length\")\n    if any(n == 0 for n in nums2):\n        raise ZeroDivisionError(\"All elements in nums2 must be nonzero\")\n    return [a % b for a, b in zip(nums1, nums2)]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.336,
+        "duration_formatted": "2.34s",
+        "tokens": {
+          "input": 195,
+          "output": 100,
+          "total": 295
+        },
+        "cost_usd": 0.00119,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:34:02.628264"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ClearLruCaches()\n  ensures true\n{\n  // No-op in Dafny: side effects on caches and Python-specific behaviors are not modeled.\n}\n```",
+      "program_specification": "def ClearLruCaches():\n    pass\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.27,
+        "duration_formatted": "1.27s",
+        "tokens": {
+          "input": 161,
+          "output": 9,
+          "total": 170
+        },
+        "cost_usd": 0.000394,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:34:08.933973"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MergeDict(d1: map<int, int>, d2: map<int, int>) returns (res: map<int, int>)\n  ensures res == d1 + d2\n{\n  res := d1 + d2;\n}\n```",
+      "program_specification": "```python\ndef MergeDict(d1: dict[int, int], d2: dict[int, int]) -> dict[int, int]:\n    if not all(isinstance(k, int) and isinstance(v, int) for k, v in d1.items()):\n        raise TypeError(\"All keys and values in d1 must be integers\")\n    if not all(isinstance(k, int) and isinstance(v, int) for k, v in d2.items()):\n        raise TypeError(\"All keys and values in d2 must be integers\")\n    res = d1.copy()\n    res.update(d2)\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.923,
+        "duration_formatted": "1.92s",
+        "tokens": {
+          "input": 178,
+          "output": 128,
+          "total": 306
+        },
+        "cost_usd": 0.00138,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:34:15.895541"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod TextMatch(text: seq<char>) returns (result: seq<char>)\n  ensures result == ['F','o','u','n','d',' ','a',' ','m','a','t','c','h','!'] || result == ['N','o','t',' ','m','a','t','c','h','...",
+      "program_specification": "```python\nfrom typing import List\n\ndef TextMatch(text: List[str]) -> List[str]:\n    # The specification is truncated, but from the name and the possible results,\n    # we infer that it checks whether the input text matches a certain pattern.\n    # Since only two possible outputs are allowed, we assume the pattern is fixed.\n    # Let's assume the pattern is the string \"match\" (case-sensitive).\n\n    pattern = ['m', 'a', 't', 'c', 'h']\n    text_len = len(text)\n    pattern_len = len(pattern)\n\n    # Search for the pattern in the text\n    found = False\n    for i in range(text_len - pattern_len + 1):\n        if text[i:i+pattern_len] == pattern:\n            found = True\n            break\n\n    if found:\n        return ['F','o','u','n','d',' ','a',' ','m','a','t','c','h','!']\n    else:\n        return ['N','o','t',' ','m','a','t','c','h','.']\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 4.954,
+        "duration_formatted": "4.95s",
+        "tokens": {
+          "input": 195,
+          "output": 225,
+          "total": 420
+        },
+        "cost_usd": 0.00219,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:34:25.880023"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod NegNos(list1: seq<int>) returns (n: int)\n  ensures (exists i :: 0 <= i < |list1| && list1[i] < 0) ==> n < 0 && (exists i :: 0 <= i < |list1| && list1[i] == n && n < 0)\n  ensures (foral...",
+      "program_specification": "```python\ndef NegNos(list1):\n    if not isinstance(list1, (list, tuple)):\n        raise TypeError(\"list1 must be a sequence\")\n    for x in list1:\n        if not isinstance(x, int):\n            raise TypeError(\"All elements of list1 must be integers\")\n    # If there is any negative number, return one of them (the first found)\n    for n in list1:\n        if n < 0:\n            return n\n    # Otherwise, return 0\n    return 0\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.452,
+        "duration_formatted": "3.45s",
+        "tokens": {
+          "input": 204,
+          "output": 112,
+          "total": 316
+        },
+        "cost_usd": 0.001304,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:34:34.362188"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod Base10To85(d: int) returns (s: seq<char>)\n  requires d >= 0\n  ensures forall c: char :: c in s ==> 33 <= c as int < 118\n  ensures d == 0 ==> |s| == 0\n{\n  if d > 0 {\n    var c := (d % 8...",
+      "program_specification": "```python\ndef Base10To85(d: int) -> list:\n    if d < 0:\n        raise ValueError(\"Precondition violated: d >= 0\")\n    if d == 0:\n        return []\n    chars = []\n    while d > 0:\n        c = d % 85\n        char_code = c + 33\n        chars.append(chr(char_code))\n        d //= 85\n    chars.reverse()\n    return chars\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.361,
+        "duration_formatted": "3.36s",
+        "tokens": {
+          "input": 203,
+          "output": 97,
+          "total": 300
+        },
+        "cost_usd": 0.001182,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:34:42.759030"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod RemoveDatatype(testTuple: seq<int>, dataTypeIsInt: bool) returns (res: seq<int>)\n  // dataTypeIsInt: true means remove all ints (all elements are ints), so always returns []\n  // For t...",
+      "program_specification": "```python\nfrom typing import List\n\ndef RemoveDatatype(testTuple: List[int], dataTypeIsInt: bool) -> List[int]:\n    if not isinstance(testTuple, list):\n        raise TypeError(\"testTuple must be a list of ints\")\n    if not isinstance(dataTypeIsInt, bool):\n        raise TypeError(\"dataTypeIsInt must be a bool\")\n    if dataTypeIsInt:\n        return []\n    else:\n        return testTuple.copy()\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.865,
+        "duration_formatted": "1.86s",
+        "tokens": {
+          "input": 177,
+          "output": 96,
+          "total": 273
+        },
+        "cost_usd": 0.001122,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:34:49.659021"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod Slope(x1: real, y1: real, x2: real, y2: real) returns (m: real)\n  requires x2 != x1\n  ensures m == (y2 - y1) / (x2 - x1)\n{\n  m := (y2 - y1) / (x2 - x1);\n}\n```",
+      "program_specification": "```python\ndef Slope(x1: float, y1: float, x2: float, y2: float) -> float:\n    if x2 == x1:\n        raise ValueError(\"Precondition violated: x2 must not be equal to x1.\")\n    return (y2 - y1) / (x2 - x1)\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 41.362,
+        "duration_formatted": "41.36s",
+        "tokens": {
+          "input": 205,
+          "output": 74,
+          "total": 279
+        },
+        "cost_usd": 0.001002,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:35:36.054995"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod IsUndulating(n: seq<int>) returns (res: bool)\n  ensures |n| <= 2 ==> res == false\n  ensures |n| > 2 ==>\n    (res <==> (forall i :: 2 <= i < |n| ==> n[i] == n[i - 2]))\n{\n  if |n| <= 2 {...",
+      "program_specification": "```python\nfrom typing import List\n\ndef IsUndulating(n: List[int]) -> bool:\n    if len(n) <= 2:\n        return False\n    for i in range(2, len(n)):\n        if n[i] != n[i - 2]:\n            return False\n    return True\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.185,
+        "duration_formatted": "1.18s",
+        "tokens": {
+          "input": 205,
+          "output": 65,
+          "total": 270
+        },
+        "cost_usd": 0.00093,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:35:42.280336"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckValidity(a: int, b: int, c: int) returns (valid: bool)\n  ensures valid <==> (a + b > c && a + c > b && b + c > a)\n{\n  if a + b <= c || a + c <= b || b + c <= a {\n    valid := fals...",
+      "program_specification": "```python\ndef CheckValidity(a: int, b: int, c: int) -> bool:\n    return (a + b > c) and (a + c > b) and (b + c > a)\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.236,
+        "duration_formatted": "1.24s",
+        "tokens": {
+          "input": 199,
+          "output": 47,
+          "total": 246
+        },
+        "cost_usd": 0.000774,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:35:48.583155"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod RandomPivot(lst: seq<int>) returns (pivot: int)\n  requires |lst| > 0\n  ensures exists i :: 0 <= i < |lst| && pivot == lst[i]\n{\n  // In Dafny, we cannot implement randomness directly.\n ...",
+      "program_specification": "import random\n\ndef RandomPivot(lst):\n    if len(lst) <= 0:\n        raise ValueError(\"Precondition violated: lst must be non-empty\")\n    i = random.randrange(len(lst))\n    return lst[i]\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.316,
+        "duration_formatted": "1.32s",
+        "tokens": {
+          "input": 183,
+          "output": 45,
+          "total": 228
+        },
+        "cost_usd": 0.000726,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:35:54.941103"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod BreakSum(n: int) returns (res: int)\n  requires n >= 1\n  ensures res >= n\n{\n  var arr := new int[n + 1];\n  arr[0] := 0;\n  arr[1] := 1;\n  var i: int := 2;\n  while i <= n\n    invariant 2 ...",
+      "program_specification": "```python\ndef BreakSum(n: int) -> int:\n    if n < 1:\n        raise ValueError(\"Precondition violated: n >= 1\")\n    arr = [0] * (n + 1)\n    arr[0] = 0\n    arr[1] = 1\n    i = 2\n    while i <= n:\n        # The Dafny spec is incomplete, but let's assume arr[i] = arr[i-1] + 1\n        arr[i] = arr[i - 1] + 1\n        i += 1\n    res = arr[n]\n    # Postcondition: res >= n\n    if res < n:\n        raise RuntimeError(\"Postcondition violated: res >= n\")\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.338,
+        "duration_formatted": "2.34s",
+        "tokens": {
+          "input": 203,
+          "output": 162,
+          "total": 365
+        },
+        "cost_usd": 0.001702,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:02.321672"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod Match(text: seq<char>) returns (res: seq<char>)\n  ensures res == ['Y','e','s'] || res == ['N','o']\n  // Weaker postcondition: if text contains a substring matching \"[A-Z]+[a-z]+$\" then...",
+      "program_specification": "```python\nimport re\n\ndef Match(text):\n    if not isinstance(text, (list, tuple, str)):\n        raise TypeError(\"text must be a sequence of characters\")\n    # Convert to string if needed\n    s = ''.join(text) if not isinstance(text, str) else text\n    # Regex: one or more uppercase, then one or more lowercase, at end of string\n    pattern = re.compile(r'[A-Z]+[a-z]+$')\n    if pattern.search(s):\n        return ['Y', 'e', 's']\n    else:\n        return ['N', 'o']\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.284,
+        "duration_formatted": "2.28s",
+        "tokens": {
+          "input": 185,
+          "output": 126,
+          "total": 311
+        },
+        "cost_usd": 0.001378,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:09.638968"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod RealPower(apparentPower: real, powerFactor: real) returns (realPower: real)\n  requires -1.0 <= powerFactor <= 1.0\n  ensures realPower == apparentPower * powerFactor\n{\n  realPower := ap...",
+      "program_specification": "def RealPower(apparentPower: float, powerFactor: float) -> float:\n    if not (-1.0 <= powerFactor <= 1.0):\n        raise ValueError(\"powerFactor must be between -1.0 and 1.0 inclusive\")\n    return apparentPower * powerFactor\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.809,
+        "duration_formatted": "3.81s",
+        "tokens": {
+          "input": 181,
+          "output": 62,
+          "total": 243
+        },
+        "cost_usd": 0.000858,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:18.481891"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MaxLength(list1: seq<seq<int>>) returns (maxLen: int, maxSeq: seq<int>)\n  requires |list1| > 0\n  ensures 0 <= maxLen\n  ensures exists x :: x in list1 && |x| == maxLen\n  ensures maxSeq ...",
+      "program_specification": "from typing import List, Tuple\n\ndef MaxLength(list1: List[List[int]]) -> Tuple[int, List[int]]:\n    if len(list1) == 0:\n        raise ValueError(\"Precondition violated: list1 must not be empty\")\n    maxLen = -1\n    maxSeq = []\n    for seq in list1:\n        if len(seq) > maxLen:\n            maxLen = len(seq)\n            maxSeq = seq\n    return maxLen, maxSeq\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 4.251,
+        "duration_formatted": "4.25s",
+        "tokens": {
+          "input": 191,
+          "output": 99,
+          "total": 290
+        },
+        "cost_usd": 0.001174,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:27.766771"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod AddNestedTuples(testTup1: seq<seq<int>>, testTup2: seq<seq<int>>) returns (res: seq<seq<int>>)\n  requires |testTup1| == |testTup2|\n  requires forall i :: 0 <= i < |testTup1| ==> |testT...",
+      "program_specification": "```python\nfrom typing import List\n\ndef AddNestedTuples(testTup1: List[List[int]], testTup2: List[List[int]]) -> List[List[int]]:\n    if len(testTup1) != len(testTup2):\n        raise ValueError(\"Input outer lists must have the same length\")\n    res = []\n    for i in range(len(testTup1)):\n        inner1 = testTup1[i]\n        inner2 = testTup2[i]\n        if len(inner1) != len(inner2):\n            raise ValueError(f\"Inner lists at index {i} must have the same length\")\n        res.append([inner1[j] + inner2[j] for j in range(len(inner1))])\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.626,
+        "duration_formatted": "2.63s",
+        "tokens": {
+          "input": 198,
+          "output": 157,
+          "total": 355
+        },
+        "cost_usd": 0.001652,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:35.412093"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod IsAbundant(n: int) returns (res: bool)\n  requires n > 0\n  ensures res <==> (SumOfProperDivisors(n) > n)\n{\n  var sum := 0;\n  var i := 1;\n  while i < n\n    invariant 1 <= i <= n\n    inva...",
+      "program_specification": "```python\ndef SumOfProperDivisors(n: int) -> int:\n    if n <= 1:\n        return 0\n    total = 1\n    sqrt_n = int(n ** 0.5)\n    for i in range(2, sqrt_n + 1):\n        if n % i == 0:\n            total += i\n            other = n // i\n            if other != i and other != n:\n                total += other\n    return total\n\ndef IsAbundant(n: int) -> bool:\n    if n <= 0:\n        raise ValueError(\"Precondition violated: n > 0\")\n    return SumOfProperDivisors(n) > n\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.622,
+        "duration_formatted": "2.62s",
+        "tokens": {
+          "input": 200,
+          "output": 147,
+          "total": 347
+        },
+        "cost_usd": 0.001576,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:43.067326"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CountAlphaDigSpl(s: seq<char>) returns (nAlpha: int, nDigit: int, nOther: int)\n  ensures nAlpha >= 0 && nDigit >= 0 && nOther >= 0\n  ensures nAlpha + nDigit + nOther == |s|\n  ensures f...",
+      "program_specification": "```python\nfrom typing import Tuple\n\ndef CountAlphaDigSpl(s: str) -> Tuple[int, int, int]:\n    \"\"\"\n    Counts the number of alphabetic, digit, and other characters in the string s.\n    Returns a tuple (nAlpha, nDigit, nOther).\n    Preconditions:\n        - s must be a string (sequence of characters).\n    Postconditions:\n        - nAlpha >= 0, nDigit >= 0, nOther >= 0\n        - nAlpha + nDigit + nOther == len(s)\n    \"\"\"\n    if not isinstance(s, str):\n        raise TypeError(\"Input must be a string\")\n    nAlpha = 0\n    nDigit = 0\n    nOther = 0\n    for c in s:\n        if c.isalpha():\n            nAlpha += 1\n        elif c.isdigit():\n            nDigit += 1\n        else:\n            nOther += 1\n    return nAlpha, nDigit, nOther\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.421,
+        "duration_formatted": "3.42s",
+        "tokens": {
+          "input": 192,
+          "output": 208,
+          "total": 400
+        },
+        "cost_usd": 0.002048,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:51.526116"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CountIntegralPoints(x1: int, y1: int, x2: int, y2: int) returns (count: int)\n  ensures count == (y2 - y1 - 1) * (x2 - x1 - 1)\n{\n  count := (y2 - y1 - 1) * (x2 - x1 - 1);\n}\n```",
+      "program_specification": "```python\ndef CountIntegralPoints(x1: int, y1: int, x2: int, y2: int) -> int:\n    return (y2 - y1 - 1) * (x2 - x1 - 1)\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.328,
+        "duration_formatted": "3.33s",
+        "tokens": {
+          "input": 210,
+          "output": 54,
+          "total": 264
+        },
+        "cost_usd": 0.000852,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:36:59.888814"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod StrToList(s: seq<char>) returns (res: seq<char>)\n  ensures |res| == |s|\n  ensures forall i :: 0 <= i < |s| ==> res[i] == s[i]\n{\n  var acc: seq<char> := [];\n  var i: int := 0;\n  while i...",
+      "program_specification": "```python\nfrom typing import List\n\ndef StrToList(s: str) -> List[str]:\n    # Precondition: s is a sequence of characters (str in Python)\n    if not isinstance(s, str):\n        raise TypeError(\"Input must be a string.\")\n    res = []\n    i = 0\n    while i < len(s):\n        res.append(s[i])\n        i += 1\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.251,
+        "duration_formatted": "2.25s",
+        "tokens": {
+          "input": 196,
+          "output": 89,
+          "total": 285
+        },
+        "cost_usd": 0.001104,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:07.196931"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod AsciiValueString(str1: seq<char>) returns (v: int)\n  requires |str1| >= 0\n  ensures (|str1| == 0 ==> v == 0)\n  ensures (|str1| > 0 ==> v == str1[0] as int)\n{\n  if |str1| > 0 {\n    v :=...",
+      "program_specification": "```python\ndef AsciiValueString(str1):\n    if len(str1) < 0:\n        raise ValueError(\"Precondition violated: |str1| >= 0\")\n    if len(str1) == 0:\n        return 0\n    return ord(str1[0])\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.408,
+        "duration_formatted": "1.41s",
+        "tokens": {
+          "input": 206,
+          "output": 62,
+          "total": 268
+        },
+        "cost_usd": 0.000908,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:13.634937"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod FrontAndRear(testTup: seq<int>) returns (res: (int, int))\n  requires |testTup| >= 1\n  ensures res.0 == testTup[0]\n  ensures res.1 == testTup[|testTup| - 1]\n{\n  res := (testTup[0], test...",
+      "program_specification": "```python\nfrom typing import Sequence, Tuple\n\ndef FrontAndRear(testTup: Sequence[int]) -> Tuple[int, int]:\n    if len(testTup) < 1:\n        raise ValueError(\"Precondition violated: |testTup| >= 1\")\n    return (testTup[0], testTup[-1])\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.279,
+        "duration_formatted": "2.28s",
+        "tokens": {
+          "input": 202,
+          "output": 72,
+          "total": 274
+        },
+        "cost_usd": 0.00098,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:20.955736"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod AccessKey(ditionary: seq<int>, key: int) returns (k: int)\n  requires 0 <= key < |ditionary|\n  ensures k == ditionary[key]\n{\n  k := ditionary[key];\n}\n```",
+      "program_specification": "def AccessKey(ditionary: list[int], key: int) -> int:\n    if not (0 <= key < len(ditionary)):\n        raise IndexError(\"key out of bounds\")\n    return ditionary[key]\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.265,
+        "duration_formatted": "1.26s",
+        "tokens": {
+          "input": 180,
+          "output": 47,
+          "total": 227
+        },
+        "cost_usd": 0.000736,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:27.253446"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod Last(n: seq<int>) returns (x: int)\n  requires |n| > 0\n  ensures x == n[|n| - 1]\n{\n  x := n[|n| - 1];\n}\n```",
+      "program_specification": "def Last(n):\n    if len(n) <= 0:\n        raise ValueError(\"Precondition violated: input sequence must have length > 0\")\n    return n[len(n) - 1]\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.424,
+        "duration_formatted": "1.42s",
+        "tokens": {
+          "input": 178,
+          "output": 41,
+          "total": 219
+        },
+        "cost_usd": 0.000684,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:33.712610"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckTypeOfTriangle(a: int, b: int, c: int) returns (t: string)\n  ensures t == \"Right-angled Triangle\" || t == \"Obtuse-angled Triangle\" || t == \"Acute-angled Triangle\"\n{\n  var var0 := ...",
+      "program_specification": "```python\ndef CheckTypeOfTriangle(a: int, b: int, c: int) -> str:\n    # Enforce triangle side constraints\n    if a <= 0 or b <= 0 or c <= 0:\n        raise ValueError(\"Sides must be positive integers\")\n    sides = sorted([a, b, c])\n    if sides[0] + sides[1] <= sides[2]:\n        raise ValueError(\"Triangle inequality violated\")\n\n    x, y, z = sides  # x <= y <= z\n    x2 = x * x\n    y2 = y * y\n    z2 = z * z\n\n    if x2 + y2 == z2:\n        return \"Right-angled Triangle\"\n    elif x2 + y2 < z2:\n        return \"Obtuse-angled Triangle\"\n    else:\n        return \"Acute-angled Triangle\"\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.305,
+        "duration_formatted": "2.30s",
+        "tokens": {
+          "input": 187,
+          "output": 187,
+          "total": 374
+        },
+        "cost_usd": 0.00187,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:41.048726"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod GetDemoGraph(index: int) returns (g: map<int, seq<int>>)\n  requires 0 <= index < 4\n  ensures index == 0 ==> g == map[\n    0 := [1, 2],\n    1 := [0, 2],\n    2 := [0, 1, 3, 5],\n    3 := ...",
+      "program_specification": "```python\ndef GetDemoGraph(index: int) -> dict[int, list[int]]:\n    if not (0 <= index < 4):\n        raise ValueError(\"index must be in range 0 <= index < 4\")\n    if index == 0:\n        return {\n            0: [1, 2],\n            1: [0, 2],\n            2: [0, 1, 3, 5],\n            3: [2, 4],\n            4: [3, 5],\n            5: [2, 4]\n        }\n    elif index == 1:\n        return {\n            0: [1],\n            1: [0, 2],\n            2: [1, 3],\n            3: [2]\n        }\n    elif index == 2:\n        return {\n            0: [1, 3],\n            1: [0, 2],\n            2: [1, 3],\n            3: [0, 2]\n        }\n    elif index == 3:\n        return {\n            0: [1, 2, 3],\n            1: [0, 2, 3],\n            2: [0, 1, 3],\n            3: [0, 1, 2]\n        }\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.047,
+        "duration_formatted": "3.05s",
+        "tokens": {
+          "input": 208,
+          "output": 288,
+          "total": 496
+        },
+        "cost_usd": 0.00272,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:49.125935"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckMonthnumbNumber(monthnum2: int) returns (ok: bool)\n  ensures ok <==> monthnum2 == 1 || monthnum2 == 3 || monthnum2 == 5 || monthnum2 == 7 || monthnum2 == 8 || monthnum2 == 10 || m...",
+      "program_specification": "```python\ndef CheckMonthnumbNumber(monthnum2: int) -> bool:\n    return monthnum2 in {1, 3, 5, 7, 8, 10, 12}\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.431,
+        "duration_formatted": "1.43s",
+        "tokens": {
+          "input": 195,
+          "output": 46,
+          "total": 241
+        },
+        "cost_usd": 0.000758,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:37:55.587973"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod LengthOfLastWord(a: seq<char>) returns (len: int)\n  ensures len >= 0\n  ensures len <= |a|\n  // len is the length of the last maximal contiguous non-space substring in a after trimming ...",
+      "program_specification": "```python\ndef LengthOfLastWord(a: list) -> int:\n    if not all(isinstance(c, str) and len(c) == 1 for c in a):\n        raise ValueError(\"Input must be a sequence of single-character strings.\")\n    n = len(a)\n    i = n - 1\n    # Trim trailing spaces\n    while i >= 0 and a[i] == ' ':\n        i -= 1\n    # All spaces or empty\n    if i < 0:\n        return 0\n    # Count length of last word\n    length = 0\n    while i >= 0 and a[i] != ' ':\n        length += 1\n        i -= 1\n    return length\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.13,
+        "duration_formatted": "2.13s",
+        "tokens": {
+          "input": 176,
+          "output": 156,
+          "total": 332
+        },
+        "cost_usd": 0.0016,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:02.751211"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod DispatchHook(\n    key: int,\n    hooks: map<int, seq<(int, int) -> int>>,\n    hookData: int\n    ) returns (result: int)\n  // Minimal specifications, as the Python code is not type-safe ...",
+      "program_specification": "```python\nfrom typing import Callable, Dict, List, Tuple\n\ndef DispatchHook(\n    key: int,\n    hooks: Dict[int, List[Callable[[int, int], int]]],\n    hookData: int\n) -> int:\n    if key not in hooks:\n        raise KeyError(\"Key not found in hooks\")\n    hook_list = hooks[key]\n    if not hook_list:\n        raise ValueError(\"No hooks for the given key\")\n    result = hookData\n    for hook in hook_list:\n        result = hook(result, key)\n    return result\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.898,
+        "duration_formatted": "1.90s",
+        "tokens": {
+          "input": 179,
+          "output": 119,
+          "total": 298
+        },
+        "cost_usd": 0.00131,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:09.676867"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ParseStrings(strs: seq<string>) returns (res: seq<string>)\n  requires forall s :: s in strs ==> s != \"\"\n  ensures forall s :: s in res ==> s != \"\"\n  ensures |res| <= |strs|\n{\n  // Sinc...",
+      "program_specification": "```python\nfrom typing import List\n\ndef ParseStrings(strs: List[str]) -> List[str]:\n    if any(s == \"\" for s in strs):\n        raise ValueError(\"All input strings must be non-empty.\")\n    # Since the postcondition only requires non-empty strings in res and |res| <= |strs|,\n    # we can simply return strs as is.\n    return list(strs)\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.913,
+        "duration_formatted": "1.91s",
+        "tokens": {
+          "input": 183,
+          "output": 84,
+          "total": 267
+        },
+        "cost_usd": 0.001038,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:16.636633"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckSolution(a: int, b: int, c: int) returns (result: string)\n  ensures (a == c) ==> result == \"Yes\"\n  ensures (a != c) ==> result == \"No\"\n{\n  if a == c {\n    result := \"Yes\";\n  } els...",
+      "program_specification": "```python\ndef CheckSolution(a: int, b: int, c: int) -> str:\n    if a == c:\n        return \"Yes\"\n    else:\n        return \"No\"\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.01,
+        "duration_formatted": "1.01s",
+        "tokens": {
+          "input": 191,
+          "output": 41,
+          "total": 232
+        },
+        "cost_usd": 0.00071,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:22.675223"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CountList(inputList: seq<int>) returns (count: int)\n  ensures count == |inputList|\n{\n  count := |inputList|;\n}\n```",
+      "program_specification": "def CountList(inputList):\n    if inputList is None:\n        raise ValueError(\"inputList must not be None\")\n    return len(inputList)\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.25,
+        "duration_formatted": "1.25s",
+        "tokens": {
+          "input": 161,
+          "output": 31,
+          "total": 192
+        },
+        "cost_usd": 0.00057,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:28.955386"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ExtractDate(url: seq<char>) returns (matches: seq<seq<seq<char>>>)\n  ensures forall m :: m in matches ==> |m| == 3\n  // Each match is a sequence of 3 groups (year, month, day)\n  // Wea...",
+      "program_specification": "```python\nimport re\n\ndef ExtractDate(url):\n    \"\"\"\n    Extracts all date matches from the input url (sequence of characters).\n    Each match is a sequence of 3 groups: [year, month, day], each itself a sequence of characters.\n    Returns a sequence of such matches.\n    \"\"\"\n    # Convert Dafny seq<char> to Python string\n    if not isinstance(url, (list, tuple, str)):\n        raise TypeError(\"url must be a sequence of characters\")\n    if isinstance(url, str):\n        s = url\n    else:\n        s = ''.join(url)\n\n    # Regex to match YYYY-MM-DD or YYYY/MM/DD, capturing groups\n    pattern = re.compile(r'(\\d{4})[-/](\\d{2})[-/](\\d{2})')\n    result = []\n    for match in pattern.finditer(s):\n        # Each group is a sequence of characters\n        groups = [list(match.group(1)), list(match.group(2)), list(match.group(3))]\n        result.append(groups)\n    return result\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 4.112,
+        "duration_formatted": "4.11s",
+        "tokens": {
+          "input": 186,
+          "output": 223,
+          "total": 409
+        },
+        "cost_usd": 0.002156,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:38.103916"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod RomanToInt(s: seq<char>) returns (res: int)\n  requires |s| >= 0\n  requires forall i :: 0 <= i < |s| ==> s[i] in {'I', 'V', 'X', 'L', 'C', 'D', 'M'}\n  ensures res >= 0\n  // ensures ther...",
+      "program_specification": "```python\ndef RomanToInt(s):\n    if not isinstance(s, (str, list, tuple)):\n        raise TypeError(\"Input must be a sequence of characters.\")\n    n = len(s)\n    if n < 0:\n        raise ValueError(\"Length of s must be non-negative.\")\n    valid = {'I', 'V', 'X', 'L', 'C', 'D', 'M'}\n    for i in range(n):\n        c = s[i]\n        if c not in valid:\n            raise ValueError(f\"Invalid Roman numeral character: {c}\")\n    # Roman numeral values\n    values = {'I': 1, 'V': 5, 'X': 10, 'L': 50,\n              'C': 100, 'D': 500, 'M': 1000}\n    res = 0\n    i = 0\n    while i < n:\n        curr = values[s[i]]\n        if i + 1 < n and values[s[i]] < values[s[i + 1]]:\n            res += values[s[i + 1]] - values[s[i]]\n            i += 2\n        else:\n            res += curr\n            i += 1\n    if res < 0:\n        # Defensive: should not happen, but per ensures\n        res = 0\n    return res\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 3.192,
+        "duration_formatted": "3.19s",
+        "tokens": {
+          "input": 202,
+          "output": 283,
+          "total": 485
+        },
+        "cost_usd": 0.002668,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:46.338032"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CountCommon(words: seq<string>) returns (result: seq<(string, int)>)\n  ensures |result| <= 4\n  ensures forall i :: 0 <= i < |result| ==> result[i].1 > 0\n  // Weaker postcondition: resu...",
+      "program_specification": "```python\nfrom typing import List, Tuple\nfrom collections import Counter\n\ndef CountCommon(words: List[str]) -> List[Tuple[str, int]]:\n    if words is None:\n        raise ValueError(\"Input list cannot be None\")\n    counter = Counter(words)\n    # Filter out items with count <= 0 (though Counter never gives <=0)\n    items = [(word, count) for word, count in counter.items() if count > 0]\n    # Return at most 4 items\n    return items[:4]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 2.193,
+        "duration_formatted": "2.19s",
+        "tokens": {
+          "input": 187,
+          "output": 110,
+          "total": 297
+        },
+        "cost_usd": 0.001254,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:38:53.568728"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod SumList(lst1: seq<int>, lst2: seq<int>) returns (res: seq<int>)\n  requires |lst1| == |lst2|\n  ensures |res| == |lst1|\n  ensures forall i :: 0 <= i < |lst1| ==> res[i] == lst1[i] + lst2...",
+      "program_specification": "```python\nfrom typing import List\n\ndef SumList(lst1: List[int], lst2: List[int]) -> List[int]:\n    if len(lst1) != len(lst2):\n        raise ValueError(\"Input lists must have the same length\")\n    return [a + b for a, b in zip(lst1, lst2)]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.516,
+        "duration_formatted": "1.52s",
+        "tokens": {
+          "input": 197,
+          "output": 70,
+          "total": 267
+        },
+        "cost_usd": 0.000954,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:00.119134"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod ExtractRear(testTuple: seq<seq<int>>) returns (result: seq<int>)\n  requires forall sub :: sub in testTuple ==> |sub| > 0\n  ensures |result| == |testTuple|\n  ensures forall i :: 0 <= i ...",
+      "program_specification": "```python\nfrom typing import List\n\ndef ExtractRear(testTuple: List[List[int]]) -> List[int]:\n    if any(len(sub) == 0 for sub in testTuple):\n        raise ValueError(\"All subsequences must have length > 0\")\n    return [sub[-1] for sub in testTuple]\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.988,
+        "duration_formatted": "1.99s",
+        "tokens": {
+          "input": 182,
+          "output": 66,
+          "total": 248
+        },
+        "cost_usd": 0.000892,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:07.134106"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CountVowels(testStr: seq<char>) returns (count: int)\n  requires |testStr| >= 2\n  ensures count >= 0\n{\n  var vowels := ['a', 'e', 'i', 'o', 'u'];\n  count := 0;\n  var n := |testStr|;\n  v...",
+      "program_specification": "```python\ndef CountVowels(testStr):\n    if len(testStr) < 2:\n        raise ValueError(\"Precondition violated: |testStr| >= 2\")\n    vowels = {'a', 'e', 'i', 'o', 'u'}\n    count = 0\n    for ch in testStr:\n        if ch in vowels:\n            count += 1\n    return count\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.256,
+        "duration_formatted": "1.26s",
+        "tokens": {
+          "input": 197,
+          "output": 85,
+          "total": 282
+        },
+        "cost_usd": 0.001074,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:13.417413"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckIP(Ip: seq<char>) returns (res: seq<char>)\n  ensures res == \"Valid IP address\" || res == \"Invalid IP address\"\n{\n  // Since we cannot use regex in Dafny, we conservatively always r...",
+      "program_specification": "```python\ndef CheckIP(Ip):\n    \"\"\"\n    Checks if the input sequence of characters represents a valid IPv4 address.\n    Returns \"Valid IP address\" or \"Invalid IP address\".\n    \"\"\"\n    if not isinstance(Ip, (str, list, tuple)):\n        raise TypeError(\"Ip must be a sequence of characters\")\n    # Convert to string if necessary\n    if not isinstance(Ip, str):\n        Ip = ''.join(Ip)\n    parts = Ip.split('.')\n    if len(parts) != 4:\n        return \"Invalid IP address\"\n    for part in parts:\n        if not part.isdigit():\n            return \"Invalid IP address\"\n        if len(part) > 1 and part[0] == '0':\n            return \"Invalid IP address\"\n        num = int(part)\n        if num < 0 or num > 255:\n            return \"Invalid IP address\"\n    return \"Valid IP address\"\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 5.235,
+        "duration_formatted": "5.24s",
+        "tokens": {
+          "input": 178,
+          "output": 193,
+          "total": 371
+        },
+        "cost_usd": 0.0019,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:23.682798"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod MaximumValue(test_list: seq<seq<int>>) returns (res: seq<(int, int)>)\n  requires forall s :: s in test_list ==> |s| > 0\n  ensures |res| == |test_list|\n  ensures forall i :: 0 <= i < |t...",
+      "program_specification": "from typing import List, Tuple\n\ndef MaximumValue(test_list: List[List[int]]) -> List[Tuple[int, int]]:\n    if any(len(s) == 0 for s in test_list):\n        raise ValueError(\"All inner lists must be non-empty.\")\n    res = []\n    for s in test_list:\n        max_val = s[0]\n        idx = 0\n        for i, v in enumerate(s):\n            if v > max_val:\n                max_val = v\n                idx = i\n        res.append((max_val, idx))\n    return res\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.73,
+        "duration_formatted": "1.73s",
+        "tokens": {
+          "input": 189,
+          "output": 118,
+          "total": 307
+        },
+        "cost_usd": 0.001322,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:30.463975"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod CheckMonthNumb(monthname2: string) returns (b: bool)\n  ensures b ==> monthname2 == \"January\" || monthname2 == \"March\" || monthname2 == \"May\" || monthname2 == \"July\" || monthname2 == \"A...",
+      "program_specification": "```python\ndef CheckMonthNumb(monthname2: str) -> bool:\n    valid_months = {\n        \"January\", \"March\", \"May\", \"July\", \"August\", \"October\", \"December\"\n    }\n    return monthname2 in valid_months\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.268,
+        "duration_formatted": "1.27s",
+        "tokens": {
+          "input": 187,
+          "output": 58,
+          "total": 245
+        },
+        "cost_usd": 0.000838,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:36.768288"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod LeftRotate(s: seq<int>, d: int) returns (t: seq<int>)\n  requires 0 <= d <= |s|\n  ensures |t| == |s|\n  ensures t == s[d..] + s[..d]\n{\n  t := s[d..] + s[..d];\n}\n```",
+      "program_specification": "from typing import List\n\ndef LeftRotate(s: List[int], d: int) -> List[int]:\n    if not (0 <= d <= len(s)):\n        raise ValueError(\"Precondition violated: 0 <= d <= len(s)\")\n    return s[d:] + s[:d]\n",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.473,
+        "duration_formatted": "1.47s",
+        "tokens": {
+          "input": 194,
+          "output": 59,
+          "total": 253
+        },
+        "cost_usd": 0.00086,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:43.285575"
+      }
+    },
+    {
+      "file_path": "output\\specification\\transformed\\combined_variable_naming_14.json",
+      "code": "```dafny\nmethod LogprobSpecifyShape(op: int, values: seq<int>, innerRv: int, shapes: seq<int>) returns (res: int)\n  requires |values| == 1\n  // No specific requirements on shapes or op, as per minimal...",
+      "program_specification": "```python\ndef LogprobSpecifyShape(op: int, values: list[int], innerRv: int, shapes: list[int]) -> int:\n    if len(values) != 1:\n        raise ValueError(\"Precondition violated: |values| == 1\")\n    # No other requirements or postconditions specified\n    # Return a default int value (e.g., 0)\n    return 0\n```",
+      "spec_type": "prompt_engineered",
+      "transformation_type": "unknown",
+      "usage_stats": {
+        "duration_seconds": 1.786,
+        "duration_formatted": "1.79s",
+        "tokens": {
+          "input": 180,
+          "output": 85,
+          "total": 265
+        },
+        "cost_usd": 0.00104,
+        "model": "gpt-4.1",
+        "timestamp": "2025-10-29T15:39:50.112199"
+      }
+    }
+  ]
+}

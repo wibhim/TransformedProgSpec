@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "summary": {
+      "total_programs": 1,
+      "api_requests": 1,
+      "cached_results": 0,
+      "errors": 0,
+      "success_rate": "100.0%"
+    },
+    "timing": {
+      "total_duration_seconds": 4.858,
+      "total_duration_formatted": "0h 0m 4.9s",
+      "average_per_request_seconds": 4.858
+    },
+    "tokens": {
+      "total": 594,
+      "input": 236,
+      "output": 358,
+      "average_per_request": 594.0
+    },
+    "cost": {
+      "total_usd": 0.02856,
+      "average_per_request_usd": 0.02856,
+      "cost_per_token_usd": 4.808080808080808e-05
+    },
+    "model": "gpt-4.1",
+    "generation_timestamp": "2025-08-18T10:53:44.778196"
+  },
+  "specifications": [
+    {
+      "file_path": "test.py",
+      "code": "def test(): return \"hello\"",
+      "program_specification": "method Test() returns (s: string) { s := \"hello\"; }",
+      "spec_type": "original",
+      "usage_stats": {
+        "duration_seconds": 4.858,
+        "duration_formatted": "4.86s",
+        "tokens": {
+          "input": 236,
+          "output": 358,
+          "total": 594
+        },
+        "cost_usd": 0.02856,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-18T10:53:44.792945"
+      }
+    }
+  ]
+}

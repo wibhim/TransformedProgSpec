@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "source_file": "program_024.py",
+      "specification_index": 24,
+      "transformation": "loop_exchange",
+      "regenerated_code": "def CountUnsetBits(n: int) -> int:\n    if n < 0:\n        raise ValueError(\"Precondition violated: n >= 0\")\n    cnt = 0\n    for i in range(1, n + 1):\n        bits = i.bit_length()\n        unset = bits - bin(i).count('1')\n        cnt += unset\n    return cnt"
+    },
+    {
+      "source_file": "program_083.py",
+      "specification_index": 83,
+      "transformation": "loop_exchange",
+      "regenerated_code": "def IsUndulating(n):\n    if len(n) <= 2:\n        return False\n    for i in range(2, len(n)):\n        if n[i] != n[i - 2]:\n            return False\n    return True"
+    },
+    {
+      "source_file": "program_085.py",
+      "specification_index": 85,
+      "transformation": "loop_exchange",
+      "regenerated_code": "def BreakSum(n: int) -> int:\n    if n < 1:\n        raise ValueError(\"Precondition violated: n >= 1\")\n    dp = [0] * (n + 1)\n    dp[0] = 0\n    dp[1] = 1\n    for i in range(2, n + 1):\n        dp[i] = i\n        for j in range(1, i):\n            dp[i] = max(dp[i], dp[j] + dp[i - j])\n    return dp[n]"
+    },
+    {
+      "source_file": "program_096.py",
+      "specification_index": 96,
+      "transformation": "loop_exchange",
+      "regenerated_code": "from typing import Sequence, Tuple\n\ndef CountAlphaDigSpl(s: Sequence[str]) -> Tuple[int, int, int]:\n    alphabets = 0\n    digits = 0\n    special = 0\n    for c in s:\n        if len(c) != 1:\n            raise ValueError(\"Each element in s must be a single character string.\")\n        if c.isalpha():\n            alphabets += 1\n        elif c.isdigit():\n            digits += 1\n        else:\n            special += 1\n    return alphabets, digits, special"
+    },
+    {
+      "source_file": "program_104.py",
+      "specification_index": 104,
+      "transformation": "loop_exchange",
+      "regenerated_code": "def AsciiValueString(str1):\n    if not isinstance(str1, (list, tuple, str)):\n        raise TypeError(\"str1 must be a sequence of characters\")\n    if len(str1) > 0:\n        # Accept both 'char' (as str of length 1) and int (ord value)\n        c = str1[0]\n        if isinstance(c, str):\n            if len(c) != 1:\n                raise ValueError(\"Elements must be single characters\")\n            return ord(c)\n        elif isinstance(c, int):\n            # Already an int, assume it's the ASCII value\n            return c\n        else:\n            raise TypeError(\"Elements of str1 must be characters or ints\")\n    else:\n        return 0"
+    },
+    {
+      "source_file": "program_121.py",
+      "specification_index": 121,
+      "transformation": "loop_exchange",
+      "regenerated_code": "def CountVowels(testStr):\n    if len(testStr) < 2:\n        raise ValueError(\"Precondition violated: |testStr| >= 2\")\n    res = 0\n    vowList = ['a', 'e', 'i', 'o', 'u']\n    idx = 1\n    while idx < len(testStr):\n        if testStr[idx].lower() in vowList:\n            res += 1\n        idx += 1\n    return res"
+    }
+  ]
+}

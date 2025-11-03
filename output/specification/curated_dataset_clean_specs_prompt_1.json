@@ -1,0 +1,221 @@
+{
+  "metadata": {
+    "summary": {
+      "total_programs": 10,
+      "api_requests": 10,
+      "cached_results": 0,
+      "errors": 0,
+      "success_rate": "100.0%"
+    },
+    "timing": {
+      "total_duration_seconds": 142.992,
+      "total_duration_formatted": "2m 23.0s",
+      "average_per_request_seconds": 14.299
+    },
+    "tokens": {
+      "total": 8933,
+      "input": 2801,
+      "output": 6132,
+      "average_per_request": 893.3
+    },
+    "cost": {
+      "total_usd": 0.054658,
+      "average_per_request_usd": 0.005466,
+      "cost_per_token_usd": 6.12e-06
+    },
+    "model": "gpt-4.1",
+    "generation_timestamp": "2025-08-15T09:49:42.327422"
+  },
+  "specifications": [
+    {
+      "file_path": "1-100q/11.py",
+      "code": "class Solution(object):\n\n    def maxArea(self, height):\n        left, right, maxArea = (0, len(height) - 1, 0)\n        while left < right:\n            maxArea = max(maxArea, min(height[left], height[right]) * (right - left))\n            if height[left] < height[right]:\n                left += 1\n            else:\n                right -= 1\n        return maxArea",
+      "program_specification": "```dafny\nmethod MaxArea(height: seq<int>) returns (maxArea: int)\n    requires |height| >= 2\n    requires forall h :: 0 <= h < |height| ==> height[h] >= 0\n    ensures 0 <= maxArea\n    ensures maxArea == (if |height| < 2 then 0 else\n        (max s, e :: 0 <= s < e < |height| :: (if 0 <= s < e < |height| then (if min(height[s], height[e]) * (e - s) > s else s) else 0)))\n    ensures forall s, e :: 0 <= s < e < |height| ==>\n        maxArea >= min(height[s], height[e]) * (e - s)\n{\n    var left := 0;\n    var right := |height| - 1;\n    maxArea := 0;\n\n    while left < right\n        invariant 0 <= left <= right < |height|\n        invariant 0 <= maxArea\n        invariant forall s, e :: 0 <= s < e < |height| && (s < left || e > right) ==>\n            maxArea >= min(height[s], height[e]) * (e - s)\n    {\n        var area := if height[left] < height[right] then height[left] * (right - left) else height[right] * (right - left);\n        if area > maxArea {\n            maxArea := area;\n        }\n        if height[left] < height[right] {\n            left := left + 1;\n        } else {\n            right := right - 1;\n        }\n    }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 13.518,
+        "duration_formatted": "13.52s",
+        "tokens": {
+          "input": 259,
+          "output": 349,
+          "total": 608
+        },
+        "cost_usd": 0.00331,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:45:52.812972"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1027.py",
+      "code": "class Solution(object):\n\n    def longestArithSeqLength(self, A):\n        from collections import defaultdict\n        dp = defaultdict(int)\n        for index_i in range(len(A)):\n            for index_j in range(index_i):\n                diff = A[index_i] - A[index_j]\n                dp[index_i, diff] = max(dp[index_i, diff], dp[index_j, diff] + 1)\n        return max(dp.itervalues()) + 1",
+      "program_specification": "```dafny\nmethod LongestArithSeqLength(A: seq<int>) returns (res: int)\n    requires |A| > 0\n    ensures res >= 1\n    ensures res <= |A|\n    ensures forall i, j, k :: 0 <= i < j < k < |A| ==>\n        (exists d: int ::\n            (forall m: int :: 0 <= m < res ==>\n                0 <= i + m * (j - i) < |A| &&\n                A[i + m * (j - i)] == A[i] + m * (A[j] - A[i]) / (j - i)\n            )\n        ) ==> res >= 3\n{\n    var n := |A|;\n    // dp[i][d] = length of arithmetic subsequence ending at index i with difference d\n    var dp := new map<(int, int), int>;\n    var maxLen := 1;\n\n    var index_i := 0;\n    while index_i < n\n        invariant 0 <= index_i <= n\n        invariant maxLen >= 1\n        invariant forall i: int, d: int :: 0 <= i < index_i ==> dp[(i, d)] >= 0\n    {\n        var index_j := 0;\n        while index_j < index_i\n            invariant 0 <= index_j <= index_i\n            invariant forall j: int, d: int :: 0 <= j < index_j ==> dp[(j, d)] >= 0\n        {\n            var diff := A[index_i] - A[index_j];\n            var prev := if (dp[(index_j, diff)] in dp) then dp[(index_j, diff)] else 0;\n            var curr := if (dp[(index_i, diff)] in dp) then dp[(index_i, diff)] else 0;\n            var newVal := if prev + 1 > curr then prev + 1 else curr;\n            dp := dp[(index_i, diff) := newVal];\n            if newVal + 1 > maxLen {\n                maxLen := newVal + 1;\n            }\n            index_j := index_j + 1;\n        }\n        index_i := index_i + 1;\n    }\n\n    res := maxLen;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 9.932,
+        "duration_formatted": "9.93s",
+        "tokens": {
+          "input": 264,
+          "output": 480,
+          "total": 744
+        },
+        "cost_usd": 0.004368,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:46:12.747623"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1028.py",
+      "code": "class Solution(object):\n\n    def longestArithSeqLength(self, A):\n        from collections import defaultdict\n        dp = defaultdict(int)\n        for index_i in range(len(A)):\n            for index_j in range(index_i):\n                diff = A[index_i] - A[index_j]\n                dp[index_i, diff] = max(dp[index_i, diff], dp[index_j, diff] + 1)\n        return max(dp.itervalues()) + 1",
+      "program_specification": "```dafny\nmodule SolutionModule {\n\n  import Map\n\n  method LongestArithSeqLength(A: seq<int>) returns (res: int)\n    requires |A| > 0\n    ensures res >= 1\n    ensures forall i, j, k :: 0 <= i < j < k < |A| ==>\n      (exists d: int :: \n        (forall m :: i <= m <= k ==> A[m] == A[i] + (m - i) * d) ==>\n          res >= k - i + 1)\n    ensures res <= |A|\n  {\n    var n := |A|;\n    // dp[(i, d)] = length of arithmetic subsequence ending at i with difference d, minus 1\n    var dp := map[(int, int)]int[];\n    var maxLen := 0;\n\n    var i := 0;\n    while i < n\n      invariant 0 <= i <= n\n      invariant forall idx, diff :: (idx, diff) in dp ==> 0 <= idx < i\n      invariant maxLen >= 0\n      invariant maxLen <= i\n    {\n      var j := 0;\n      while j < i\n        invariant 0 <= j <= i\n        invariant forall idx, diff :: (idx, diff) in dp ==> 0 <= idx < i\n        invariant maxLen >= 0\n        invariant maxLen <= i\n      {\n        var diff := A[i] - A[j];\n        var prev := if (j, diff) in dp then dp[(j, diff)] else 0;\n        var curr := if (i, diff) in dp then dp[(i, diff)] else 0;\n        var newLen := if prev + 1 > curr then prev + 1 else curr;\n        dp := dp[(i, diff) := newLen];\n        if newLen > maxLen {\n          maxLen := newLen;\n        }\n        j := j + 1;\n      }\n      i := i + 1;\n    }\n    res := maxLen + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 9.34,
+        "duration_formatted": "9.34s",
+        "tokens": {
+          "input": 264,
+          "output": 440,
+          "total": 704
+        },
+        "cost_usd": 0.004048,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:46:32.091208"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1052.py",
+      "code": "class Solution(object):\n\n    def maxSatisfied(self, customers, grumpy, X):\n        result = 0\n        prefix_sum = [0] * (len(customers) + 1)\n        index = 0\n        for customer, grump in zip(customers, grumpy):\n            prefix_sum[index + 1] = prefix_sum[index]\n            if grump == 0:\n                result += customer\n            else:\n                prefix_sum[index + 1] += customer\n            index += 1\n        curr_max = result + prefix_sum[X]\n        for index in range(X + 1, len(prefix_sum)):\n            temp_max = result + prefix_sum[index] - prefix_sum[index - X]\n            curr_max = max(curr_max, temp_max)\n        return curr_max",
+      "program_specification": "```dafny\nmethod MaxSatisfied(customers: seq<int>, grumpy: seq<int>, X: int) returns (curr_max: int)\n    requires |customers| == |grumpy|\n    requires 0 <= X <= |customers|\n    requires forall c :: 0 <= c < |customers| ==> customers[c] >= 0\n    requires forall g :: 0 <= g < |grumpy| ==> grumpy[g] == 0 || grumpy[g] == 1\n    ensures curr_max >= 0\n    ensures curr_max <= sum(customers)\n    ensures curr_max == MaxSatisfiedSpec(customers, grumpy, X)\n{\n    var n := |customers|;\n    var result := 0;\n    var prefix_sum := new int[n + 1];\n    var index := 0;\n\n    // Compute prefix_sum and result\n    while index < n\n        invariant 0 <= index <= n\n        invariant prefix_sum[0] == 0\n        invariant forall i :: 0 <= i <= index ==> prefix_sum[i] >= 0\n        invariant result == sum([customers[j] | j : int :: 0 <= j < index && grumpy[j] == 0])\n        invariant forall i :: 0 <= i <= index ==> prefix_sum[i] == sum([customers[j] | j : int :: 0 <= j < i && grumpy[j] == 1])\n    {\n        prefix_sum[index + 1] := prefix_sum[index];\n        if grumpy[index] == 0 {\n            result := result + customers[index];\n        } else {\n            prefix_sum[index + 1] := prefix_sum[index + 1] + customers[index];\n        }\n        index := index + 1;\n    }\n\n    curr_max := result + prefix_sum[X];\n\n    var idx := X + 1;\n    while idx <= n\n        invariant X + 1 <= idx <= n + 1\n        invariant curr_max >= result\n        invariant forall i :: X <= i < idx ==> \n            curr_max >= result + prefix_sum[i] - prefix_sum[i - X]\n    {\n        var temp_max := result + prefix_sum[idx] - prefix_sum[idx - X];\n        if temp_max > curr_max {\n            curr_max := temp_max;\n        }\n        idx := idx + 1;\n    }\n}\n\nfunction sum(a: seq<int>): int\n{\n    if |a| == 0 then 0 else a[0] + sum(a[1..])\n}\n\nfunction MaxSatisfiedSpec(customers: seq<int>, grumpy: seq<int>, X: int): int\n    requires |customers| == |grumpy|\n    requires 0 <= X <= |customers|\n{\n    var always := sum([customers[i] | i : int :: 0 <= i < |customers| && grumpy[i] == 0]);\n    var max_extra := if X == 0 then 0 else\n        max([sum([customers[j] | j : int :: i <= j < i+X && grumpy[j] == 1]) | i : int :: 0 <= i <= |customers| - X]);\n    always + max_extra\n}\n\nfunction max(a: seq<int>): int\n    requires |a| > 0\n{\n    if |a| == 1 then a[0] else if a[0] > max(a[1..]) then a[0] else max(a[1..])\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 13.401,
+        "duration_formatted": "13.40s",
+        "tokens": {
+          "input": 333,
+          "output": 720,
+          "total": 1053
+        },
+        "cost_usd": 0.006426,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:46:55.496994"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1065.py",
+      "code": "class Solution(object):\n\n    def indexPairs(self, text, words):\n        if not words:\n            return []\n        result = []\n        for word in words:\n            starting = [index for index in range(len(text)) if text.startswith(word, index)]\n            for start in starting:\n                result.append([start, start + len(word) - 1])\n        result.sort()\n        return result",
+      "program_specification": "```dafny\nmethod IndexPairs(text: seq<char>, words: seq<seq<char>>) returns (result: seq<seq<int>>)\n    requires text != null\n    requires words != null\n    ensures (words == []) ==> (result == [])\n    ensures forall pair :: pair in result ==>\n        0 <= pair[0] <= pair[1] < |text| &&\n        exists word :: word in words && |word| > 0 &&\n            pair[1] - pair[0] + 1 == |word| &&\n            text[pair[0] .. pair[1] + 1] == word\n    ensures forall word :: word in words && |word| > 0 ==>\n        forall i :: 0 <= i <= |text| - |word| ==>\n            text[i .. i + |word|] == word ==>\n                [i, i + |word| - 1] in result\n    ensures forall i :: 0 <= i < |result| - 1 ==> result[i] <= result[i+1]\n{\n    if |words| == 0 {\n        result := [];\n        return;\n    }\n    var tempResult := new seq<seq<int>>[];\n    var w := 0;\n    while w < |words|\n        invariant 0 <= w <= |words|\n        invariant tempResult == \n            (flatten (map words[..w] (lambda word => \n                (var starting := FindStartingIndices(text, word);\n                 map starting (lambda start => [start, start + |word| - 1])))))\n    {\n        var word := words[w];\n        if |word| > 0 {\n            var starting := FindStartingIndices(text, word);\n            var s := 0;\n            while s < |starting|\n                invariant 0 <= s <= |starting|\n                invariant forall j :: 0 <= j < s ==>\n                    tempResult[|tempResult| - s + j] == [starting[j], starting[j] + |word| - 1]\n            {\n                tempResult := tempResult + [[starting[s], starting[s] + |word| - 1]];\n                s := s + 1;\n            }\n        }\n        w := w + 1;\n    }\n    result := SortPairs(tempResult);\n}\n\nfunction method FindStartingIndices(text: seq<char>, word: seq<char>): seq<int>\n    requires text != null && word != null\n    ensures forall i :: 0 <= i < |FindStartingIndices(text, word)| ==>\n        0 <= FindStartingIndices(text, word)[i] <= |text| - |word| &&\n        text[FindStartingIndices(text, word)[i] .. FindStartingIndices(text, word)[i] + |word|] == word\n    ensures forall i :: 0 <= i <= |text| - |word| ==>\n        text[i .. i + |word|] == word ==>\n            i in FindStartingIndices(text, word)\n{\n    var indices := [];\n    var i := 0;\n    while i <= |text| - |word|\n        invariant 0 <= i <= |text| - |word| + 1\n        invariant forall j :: 0 <= j < |indices| ==>\n            0 <= indices[j] <= |text| - |word| &&\n            text[indices[j] .. indices[j] + |word|] == word\n        invariant forall k :: 0 <= k < i ==>\n            (text[k .. k + |word|] == word) ==> (k in indices)\n    {\n        if text[i .. i + |word|] == word {\n            indices := indices + [i];\n        }\n        i := i + 1;\n    }\n    indices\n}\n\nfunction method SortPairs(pairs: seq<seq<int>>): seq<seq<int>>\n    requires forall pair :: pair in pairs ==> |pair| == 2\n    ensures |SortPairs(pairs)| == |pairs|\n    ensures multiset SortPairs(pairs) == multiset pairs\n    ensures forall i :: 0 <= i < |SortPairs(pairs)| - 1 ==> SortPairs(pairs)[i] <= SortPairs(pairs)[i+1]\n{\n    if |pairs| <= 1 then pairs\n    else\n        var pivot := pairs[0];\n        SortPairs([pair | pair := pairs[1..], pair < pivot]) +\n        [pivot] +\n        SortPairs([pair | pair := pairs[1..], pair >= pivot])\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 35.926,
+        "duration_formatted": "35.93s",
+        "tokens": {
+          "input": 250,
+          "output": 949,
+          "total": 1199
+        },
+        "cost_usd": 0.008092,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:47:41.428607"
+      }
+    },
+    {
+      "file_path": "900-1000q/926.py",
+      "code": "class Solution(object):\n\n    def minFlipsMonoIncr(self, S):\n        ones = [0]\n        for char in S:\n            ones.append(ones[-1] + int(char))\n        result = float('inf')\n        for index in range(len(ones)):\n            zeroes = len(S) - index - (ones[-1] - ones[index])\n            result = min(zeroes + ones[index], result)\n        return result",
+      "program_specification": "```dafny\nmethod MinFlipsMonoIncr(S: seq<char>) returns (result: int)\n    requires forall c :: c in S ==> c == '0' || c == '1'\n    ensures 0 <= result <= |S|\n    ensures forall i :: 0 <= i <= |S| ==>\n        result <= (if i == 0 then 0 else |S[..i]| - CountOnes(S[..i])) + CountOnes(S[i..])\n    ensures exists i :: 0 <= i <= |S| &&\n        result == (if i == 0 then 0 else |S[..i]| - CountOnes(S[..i])) + CountOnes(S[i..])\n{\n    var n := |S|;\n    var ones := new int[n+1];\n    ones[0] := 0;\n    var i: int := 0;\n    while i < n\n        invariant 0 <= i <= n\n        invariant ones[0] == 0\n        invariant forall j :: 0 <= j <= i ==> ones[j] == CountOnes(S[..j])\n        invariant forall j :: 0 <= j < i ==> ones[j+1] == ones[j] + (if S[j] == '1' then 1 else 0)\n    {\n        ones[i+1] := ones[i] + (if S[i] == '1' then 1 else 0);\n        i := i + 1;\n    }\n\n    result := n; // initial upper bound\n    var index: int := 0;\n    while index <= n\n        invariant 0 <= index <= n+1\n        invariant 0 <= result <= n\n        invariant forall k :: 0 <= k < index ==>\n            result <= (n - k - (ones[n] - ones[k])) + ones[k]\n    {\n        var zeroes := n - index - (ones[n] - ones[index]);\n        var flips := zeroes + ones[index];\n        if flips < result {\n            result := flips;\n        }\n        index := index + 1;\n    }\n}\n\nfunction method CountOnes(S: seq<char>): int\n    decreases |S|\n{\n    if |S| == 0 then 0\n    else (if S[0] == '1' then 1 else 0) + CountOnes(S[1..])\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 6.754,
+        "duration_formatted": "6.75s",
+        "tokens": {
+          "input": 262,
+          "output": 501,
+          "total": 763
+        },
+        "cost_usd": 0.004532,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:47:58.189031"
+      }
+    },
+    {
+      "file_path": "Python/4-keys-keyboard.py",
+      "code": "class Solution(object):\n\n    def maxA(self, N):\n        if N < 7:\n            return N\n        if N == 10:\n            return 20\n        n = N // 5 + 1\n        n3 = 5 * n - N - 1\n        n4 = n - n3\n        return 3 ** n3 * 4 ** n4\n\nclass Solution2(object):\n\n    def maxA(self, N):\n        if N < 7:\n            return N\n        dp = range(N + 1)\n        for i in xrange(7, N + 1):\n            dp[i % 6] = max(dp[(i - 4) % 6] * 3, dp[(i - 5) % 6] * 4)\n        return dp[N % 6]",
+      "program_specification": "```dafny\nmethod Main() {\n  // Example usage\n  var n := 10;\n  var res1 := MaxA(n);\n  var res2 := MaxA_DP(n);\n  assert res1 == res2;\n}\n\nfunction pow(base: int, exp: int): int\n  requires exp >= 0\n  decreases exp\n{\n  if exp == 0 then 1 else base * pow(base, exp - 1)\n}\n\nfunction method MaxA(N: int): int\n  requires N >= 0\n  ensures MaxA(N) == MaxA_Spec(N)\n{\n  if N < 7 then\n    N\n  else if N == 10 then\n    20\n  else\n    var n := N / 5 + 1;\n    var n3 := 5 * n - N - 1;\n    var n4 := n - n3;\n    pow(3, n3) * pow(4, n4)\n}\n\nfunction method MaxA_Spec(N: int): int\n  requires N >= 0\n{\n  if N < 7 then\n    N\n  else if N == 10 then\n    20\n  else\n    var n := N / 5 + 1;\n    var n3 := 5 * n - N - 1;\n    var n4 := n - n3;\n    pow(3, n3) * pow(4, n4)\n}\n\nmethod MaxA_DP(N: int) returns (res: int)\n  requires N >= 0\n  ensures res == MaxA_Spec(N)\n{\n  if N < 7 {\n    res := N;\n    return;\n  }\n  var dp: array<int> := new int[6];\n  // Initialize dp[0..5] to 0..5\n  var i: int := 0;\n  while i <= 5\n    invariant 0 <= i <= 6\n    invariant forall j :: 0 <= j < i ==> dp[j] == j\n    invariant forall j :: i <= j < 6 ==> dp[j] == 0\n  {\n    dp[i] := i;\n    i := i + 1;\n  }\n  i := 7;\n  while i <= N\n    invariant 7 <= i <= N + 1\n    invariant forall j :: 0 <= j < 6 ==> dp[j] == MaxA_Spec(i - 6 + j)\n  {\n    var v1 := dp[(i - 4) % 6] * 3;\n    var v2 := dp[(i - 5) % 6] * 4;\n    dp[i % 6] := if v1 > v2 then v1 else v2;\n    i := i + 1;\n  }\n  res := dp[N % 6];\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 21.482,
+        "duration_formatted": "21.48s",
+        "tokens": {
+          "input": 346,
+          "output": 601,
+          "total": 947
+        },
+        "cost_usd": 0.0055,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:48:29.674939"
+      }
+    },
+    {
+      "file_path": "Python/adjacent-increasing-subarrays-detection-i.py",
+      "code": "class Solution(object):\n\n    def hasIncreasingSubarrays(self, nums, k):\n        result = 0\n        curr, prev = (1, 0)\n        for i in xrange(len(nums) - 1):\n            if nums[i] < nums[i + 1]:\n                curr += 1\n            else:\n                prev = curr\n                curr = 1\n            result = max(result, curr // 2, min(prev, curr))\n        return result >= k",
+      "program_specification": "```dafny\nmethod hasIncreasingSubarrays(nums: seq<int>, k: int) returns (res: bool)\n    requires 0 <= k\n    ensures res == (exists i, j :: 0 <= i < j <= |nums| && isStrictlyIncreasing(nums[i..j]) && (j - i) >= 2 && (maxSubarrayScore(nums) >= k))\n{\n    var n := |nums|;\n    var result: int := 0;\n    var curr: int := 1;\n    var prev: int := 0;\n    var i: int := 0;\n\n    while i < n - 1\n        invariant 0 <= i <= n - 1\n        invariant 1 <= curr <= i + 1\n        invariant 0 <= prev <= i\n        invariant result == maxResultSoFar(nums, i, curr, prev)\n    {\n        if nums[i] < nums[i + 1] {\n            curr := curr + 1;\n        } else {\n            prev := curr;\n            curr := 1;\n        }\n        result := max(result, curr / 2, if prev < curr then prev else curr);\n        i := i + 1;\n    }\n    res := result >= k;\n}\n\n// Helper function: checks if a sequence is strictly increasing\nfunction isStrictlyIncreasing(s: seq<int>): bool\n{\n    forall i :: 0 <= i < |s| - 1 ==> s[i] < s[i+1]\n}\n\n// Helper function: computes the maximum score as in the original code\nfunction maxSubarrayScore(nums: seq<int>): int\n{\n    if |nums| < 2 then 0\n    else\n        var result := 0;\n        var curr := 1;\n        var prev := 0;\n        var i := 0;\n        while i < |nums| - 1\n            decreases |nums| - 1 - i\n        {\n            if nums[i] < nums[i + 1] {\n                curr := curr + 1;\n            } else {\n                prev := curr;\n                curr := 1;\n            }\n            result := max(result, curr / 2, if prev < curr then prev else curr);\n            i := i + 1;\n        }\n        result\n}\n\n// Helper function: computes the max result so far for loop invariant\nfunction maxResultSoFar(nums: seq<int>, i: int, curr: int, prev: int): int\n    requires 0 <= i <= |nums| - 1\n    requires 1 <= curr <= i + 1\n    requires 0 <= prev <= i\n{\n    var result := 0;\n    var c := 1;\n    var p := 0;\n    var j := 0;\n    while j <= i\n        decreases i - j\n    {\n        if nums[j] < nums[j + 1] {\n            c := c + 1;\n        } else {\n            p := c;\n            c := 1;\n        }\n        result := max(result, c / 2, if p < c then p else c);\n        j := j + 1;\n    }\n    result\n}\n\n// Helper function: max of three integers\nfunction max(a: int, b: int, c: int): int\n{\n    if a >= b && a >= c then a\n    else if b >= a && b >= c then b\n    else c\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 10.222,
+        "duration_formatted": "10.22s",
+        "tokens": {
+          "input": 269,
+          "output": 719,
+          "total": 988
+        },
+        "cost_usd": 0.00629,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:48:49.901455"
+      }
+    },
+    {
+      "file_path": "Python/adjacent-increasing-subarrays-detection-ii.py",
+      "code": "class Solution(object):\n\n    def maxIncreasingSubarrays(self, nums):\n        result = 0\n        curr, prev = (1, 0)\n        for i in xrange(len(nums) - 1):\n            if nums[i] < nums[i + 1]:\n                curr += 1\n            else:\n                prev = curr\n                curr = 1\n            result = max(result, curr // 2, min(prev, curr))\n        return result",
+      "program_specification": "```dafny\nmethod MaxIncreasingSubarrays(nums: seq<int>) returns (result: int)\n    requires |nums| >= 1\n    ensures result >= 0\n    ensures forall s: seq<int>, 0 <= s <= nums && |s| >= 2 && (forall i :: 0 <= i < |s|-1 ==> s[i] < s[i+1]) ==>\n                result >= |s| / 2\n    ensures forall i, j :: 0 <= i < j < |nums| && (forall k :: i <= k < j ==> nums[k] < nums[k+1]) ==>\n                result >= if (j-i+1) % 2 == 0 then (j-i+1)/2 else (j-i+1)/2\n{\n    var n := |nums|;\n    var res := 0;\n    var curr := 1;\n    var prev := 0;\n    var i := 0;\n    while i < n - 1\n        invariant 0 <= i <= n - 1\n        invariant curr >= 1\n        invariant prev >= 0\n        invariant res >= 0\n        invariant forall j :: 0 <= j < i ==>\n            res >= max(curr // 2, min(prev, curr))\n    {\n        if nums[i] < nums[i + 1] {\n            curr := curr + 1;\n        } else {\n            prev := curr;\n            curr := 1;\n        }\n        res := if res > curr / 2 then res else curr / 2;\n        res := if res > (if prev < curr then prev else curr) then res else (if prev < curr then prev else curr);\n        i := i + 1;\n    }\n    result := res;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 7.188,
+        "duration_formatted": "7.19s",
+        "tokens": {
+          "input": 265,
+          "output": 374,
+          "total": 639
+        },
+        "cost_usd": 0.003522,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:49:07.092663"
+      }
+    },
+    {
+      "file_path": "Python/all-divisions-with-the-highest-score-of-a-binary-array.py",
+      "code": "class Solution(object):\n\n    def maxScoreIndices(self, nums):\n        result = []\n        mx = zeros = 0\n        total = sum(nums)\n        for i in xrange(len(nums) + 1):\n            zeros += (nums[i - 1] if i else 0) == 0\n            if zeros + (total - (i - zeros)) > mx:\n                mx = zeros + (total - (i - zeros))\n                result = []\n            if zeros + (total - (i - zeros)) == mx:\n                result.append(i)\n        return result",
+      "program_specification": "```dafny\nmethod MaxScoreIndices(nums: seq<int>) returns (result: seq<int>)\n    requires forall x :: 0 <= x < |nums| ==> nums[x] == 0 || nums[x] == 1\n    ensures\n        // result contains all indices i maximizing score(i)\n        forall i :: 0 <= i <= |nums| ==>\n            (i in result) <==> (Score(nums, i) == MaxScore(nums))\n    ensures\n        // result is sorted and contains no duplicates\n        forall j, k :: 0 <= j < k < |result| ==> result[j] < result[k]\n{\n    var n := |nums|;\n    var total := Sum(nums);\n    var zeros := 0;\n    var mx := 0;\n    var res := new seq<int>(0);\n\n    var i := 0;\n    while i <= n\n        invariant 0 <= i <= n + 1\n        invariant 0 <= zeros <= i\n        invariant mx == MaxScoreUpTo(nums, i, zeros, total)\n        invariant res == IndicesWithMaxScore(nums, i, mx)\n        invariant forall j :: 0 <= j < |res| ==> 0 <= res[j] < i\n        invariant forall j, k :: 0 <= j < k < |res| ==> res[j] < res[k]\n    {\n        if i == 0 {\n            zeros := 0;\n        } else {\n            if nums[i - 1] == 0 {\n                zeros := zeros + 1;\n            }\n        }\n        var ones_right := total - (i - zeros);\n        var score := zeros + ones_right;\n        if score > mx {\n            mx := score;\n            res := [];\n        }\n        if score == mx {\n            res := res + [i];\n        }\n        i := i + 1;\n    }\n    result := res;\n}\n\n// Helper function: sum of sequence\nfunction method Sum(a: seq<int>): int\n    decreases a\n{\n    if |a| == 0 then 0 else a[0] + Sum(a[1..])\n}\n\n// Helper function: score at index i\nfunction method Score(nums: seq<int>, i: int): int\n    requires 0 <= i <= |nums|\n{\n    NumZeros(nums[0..i]) + NumOnes(nums[i..])\n}\n\n// Helper function: number of zeros in a sequence\nfunction method NumZeros(a: seq<int>): int\n    decreases a\n{\n    if |a| == 0 then 0 else (if a[0] == 0 then 1 else 0) + NumZeros(a[1..])\n}\n\n// Helper function: number of ones in a sequence\nfunction method NumOnes(a: seq<int>): int\n    decreases a\n{\n    if |a| == 0 then 0 else (if a[0] == 1 then 1 else 0) + NumOnes(a[1..])\n}\n\n// Helper function: maximum score over all indices\nfunction method MaxScore(nums: seq<int>): int\n{\n    if |nums| == 0 then 0 else MaxScoreRec(nums, 0, |nums|)\n}\n\nfunction method MaxScoreRec(nums: seq<int>, i: int, n: int): int\n    requires 0 <= i <= n <= |nums|\n    decreases n - i\n{\n    if i == n then Score(nums, i)\n    else\n        var s := Score(nums, i);\n        var m := MaxScoreRec(nums, i + 1, n);\n        if s > m then s else m\n}\n\n// Helper function: maximum score up to index i\nfunction method MaxScoreUpTo(nums: seq<int>, i: int, zeros: int, total: int): int\n    requires 0 <= i <= |nums|\n    requires 0 <= zeros <= i\n    requires total == Sum(nums)\n{\n    if i == 0 then zeros + (total - (i - zeros))\n    else\n        var prev := MaxScoreUpTo(nums, i - 1, if nums[i - 1] == 0 then zeros - 1 else zeros, total);\n        var curr := zeros + (total - (i - zeros));\n        if curr > prev then curr else prev\n}\n\n// Helper function: indices with max score up to i\nfunction method IndicesWithMaxScore(nums: seq<int>, i: int, mx: int): seq<int>\n    requires 0 <= i <= |nums|\n{\n    if i == 0 then []\n    else\n        var prev := IndicesWithMaxScore(nums, i - 1, mx);\n        if Score(nums, i - 1) == mx then prev + [i - 1] else prev\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 15.229,
+        "duration_formatted": "15.23s",
+        "tokens": {
+          "input": 289,
+          "output": 999,
+          "total": 1288
+        },
+        "cost_usd": 0.00857,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T09:49:32.326810"
+      }
+    }
+  ]
+}

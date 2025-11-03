@@ -1,0 +1,981 @@
+{
+  "metadata": {
+    "summary": {
+      "total_programs": 50,
+      "api_requests": 50,
+      "cached_results": 0,
+      "errors": 0,
+      "success_rate": "100.0%"
+    },
+    "timing": {
+      "total_duration_seconds": 719.073,
+      "total_duration_formatted": "11m 59.1s",
+      "average_per_request_seconds": 14.381
+    },
+    "tokens": {
+      "total": 64657,
+      "input": 24619,
+      "output": 40038,
+      "average_per_request": 1293.1
+    },
+    "cost": {
+      "total_usd": 0.369542,
+      "average_per_request_usd": 0.007391,
+      "cost_per_token_usd": 5.72e-06
+    },
+    "model": "gpt-4.1",
+    "generation_timestamp": "2025-08-15T11:15:31.366095"
+  },
+  "specifications": [
+    {
+      "file_path": "1-100q/11.py",
+      "code": "class Solution(object):\n\n    def maxArea(self, height):\n        left, right, maxArea = (0, len(height) - 1, 0)\n        while left < right:\n            maxArea = max(maxArea, min(height[left], height[right]) * (right - left))\n            if height[left] < height[right]:\n                left += 1\n            else:\n                right -= 1\n        return maxArea",
+      "program_specification": "```dafny\nfunction MaxAreaSpec(height: seq<int>): int\n  requires |height| >= 2\n  ensures MaxAreaSpec(height) >= 0\n{\n  if |height| < 2 then 0\n  else\n    // Maximum area between any two indices i < j\n    (max i, j | 0 <= i < j < |height| :: (if height[i] < height[j] then height[i] else height[j]) * (j - i))\n}\n\nmethod maxArea(height: array<int>) returns (maxArea: int)\n  requires height != null\n  requires height.Length >= 2\n  ensures maxArea == MaxAreaSpec(height[..])\n{\n  var left: int := 0;\n  var right: int := height.Length - 1;\n  maxArea := 0;\n\n  while left < right\n    invariant 0 <= left <= right < height.Length\n    invariant maxArea >= 0\n    invariant forall i, j :: 0 <= i < j < height.Length && (i < left || j > right) ==> \n      maxArea >= (if height[i] < height[j] then height[i] else height[j]) * (j - i)\n    invariant left <= right\n  {\n    var hLeft := height[left];\n    var hRight := height[right];\n    var area := if hLeft < hRight then hLeft else hRight;\n    area := area * (right - left);\n    if area > maxArea {\n      maxArea := area;\n    }\n    if hLeft < hRight {\n      left := left + 1;\n    } else {\n      right := right - 1;\n    }\n  }\n\n  // After the loop, left >= right, so all pairs have been considered\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 6.458,
+        "duration_formatted": "6.46s",
+        "tokens": {
+          "input": 428,
+          "output": 372,
+          "total": 800
+        },
+        "cost_usd": 0.003832,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:55:18.534753"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1027.py",
+      "code": "class Solution(object):\n\n    def longestArithSeqLength(self, A):\n        from collections import defaultdict\n        dp = defaultdict(int)\n        for index_i in range(len(A)):\n            for index_j in range(index_i):\n                diff = A[index_i] - A[index_j]\n                dp[index_i, diff] = max(dp[index_i, diff], dp[index_j, diff] + 1)\n        return max(dp.itervalues()) + 1",
+      "program_specification": "```dafny\n// Dafny program for finding the length of the longest arithmetic subsequence\n\nmethod LongestArithSeqLength(A: array<int>) returns (res: int)\n  requires A != null\n  ensures 1 <= res <= A.Length\n  ensures forall i: int, j: int, d: int ::\n            0 <= i < j < A.Length && (exists k: int :: 2 <= k <= res && IsArithSeq(A, i, j, d, k)) ==> res >= k\n{\n  // Map from (index, diff) to length of arithmetic subsequence ending at index with difference diff\n  var dp := map<(int, int), int>{};\n  var maxLen := 1;\n\n  var n := A.Length;\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant maxLen >= 1\n    invariant forall key: (int, int) :: key in dp ==> 1 <= dp[key] <= i\n    invariant forall k: int, d: int ::\n      2 <= k <= maxLen ==>\n        exists s: int :: 0 <= s <= i - k + 1 && IsArithSeqPrefix(A, s, d, k, i)\n  {\n    var j := 0;\n    while j < i\n      invariant 0 <= j <= i\n      invariant forall key: (int, int) :: key in dp ==> 1 <= dp[key] <= i\n      invariant forall k: int, d: int ::\n        2 <= k <= maxLen ==>\n          exists s: int :: 0 <= s <= i - k + 1 && IsArithSeqPrefix(A, s, d, k, i)\n    {\n      var diff := A[i] - A[j];\n      var prevLen := if ((j, diff) in dp) then dp[(j, diff)] else 1;\n      var currLen := prevLen + 1;\n      if ((i, diff) in dp) {\n        if dp[(i, diff)] < currLen {\n          dp := dp[(i, diff) := currLen];\n        }\n      } else {\n        dp := dp[(i, diff) := currLen];\n      }\n      if currLen > maxLen {\n        maxLen := currLen;\n      }\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n\n  res := maxLen;\n}\n\n// Helper predicate: IsArithSeq(A, i, j, d, k) means there is an arithmetic sequence of length k starting at i, next at j, with difference d\npredicate IsArithSeq(A: array<int>, i: int, j: int, d: int, k: int)\n  requires A != null && 0 <= i < j < A.Length && k >= 2\n{\n  (forall m: int :: 0 <= m < k ==>\n    if m == 0 then A[i] == A[i]\n    else if m == 1 then A[j] == A[i] + d\n    else exists idx: int :: idx > j && idx < A.Length &&\n      A[idx] == A[i] + d * m)\n}\n\n// Helper predicate: IsArithSeqPrefix(A, s, d, k, upto) means there is an arithmetic sequence of length k starting at s with diff d, all indices < upto\npredicate IsArithSeqPrefix(A: array<int>, s: int, d: int, k: int, upto: int)\n  requires A != null && 0 <= s < upto && k >= 2 && upto <= A.Length\n{\n  (forall m: int :: 0 <= m < k ==> s + m < upto && A[s + m] == A[s] + d * m)\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 18.499,
+        "duration_formatted": "18.50s",
+        "tokens": {
+          "input": 433,
+          "output": 811,
+          "total": 1244
+        },
+        "cost_usd": 0.007354,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:55:47.037185"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1028.py",
+      "code": "class Solution(object):\n\n    def longestArithSeqLength(self, A):\n        from collections import defaultdict\n        dp = defaultdict(int)\n        for index_i in range(len(A)):\n            for index_j in range(index_i):\n                diff = A[index_i] - A[index_j]\n                dp[index_i, diff] = max(dp[index_i, diff], dp[index_j, diff] + 1)\n        return max(dp.itervalues()) + 1",
+      "program_specification": "```dafny\n// Dafny implementation of longestArithSeqLength\n\n// Helper function to compute the length of the longest arithmetic subsequence in A\nfunction LongestArithSeqLengthSpec(A: seq<int>): nat\n{\n  if |A| <= 1 then |A|\n  else\n    var maxLen := 1;\n    // For each possible difference, for each pair (i, j), compute the length\n    // This is a specification, not an efficient implementation\n    var allLens := set l: nat | \n      exists diff: int, i: int, j: int ::\n        0 <= j < i < |A| &&\n        diff == A[i] - A[j] &&\n        l == 2 + MaxArithSeqLenFrom(A, j, diff, 1)\n    :: l;\n    if |allLens| == 0 then 1 else max(maxLen, if |allLens| == 0 then 1 else max(allLens))\n}\n\n// Helper function: returns the max length of arithmetic sequence starting at index j with difference diff and current length len\nfunction MaxArithSeqLenFrom(A: seq<int>, j: int, diff: int, len: nat): nat\n  requires 0 <= j < |A|\n{\n  var next := j + 1;\n  var found := false;\n  var nextIdx := 0;\n  // Find the next index k > j such that A[k] - A[j] == diff\n  if next >= |A| then len - 1\n  else\n    var maxLen := len;\n    while next < |A|\n      decreases |A| - next\n    {\n      if A[next] - A[j] == diff {\n        var l := MaxArithSeqLenFrom(A, next, diff, len + 1);\n        if l > maxLen { maxLen := l; }\n      }\n      next := next + 1;\n    }\n    maxLen - 1\n}\n\n// Main method\nmethod LongestArithSeqLength(A: array<int>) returns (res: nat)\n  requires A != null\n  ensures res == LongestArithSeqLengthSpec(A[..])\n{\n  var n := A.Length;\n  if n <= 1 {\n    res := n;\n    return;\n  }\n\n  // dp[i, diff] = length of arithmetic sequence ending at index i with difference diff\n  // We'll use a map from (i, diff) to nat\n  var dp := map<(int, int), nat>{};\n  var maxLen: nat := 1;\n\n  var i: int := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall idx: int, d: int :: (idx, d) in dp ==> 0 <= idx < i\n    invariant maxLen >= 1\n  {\n    var j: int := 0;\n    while j < i\n      invariant 0 <= j <= i\n      invariant forall idx: int, d: int :: (idx, d) in dp ==> 0 <= idx < i\n      invariant maxLen >= 1\n    {\n      var diff := A[i] - A[j];\n      var prevLen := if (j, diff) in dp then dp[(j, diff)] else 1;\n      var currLen := if (i, diff) in dp then dp[(i, diff)] else 1;\n      var newLen := if prevLen + 1 > currLen then prevLen + 1 else currLen;\n      dp := dp[(i, diff) := newLen];\n      if newLen > maxLen {\n        maxLen := newLen;\n      }\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n\n  res := maxLen;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 15.974,
+        "duration_formatted": "15.97s",
+        "tokens": {
+          "input": 433,
+          "output": 802,
+          "total": 1235
+        },
+        "cost_usd": 0.007282,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:56:13.014930"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1052.py",
+      "code": "class Solution(object):\n\n    def maxSatisfied(self, customers, grumpy, X):\n        result = 0\n        prefix_sum = [0] * (len(customers) + 1)\n        index = 0\n        for customer, grump in zip(customers, grumpy):\n            prefix_sum[index + 1] = prefix_sum[index]\n            if grump == 0:\n                result += customer\n            else:\n                prefix_sum[index + 1] += customer\n            index += 1\n        curr_max = result + prefix_sum[X]\n        for index in range(X + 1, len(prefix_sum)):\n            temp_max = result + prefix_sum[index] - prefix_sum[index - X]\n            curr_max = max(curr_max, temp_max)\n        return curr_max",
+      "program_specification": "```dafny\nmethod MaxSatisfied(customers: seq<int>, grumpy: seq<int>, X: nat) returns (maxSat: int)\n  requires |customers| == |grumpy|\n  requires X >= 1 && X <= |customers|\n  ensures maxSat == MaxSatisfiedSpec(customers, grumpy, X)\n{\n  var n := |customers|;\n  var result := 0;\n  var prefix_sum := new int[n + 1];\n  prefix_sum[0] := 0;\n  var index := 0;\n\n  // Compute result and prefix_sum\n  while index < n\n    invariant 0 <= index <= n\n    invariant prefix_sum[0] == 0\n    invariant forall i :: 0 <= i <= index ==> prefix_sum[i] == PrefixSumSpec(customers, grumpy, i)\n    invariant result == SatisfiedSumSpec(customers, grumpy, index)\n  {\n    prefix_sum[index + 1] := prefix_sum[index];\n    if grumpy[index] == 0 {\n      result := result + customers[index];\n    } else {\n      prefix_sum[index + 1] := prefix_sum[index + 1] + customers[index];\n    }\n    index := index + 1;\n  }\n\n  var curr_max := result + prefix_sum[X];\n  index := X + 1;\n  while index <= n\n    invariant X + 1 <= index <= n + 1\n    invariant curr_max == CurrMaxInvariant(customers, grumpy, X, result, prefix_sum, index)\n    invariant forall j :: X <= j < index ==> \n      curr_max >= result + prefix_sum[j] - prefix_sum[j - X]\n  {\n    var temp_max := result + prefix_sum[index] - prefix_sum[index - X];\n    if temp_max > curr_max {\n      curr_max := temp_max;\n    }\n    index := index + 1;\n  }\n  maxSat := curr_max;\n}\n\n// Specification: sum of satisfied customers without using the technique\nfunction SatisfiedSumSpec(customers: seq<int>, grumpy: seq<int>, upto: nat): int\n  requires upto <= |customers|\n{\n  if upto == 0 then 0\n  else SatisfiedSumSpec(customers[..upto-1], grumpy[..upto-1], upto-1) +\n    (if grumpy[upto-1] == 0 then customers[upto-1] else 0)\n}\n\n// Specification: prefix sum of grumpy customers up to index\nfunction PrefixSumSpec(customers: seq<int>, grumpy: seq<int>, upto: nat): int\n  requires upto <= |customers|\n{\n  if upto == 0 then 0\n  else PrefixSumSpec(customers[..upto-1], grumpy[..upto-1], upto-1) +\n    (if grumpy[upto-1] == 1 then customers[upto-1] else 0)\n}\n\n// Specification: the maximal satisfied customers after using the technique\nfunction MaxSatisfiedSpec(customers: seq<int>, grumpy: seq<int>, X: nat): int\n  requires |customers| == |grumpy|\n  requires X >= 1 && X <= |customers|\n{\n  var n := |customers|;\n  var base := SatisfiedSumSpec(customers, grumpy, n);\n  var maxExtra := if n < X then 0 else\n    max( seq j | 0 <= j <= n - X :: \n      sum k | j <= k < j + X :: if grumpy[k] == 1 then customers[k] else 0\n    );\n  base + maxExtra\n}\n\n// Helper: sum over a range\nfunction sum(k: int -> bool, f: int -> int): int\n{\n  if (exists i :: k(i)) then\n    var i :| k(i);\n    f(i) + sum((j: int) => k(j) && j != i, f)\n  else 0\n}\n\n// Helper: max over a sequence\nfunction max(s: seq<int>): int\n  decreases |s|\n{\n  if |s| == 0 then 0\n  else if |s| == 1 then s[0]\n  else if s[0] > max(s[1..]) then s[0] else max(s[1..])\n}\n\n// Invariant for curr_max in the sliding window\nfunction CurrMaxInvariant(customers: seq<int>, grumpy: seq<int>, X: nat, result: int, prefix_sum: array<int>, index: int): int\n  requires X + 1 <= index <= |customers| + 1\n  requires |customers| == |grumpy|\n  requires prefix_sum.Length == |customers| + 1\n{\n  max( [result + prefix_sum[j] - prefix_sum[j - X] | j := X .. index - 1] )\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 17.304,
+        "duration_formatted": "17.30s",
+        "tokens": {
+          "input": 502,
+          "output": 1024,
+          "total": 1526
+        },
+        "cost_usd": 0.009196,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:56:40.320450"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1065.py",
+      "code": "class Solution(object):\n\n    def indexPairs(self, text, words):\n        if not words:\n            return []\n        result = []\n        for word in words:\n            starting = [index for index in range(len(text)) if text.startswith(word, index)]\n            for start in starting:\n                result.append([start, start + len(word) - 1])\n        result.sort()\n        return result",
+      "program_specification": "```dafny\nmodule SolutionModule {\n\n  // Helper function: checks if 'text' starts with 'word' at position 'index'\n  function startsWithAt(text: seq<char>, word: seq<char>, index: int): bool\n    requires 0 <= index <= |text|\n    requires 0 <= |word| <= |text| - index\n  {\n    |word| <= |text| - index &&\n    (forall j :: 0 <= j < |word| ==> text[index + j] == word[j])\n  }\n\n  // Helper function: returns all starting indices in 'text' where 'word' occurs as a prefix\n  function getStartingIndices(text: seq<char>, word: seq<char>): set<int>\n    requires |word| <= |text|\n  {\n    set i | 0 <= i <= |text| - |word| && startsWithAt(text, word, i)\n  }\n\n  // Helper function: returns all index pairs [start, end] for all occurrences of all words\n  function expectedIndexPairs(text: seq<char>, words: seq<seq<char>>): set<seq<int>>\n  {\n    set pair | \n      word: seq<char>, start: int ::\n        word in words &&\n        0 <= start <= |text| - |word| &&\n        startsWithAt(text, word, start) &&\n        pair == [start, start + |word| - 1]\n  }\n\n  method indexPairs(text: seq<char>, words: seq<seq<char>>) returns (result: seq<seq<int>>)\n    requires true\n    ensures\n      (|words| == 0 ==> |result| == 0) &&\n      (|words| > 0 ==> \n        multiset result == multiset expectedIndexPairs(text, words) &&\n        (forall i :: 0 <= i < |result| - 1 ==> result[i] <= result[i+1]))\n  {\n    if |words| == 0 {\n      result := [];\n      return;\n    }\n    var res: seq<seq<int>> := [];\n    var w: int := 0;\n    while w < |words|\n      invariant 0 <= w <= |words|\n      invariant multiset res == multiset expectedIndexPairs(text, words[..w])\n      invariant forall i :: 0 <= i < |res| ==> |res[i]| == 2\n    {\n      var word := words[w];\n      if |word| <= |text| {\n        var i: int := 0;\n        while i <= |text| - |word|\n          invariant 0 <= i <= |text| - |word| + 1\n          invariant multiset res == multiset expectedIndexPairs(text, words[..w]) +\n                                   multiset set pair | \n                                     j: int :: 0 <= j < i && startsWithAt(text, word, j) && pair == [j, j + |word| - 1]\n        {\n          if startsWithAt(text, word, i) {\n            res := res + [[i, i + |word| - 1]];\n          }\n          i := i + 1;\n        }\n      }\n      w := w + 1;\n    }\n    // Sort the result lexicographically\n    // Simple insertion sort for clarity\n    var sorted: seq<seq<int>> := [];\n    var k: int := 0;\n    while k < |res|\n      invariant 0 <= k <= |res|\n      invariant multiset sorted + multiset res[k..] == multiset res\n      invariant forall i :: 0 <= i < |sorted| - 1 ==> sorted[i] <= sorted[i+1]\n    {\n      var inserted := false;\n      var j: int := 0;\n      while !inserted && j < |sorted|\n        invariant 0 <= j <= |sorted|\n        invariant !inserted ==> |sorted| == k\n        invariant inserted ==> |sorted| == k + 1\n        invariant multiset sorted + multiset res[k..] == multiset res\n      {\n        if res[k] <= sorted[j] {\n          sorted := sorted[..j] + [res[k]] + sorted[j..];\n          inserted := true;\n        } else {\n          j := j + 1;\n        }\n      }\n      if !inserted {\n        sorted := sorted + [res[k]];\n      }\n      k := k + 1;\n    }\n    result := sorted;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 20.871,
+        "duration_formatted": "20.87s",
+        "tokens": {
+          "input": 419,
+          "output": 932,
+          "total": 1351
+        },
+        "cost_usd": 0.008294,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:57:11.196017"
+      }
+    },
+    {
+      "file_path": "900-1000q/926.py",
+      "code": "class Solution(object):\n\n    def minFlipsMonoIncr(self, S):\n        ones = [0]\n        for char in S:\n            ones.append(ones[-1] + int(char))\n        result = float('inf')\n        for index in range(len(ones)):\n            zeroes = len(S) - index - (ones[-1] - ones[index])\n            result = min(zeroes + ones[index], result)\n        return result",
+      "program_specification": "```dafny\nmodule SolutionModule {\n\n  function method NumOnes(S: seq<char>, i: nat): nat\n    requires i <= |S|\n    decreases i\n  {\n    if i == 0 then 0\n    else NumOnes(S, i - 1) + (if S[i - 1] == '1' then 1 else 0)\n  }\n\n  function method MinFlipsMonoIncrSpec(S: seq<char>): nat\n    decreases S\n  {\n    if |S| == 0 then 0\n    else\n      // For every possible split, compute the flips needed\n      min({ NumOnes(S, i) + (|S| - i - (NumOnes(S, |S|) - NumOnes(S, i))) | i : nat, i <= |S| })\n  }\n\n  method minFlipsMonoIncr(S: seq<char>) returns (result: nat)\n    requires forall c :: c in S ==> c == '0' || c == '1'\n    ensures result == MinFlipsMonoIncrSpec(S)\n  {\n    var n := |S|;\n    var ones := new int[n + 1];\n    ones[0] := 0;\n    var i: int := 0;\n    // Compute prefix sums of ones\n    while i < n\n      invariant 0 <= i <= n\n      invariant forall j :: 0 <= j <= i ==> ones[j] == NumOnes(S, j)\n      invariant ones[0] == 0\n    {\n      ones[i + 1] := ones[i] + (if S[i] == '1' then 1 else 0);\n      i := i + 1;\n    }\n\n    var totalOnes := ones[n];\n    result := n + 1; // more than max possible flips\n    var index: int := 0;\n    while index <= n\n      invariant 0 <= index <= n + 1\n      invariant forall k :: 0 <= k < index ==> result <= ones[k] + (n - k - (totalOnes - ones[k]))\n      invariant result >= 0\n    {\n      var zeroes := n - index - (totalOnes - ones[index]);\n      var flips := ones[index] + zeroes;\n      if flips < result {\n        result := flips;\n      }\n      index := index + 1;\n    }\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 10.34,
+        "duration_formatted": "10.34s",
+        "tokens": {
+          "input": 431,
+          "output": 513,
+          "total": 944
+        },
+        "cost_usd": 0.004966,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:57:31.539544"
+      }
+    },
+    {
+      "file_path": "Python/4-keys-keyboard.py",
+      "code": "class Solution(object):\n\n    def maxA(self, N):\n        if N < 7:\n            return N\n        if N == 10:\n            return 20\n        n = N // 5 + 1\n        n3 = 5 * n - N - 1\n        n4 = n - n3\n        return 3 ** n3 * 4 ** n4\n\nclass Solution2(object):\n\n    def maxA(self, N):\n        if N < 7:\n            return N\n        dp = range(N + 1)\n        for i in xrange(7, N + 1):\n            dp[i % 6] = max(dp[(i - 4) % 6] * 3, dp[(i - 5) % 6] * 4)\n        return dp[N % 6]",
+      "program_specification": "```dafny\n// Specification function for the optimal number of 'A's after N key presses\nfunction maxA_spec(N: nat): nat\n{\n  if N < 7 then N\n  else if N == 10 then 20\n  else\n    var n := N / 5 + 1;\n    var n3 := 5 * n - N - 1;\n    var n4 := n - n3;\n    3 ^ n3 * 4 ^ n4\n}\n\n// Solution 1: Direct formula\nmethod MaxA_Formula(N: nat) returns (res: nat)\n  requires N >= 0\n  ensures res == maxA_spec(N)\n{\n  if N < 7 {\n    res := N;\n    return;\n  }\n  if N == 10 {\n    res := 20;\n    return;\n  }\n  var n := N / 5 + 1;\n  var n3 := 5 * n - N - 1;\n  var n4 := n - n3;\n  res := 1;\n  var i: int := 0;\n  // Compute 3^n3\n  while i < n3\n    invariant 0 <= i <= n3\n    invariant res == 3 ^ i\n  {\n    res := res * 3;\n    i := i + 1;\n  }\n  i := 0;\n  var res2: nat := 1;\n  // Compute 4^n4\n  while i < n4\n    invariant 0 <= i <= n4\n    invariant res2 == 4 ^ i\n  {\n    res2 := res2 * 4;\n    i := i + 1;\n  }\n  res := res * res2;\n}\n\n// Solution 2: Dynamic Programming\nmethod MaxA_DP(N: nat) returns (res: nat)\n  requires N >= 0\n  ensures res == maxA_spec(N)\n{\n  if N < 7 {\n    res := N;\n    return;\n  }\n  var dp: array<nat> := new nat[6];\n  var i: int := 0;\n  // Initialize dp[0..5] = 0..5\n  while i <= 5\n    invariant 0 <= i <= 6\n    invariant forall j :: 0 <= j < i ==> dp[j] == j\n  {\n    dp[i] := i;\n    i := i + 1;\n  }\n  i := 7;\n  while i <= N\n    invariant 7 <= i <= N + 1\n    invariant forall j :: 0 <= j < 6 ==> dp[j] == if i - 6 <= j <= i - 1 then maxA_spec(i - 6 + j) else dp[j]\n  {\n    var idx4 := (i - 4) % 6;\n    var idx5 := (i - 5) % 6;\n    var val4 := dp[idx4] * 3;\n    var val5 := dp[idx5] * 4;\n    dp[i % 6] := if val4 > val5 then val4 else val5;\n    i := i + 1;\n  }\n  res := dp[N % 6];\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 9.515,
+        "duration_formatted": "9.52s",
+        "tokens": {
+          "input": 515,
+          "output": 684,
+          "total": 1199
+        },
+        "cost_usd": 0.006502,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:57:51.057888"
+      }
+    },
+    {
+      "file_path": "Python/adjacent-increasing-subarrays-detection-i.py",
+      "code": "class Solution(object):\n\n    def hasIncreasingSubarrays(self, nums, k):\n        result = 0\n        curr, prev = (1, 0)\n        for i in xrange(len(nums) - 1):\n            if nums[i] < nums[i + 1]:\n                curr += 1\n            else:\n                prev = curr\n                curr = 1\n            result = max(result, curr // 2, min(prev, curr))\n        return result >= k",
+      "program_specification": "```dafny\nmethod HasIncreasingSubarrays(nums: array<int>, k: int) returns (res: bool)\n  requires nums != null\n  requires 0 <= k\n  ensures res == (exists i, j :: 0 <= i < j <= nums.Length && IsStrictlyIncreasing(nums, i, j) && (j - i) >= 2 && (j - i) >= k)\n{\n  var result: int := 0;\n  var curr: int := 1;\n  var prev: int := 0;\n  var i: int := 0;\n  while i < nums.Length - 1\n    invariant 0 <= i <= nums.Length - 1\n    invariant 1 <= curr <= i + 2\n    invariant 0 <= prev <= i + 1\n    invariant 0 <= result <= i + 2\n    invariant forall j: int :: 0 <= j < i ==> (nums[j] < nums[j+1] ==> curr >= 1)\n    invariant result == MaxIncreasingSubarrayScore(nums, i, curr, prev)\n  {\n    if nums[i] < nums[i + 1] {\n      curr := curr + 1;\n    } else {\n      prev := curr;\n      curr := 1;\n    }\n    result := max(result, curr / 2, if prev < curr then prev else curr);\n    i := i + 1;\n  }\n  res := result >= k;\n}\n\nfunction IsStrictlyIncreasing(nums: array<int>, start: int, end: int): bool\n  requires nums != null\n  requires 0 <= start < end <= nums.Length\n{\n  forall i :: start <= i < end - 1 ==> nums[i] < nums[i + 1]\n}\n\nfunction MaxIncreasingSubarrayScore(nums: array<int>, upto: int, curr: int, prev: int): int\n  requires nums != null\n  requires 0 <= upto <= nums.Length - 1\n  requires 1 <= curr <= upto + 2\n  requires 0 <= prev <= upto + 1\n{\n  // This function is a helper for the invariant, not for the final result.\n  // It models the maximum score seen so far, up to index 'upto'.\n  // For full correctness, a more precise model would be needed.\n  0 // Placeholder, as the actual value is tracked in the loop\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 8.039,
+        "duration_formatted": "8.04s",
+        "tokens": {
+          "input": 438,
+          "output": 505,
+          "total": 943
+        },
+        "cost_usd": 0.004916,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:58:09.100498"
+      }
+    },
+    {
+      "file_path": "Python/adjacent-increasing-subarrays-detection-ii.py",
+      "code": "class Solution(object):\n\n    def maxIncreasingSubarrays(self, nums):\n        result = 0\n        curr, prev = (1, 0)\n        for i in xrange(len(nums) - 1):\n            if nums[i] < nums[i + 1]:\n                curr += 1\n            else:\n                prev = curr\n                curr = 1\n            result = max(result, curr // 2, min(prev, curr))\n        return result",
+      "program_specification": "```dafny\nmethod MaxIncreasingSubarrays(nums: seq<int>) returns (result: int)\n  requires |nums| >= 1\n  ensures result == MaxIncreasingSubarraysSpec(nums)\n{\n  var n := |nums|;\n  result := 0;\n  var curr: int := 1;\n  var prev: int := 0;\n  var i: int := 0;\n  while i < n - 1\n    invariant 0 <= i <= n - 1\n    invariant 1 <= curr <= i + 1\n    invariant 0 <= prev <= i\n    invariant result == MaxResultSoFar(nums, i, curr, prev)\n  {\n    if nums[i] < nums[i + 1] {\n      curr := curr + 1;\n    } else {\n      prev := curr;\n      curr := 1;\n    }\n    result := max(result, curr / 2, if prev < curr then prev else curr);\n    i := i + 1;\n  }\n}\n\nfunction MaxIncreasingSubarraysSpec(nums: seq<int>): int\n  requires |nums| >= 1\n{\n  // Simulate the algorithm to compute the result\n  if |nums| == 1 then 0\n  else MaxIncreasingSubarraysSpecAux(nums, 0, 1, 0, 0)\n}\n\nfunction MaxIncreasingSubarraysSpecAux(nums: seq<int>, i: int, curr: int, prev: int, result: int): int\n  requires 0 <= i <= |nums| - 1\n  requires 1 <= curr <= i + 1\n  requires 0 <= prev <= i\n{\n  if i == |nums| - 1 then result\n  else\n    if nums[i] < nums[i + 1] then\n      MaxIncreasingSubarraysSpecAux(nums, i + 1, curr + 1, prev, max(result, (curr + 1) / 2, if prev < curr + 1 then prev else curr + 1))\n    else\n      MaxIncreasingSubarraysSpecAux(nums, i + 1, 1, curr, max(result, 1 / 2, if curr < 1 then curr else 1))\n}\n\nfunction MaxResultSoFar(nums: seq<int>, i: int, curr: int, prev: int): int\n  requires 0 <= i <= |nums| - 1\n  requires 1 <= curr <= i + 1\n  requires 0 <= prev <= i\n{\n  // Simulate the result value up to index i\n  if i == 0 then max(0, curr / 2, if prev < curr then prev else curr)\n  else MaxIncreasingSubarraysSpecAux(nums, 0, 1, 0, 0)[..i]\n}\n\nfunction max(a: int, b: int, c: int): int\n{\n  if a >= b && a >= c then a\n  else if b >= a && b >= c then b\n  else c\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 10.731,
+        "duration_formatted": "10.73s",
+        "tokens": {
+          "input": 434,
+          "output": 638,
+          "total": 1072
+        },
+        "cost_usd": 0.005972,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:58:29.835773"
+      }
+    },
+    {
+      "file_path": "Python/all-divisions-with-the-highest-score-of-a-binary-array.py",
+      "code": "class Solution(object):\n\n    def maxScoreIndices(self, nums):\n        result = []\n        mx = zeros = 0\n        total = sum(nums)\n        for i in xrange(len(nums) + 1):\n            zeros += (nums[i - 1] if i else 0) == 0\n            if zeros + (total - (i - zeros)) > mx:\n                mx = zeros + (total - (i - zeros))\n                result = []\n            if zeros + (total - (i - zeros)) == mx:\n                result.append(i)\n        return result",
+      "program_specification": "```dafny\nmethod MaxScoreIndices(nums: seq<int>) returns (result: seq<int>)\n  requires forall x :: 0 <= x < |nums| ==> nums[x] == 0 || nums[x] == 1\n  ensures forall i :: 0 <= i <= |nums| ==> \n            (i in result) <==> \n            (forall j :: 0 <= j <= |nums| ==> \n                ScoreAt(nums, i) >= ScoreAt(nums, j))\n  ensures forall i :: 0 <= i < |result| - 1 ==> result[i] < result[i+1]\n{\n  var n := |nums|;\n  var total: int := 0;\n  // Compute total number of 1's in nums\n  var t := 0;\n  while t < n\n    invariant 0 <= t <= n\n    invariant total == sum(nums[..t])\n  {\n    total := total + nums[t];\n    t := t + 1;\n  }\n\n  var zeros: int := 0;\n  var mx: int := 0;\n  result := [];\n  var i: int := 0;\n  while i <= n\n    invariant 0 <= i <= n + 1\n    invariant 0 <= zeros <= i\n    invariant mx == (if |result| == 0 then 0 else ScoreAt(nums, result[0]))\n    invariant forall j :: 0 <= j < |result| ==> 0 <= result[j] <= n\n    invariant forall j :: 0 <= j < |result| ==> ScoreAt(nums, result[j]) == mx\n    invariant forall k :: 0 <= k < i ==> ScoreAt(nums, k) <= mx\n    invariant forall j :: 0 <= j < |result| - 1 ==> result[j] < result[j+1]\n  {\n    if i > 0 && nums[i-1] == 0 {\n      zeros := zeros + 1;\n    }\n    var ones_left := i - zeros;\n    var ones_right := total - ones_left;\n    var score := zeros + ones_right;\n    if score > mx {\n      mx := score;\n      result := [];\n    }\n    if score == mx {\n      result := result + [i];\n    }\n    i := i + 1;\n  }\n}\n\nfunction sum(s: seq<int>): int\n{\n  if |s| == 0 then 0 else s[0] + sum(s[1..])\n}\n\nfunction ScoreAt(nums: seq<int>, i: int): int\n  requires 0 <= i <= |nums|\n  requires forall x :: 0 <= x < |nums| ==> nums[x] == 0 || nums[x] == 1\n{\n  NumZeros(nums[..i]) + NumOnes(nums[i..])\n}\n\nfunction NumZeros(s: seq<int>): int\n{\n  if |s| == 0 then 0 else (if s[0] == 0 then 1 else 0) + NumZeros(s[1..])\n}\n\nfunction NumOnes(s: seq<int>): int\n{\n  if |s| == 0 then 0 else (if s[0] == 1 then 1 else 0) + NumOnes(s[1..])\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 11.712,
+        "duration_formatted": "11.71s",
+        "tokens": {
+          "input": 458,
+          "output": 686,
+          "total": 1144
+        },
+        "cost_usd": 0.006404,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:58:51.554182"
+      }
+    },
+    {
+      "file_path": "Python/all-paths-from-source-to-target.py",
+      "code": "class Solution(object):\n\n    def allPathsSourceTarget(self, graph):\n\n        def dfs(graph, curr, path, result):\n            if curr == len(graph) - 1:\n                result.append(path[:])\n                return\n            for node in graph[curr]:\n                path.append(node)\n                dfs(graph, node, path, result)\n                path.pop()\n        result = []\n        dfs(graph, 0, [0], result)\n        return result",
+      "program_specification": "```dafny\n// Dafny program to find all paths from source (0) to target (|graph|-1) in a DAG\n\n// A graph is a sequence of sequences of integers, where graph[i] is the list of nodes\n// that node i points to.\ntype Graph = seq<seq<int>>\n\n// A path is a sequence of node indices\ntype Path = seq<int>\n\n// Returns true if 'path' is a valid path from source (0) to target (|graph|-1) in 'graph'\nfunction method IsValidPath(graph: Graph, path: Path): bool\n{\n  path.Length >= 1 &&\n  path[0] == 0 &&\n  path[path.Length - 1] == |graph| - 1 &&\n  // Each consecutive pair must be an edge in the graph\n  (forall i :: 0 <= i < path.Length - 1 ==> path[i+1] in graph[path[i]])\n}\n\n// Returns true if all paths in 'paths' are valid paths from source to target in 'graph'\nfunction method AllPathsValid(graph: Graph, paths: seq<Path>): bool\n{\n  forall p :: p in paths ==> IsValidPath(graph, p)\n}\n\n// Returns true if all paths in 'paths' are unique\nfunction method AllPathsUnique(paths: seq<Path>): bool\n{\n  forall i, j :: 0 <= i < j < |paths| ==> paths[i] != paths[j]\n}\n\n// Returns true if 'paths' contains all possible valid paths from source to target in 'graph'\nfunction method AllPathsSourceTargetSpec(graph: Graph, paths: seq<Path>): bool\n{\n  AllPathsValid(graph, paths) &&\n  AllPathsUnique(paths) &&\n  // For any valid path, it must be in 'paths'\n  forall p: Path :: IsValidPath(graph, p) ==> p in paths\n}\n\nmethod AllPathsSourceTarget(graph: Graph) returns (result: seq<Path>)\n  requires |graph| > 0\n  requires forall i :: 0 <= i < |graph| ==> forall v :: v in graph[i] ==> 0 <= v < |graph|\n  ensures AllPathsSourceTargetSpec(graph, result)\n{\n  var res: seq<Path> := [];\n  var path: seq<int> := [0];\n\n  method {:tailrecursion} dfs(curr: int, path: seq<int>)\n    requires 0 <= curr < |graph|\n    requires path.Length >= 1 && path[path.Length - 1] == curr\n    modifies res\n    ensures forall oldRes: seq<Path> :: oldRes == old(res) ==> \n              res == oldRes + (if curr == |graph| - 1 then [path] else [])\n    ensures forall p :: p in res ==> IsValidPath(graph, p)\n  {\n    if curr == |graph| - 1 {\n      res := res + [path];\n      return;\n    }\n    var neighbors := graph[curr];\n    var i: int := 0;\n    while i < |neighbors|\n      invariant 0 <= i <= |neighbors|\n      invariant forall j :: 0 <= j < i ==> \n        (let next := neighbors[j] in\n          true // All side effects are in res, which is only appended to\n        )\n      invariant forall p :: p in res ==> IsValidPath(graph, p)\n      decreases |neighbors| - i\n    {\n      var next := neighbors[i];\n      if next !in path { // avoid cycles, though graph is a DAG\n        dfs(next, path + [next]);\n      }\n      i := i + 1;\n    }\n  }\n\n  dfs(0, path);\n  result := res;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 13.6,
+        "duration_formatted": "13.60s",
+        "tokens": {
+          "input": 430,
+          "output": 766,
+          "total": 1196
+        },
+        "cost_usd": 0.006988,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:59:15.160540"
+      }
+    },
+    {
+      "file_path": "Python/alternating-groups-i.py",
+      "code": "class Solution(object):\n\n    def numberOfAlternatingGroups(self, colors):\n        k = 3\n        result = curr = left = 0\n        for right in xrange(len(colors) + k - 1):\n            if right - left + 1 == k:\n                result += int(curr == k - 1)\n                curr -= int(colors[left] != colors[(left + 1) % len(colors)])\n                left += 1\n            curr += int(colors[right % len(colors)] != colors[(right + 1) % len(colors)])\n        return result\n\nclass Solution2(object):\n\n    def numberOfAlternatingGroups(self, colors):\n        return sum((colors[i] != colors[(i + 1) % len(colors)] != colors[(i + 2) % len(colors)] for i in xrange(len(colors))))",
+      "program_specification": "```dafny\n// Dafny translation of numberOfAlternatingGroups\n\n// Helper function to check if three consecutive colors are alternating\nfunction IsAlternatingTriple(colors: seq<int>, i: int): bool\n  requires |colors| >= 3\n  requires 0 <= i < |colors|\n{\n  colors[i % |colors|] != colors[(i + 1) % |colors|] &&\n  colors[(i + 1) % |colors|] != colors[(i + 2) % |colors|] &&\n  colors[i % |colors|] != colors[(i + 2) % |colors|]\n}\n\n// Specification function: counts the number of alternating triples in the sequence\nfunction NumberOfAlternatingGroups(colors: seq<int>): nat\n  requires |colors| >= 3\n{\n  |set i: int | 0 <= i < |colors| && IsAlternatingTriple(colors, i)|\n}\n\n// Solution 1: Sliding window approach\nmethod NumberOfAlternatingGroups1(colors: seq<int>) returns (result: nat)\n  requires |colors| >= 3\n  ensures result == NumberOfAlternatingGroups(colors)\n{\n  var k := 3;\n  result := 0;\n  var curr: int := 0;\n  var left: int := 0;\n  var n := |colors|;\n\n  var right: int := 0;\n  while right < n + k - 1\n    invariant 0 <= left <= right <= n + k - 1\n    invariant 0 <= curr <= k - 1\n    invariant result <= NumberOfAlternatingGroups(colors)\n    invariant forall i: int :: 0 <= i < left ==> \n      (if forall j: int :: 0 <= j < k - 1 ==> \n            colors[(i + j) % n] != colors[(i + j + 1) % n] then\n         true\n       else\n         true)\n    decreases n + k - 1 - right\n  {\n    if right - left + 1 == k {\n      if curr == k - 1 {\n        result := result + 1;\n      }\n      if colors[left % n] != colors[(left + 1) % n] {\n        curr := curr - 1;\n      }\n      left := left + 1;\n    }\n    if colors[right % n] != colors[(right + 1) % n] {\n      curr := curr + 1;\n    }\n    right := right + 1;\n  }\n}\n\n// Solution 2: Direct sum using IsAlternatingTriple\nmethod NumberOfAlternatingGroups2(colors: seq<int>) returns (result: nat)\n  requires |colors| >= 3\n  ensures result == NumberOfAlternatingGroups(colors)\n{\n  result := 0;\n  var n := |colors|;\n  var i: int := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant result == |set j: int | 0 <= j < i && IsAlternatingTriple(colors, j)|\n    decreases n - i\n  {\n    if IsAlternatingTriple(colors, i) {\n      result := result + 1;\n    }\n    i := i + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 9.572,
+        "duration_formatted": "9.57s",
+        "tokens": {
+          "input": 511,
+          "output": 686,
+          "total": 1197
+        },
+        "cost_usd": 0.00651,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T10:59:34.736548"
+      }
+    },
+    {
+      "file_path": "Python/append-k-integers-with-minimal-sum.py",
+      "code": "class Solution(object):\n\n    def minimalKSum(self, nums, k):\n        result = k * (k + 1) // 2\n        curr = k + 1\n        for x in sorted(set(nums)):\n            if x < curr:\n                result += curr - x\n                curr += 1\n        return result\n\nclass Solution2(object):\n\n    def minimalKSum(self, nums, k):\n        result = prev = 0\n        nums.append(float('inf'))\n        for x in sorted(set(nums)):\n            if not k:\n                break\n            cnt = min(x - 1 - prev, k)\n            k -= cnt\n            result += (prev + 1 + (prev + cnt)) * cnt // 2\n            prev = x\n        return result",
+      "program_specification": "```dafny\n// Helper function to compute the sum of first n natural numbers\nfunction SumFirstN(n: nat): nat\n{\n  n * (n + 1) / 2\n}\n\n// Helper function to get the sorted set of nums\nfunction SortedSet(nums: seq<int>): seq<int>\n  ensures set(SortedSet(nums)) == set(nums)\n  ensures forall i, j :: 0 <= i < j < |SortedSet(nums)| ==> SortedSet(nums)[i] < SortedSet(nums)[j]\n{\n  var s := set nums;\n  var arr := [];\n  var i := 0;\n  while i < |nums|\n    invariant 0 <= i <= |nums|\n    invariant set(arr) <= s\n    invariant forall x :: x in arr ==> x in s\n    decreases |nums| - i\n  {\n    if nums[i] !in arr {\n      arr := arr + [nums[i]];\n    }\n    i := i + 1;\n  }\n  // Now sort arr\n  var sorted := arr;\n  var n := |sorted|;\n  var j := 0;\n  while j < n\n    invariant 0 <= j <= n\n    invariant multiset(sorted[..j]) == multiset(arr[..j])\n    decreases n - j\n  {\n    var minIdx := j;\n    var k := j + 1;\n    while k < n\n      invariant j + 1 <= k <= n\n      invariant minIdx >= j && minIdx < n\n      decreases n - k\n    {\n      if sorted[k] < sorted[minIdx] {\n        minIdx := k;\n      }\n      k := k + 1;\n    }\n    if minIdx != j {\n      var tmp := sorted[j];\n      sorted[j] := sorted[minIdx];\n      sorted[minIdx] := tmp;\n    }\n    j := j + 1;\n  }\n  sorted\n}\n\n// Solution 1: Direct simulation\nmethod minimalKSum(nums: seq<int>, k: nat) returns (result: int)\n  requires forall x :: 0 <= x < |nums| ==> nums[x] > 0\n  ensures result == minimalKSumSpec(nums, k)\n{\n  var sortedNums := SortedSet(nums);\n  result := k * (k + 1) / 2;\n  var curr: int := k + 1;\n  var i: int := 0;\n  while i < |sortedNums|\n    invariant 0 <= i <= |sortedNums|\n    invariant result == k * (k + 1) / 2 + sum j: 0 <= j < i && sortedNums[j] < curr :: currAt(j, k) - sortedNums[j]\n    invariant curr >= k + 1\n    decreases |sortedNums| - i\n  {\n    var x := sortedNums[i];\n    if x < curr {\n      result := result + curr - x;\n      curr := curr + 1;\n    }\n    i := i + 1;\n  }\n}\n\n// Helper function for invariant\nfunction currAt(j: int, k: nat): int\n{\n  k + 1 + j\n}\n\n// Specification function for Solution 1\nfunction minimalKSumSpec(nums: seq<int>, k: nat): int\n{\n  var s := set nums;\n  var res := 0;\n  var cnt := 0;\n  var x := 1;\n  while cnt < k\n    decreases k - cnt\n  {\n    if x !in s {\n      res := res + x;\n      cnt := cnt + 1;\n    }\n    x := x + 1;\n  }\n  res\n}\n\n// Solution 2: Efficient gap-filling\nmethod minimalKSum2(nums: seq<int>, k: nat) returns (result: int)\n  requires forall x :: 0 <= x < |nums| ==> nums[x] > 0\n  ensures result == minimalKSumSpec(nums, k)\n{\n  var sortedNums := SortedSet(nums);\n  var prev: int := 0;\n  result := 0;\n  var kk := k;\n  var i: int := 0;\n  while i < |sortedNums| && kk > 0\n    invariant 0 <= i <= |sortedNums|\n    invariant 0 <= kk <= k\n    invariant prev >= 0\n    invariant result == minimalKSumSpecPartial(nums, k, i, prev, kk)\n    decreases |sortedNums| - i, kk\n  {\n    var x := sortedNums[i];\n    var cnt := if x - 1 - prev < kk then x - 1 - prev else kk;\n    if cnt > 0 {\n      result := result + (prev + 1 + (prev + cnt)) * cnt / 2;\n      kk := kk - cnt;\n    }\n    prev := x;\n    i := i + 1;\n  }\n  if kk > 0 {\n    result := result + (prev + 1 + (prev + kk)) * kk / 2;\n  }\n}\n\n// Helper function for partial sum in Solution 2\nfunction minimalKSumSpecPartial(nums: seq<int>, k: nat, i: int, prev: int, kk: nat): int\n{\n  var sortedNums := SortedSet(nums);\n  var res := 0;\n  var cnt := 0;\n  var idx := 0;\n  var last := 0;\n  while idx < i\n    decreases i - idx\n  {\n    var x := sortedNums[idx];\n    var c := if x - 1 - last < k - cnt then x - 1 - last else k - cnt;\n    if c > 0 {\n      res := res + (last + 1 + (last + c)) * c / 2;\n      cnt := cnt + c;\n    }\n    last := x;\n    idx := idx + 1;\n  }\n  res\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 22.278,
+        "duration_formatted": "22.28s",
+        "tokens": {
+          "input": 502,
+          "output": 1237,
+          "total": 1739
+        },
+        "cost_usd": 0.0109,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:00:07.017017"
+      }
+    },
+    {
+      "file_path": "algorithms/arrays/rotate.py",
+      "code": "def rotate_v1(array, k):\n    array = array[:]\n    n = len(array)\n    for i in range(k):\n        temp = array[n - 1]\n        for j in range(n - 1, 0, -1):\n            array[j] = array[j - 1]\n        array[0] = temp\n    return array\n\ndef rotate_v2(array, k):\n    array = array[:]\n\n    def reverse(arr, a, b):\n        while a < b:\n            arr[a], arr[b] = (arr[b], arr[a])\n            a += 1\n            b -= 1\n    n = len(array)\n    k = k % n\n    reverse(array, 0, n - k - 1)\n    reverse(array, n - k, n - 1)\n    reverse(array, 0, n - 1)\n    return array\n\ndef rotate_v3(array, k):\n    if array is None:\n        return None\n    length = len(array)\n    k = k % length\n    return array[length - k:] + array[:length - k]",
+      "program_specification": "```dafny\n// Rotates an array to the right by k steps.\n// The rotated array has the last k elements moved to the front.\n\nfunction method Rotated(a: seq<int>, k: int): seq<int>\n  requires |a| > 0\n{\n  var n := |a|;\n  var m := if n == 0 then 0 else k % n;\n  a[n - m ..] + a[.. n - m]\n}\n\n// Version 1: Rotate by shifting one by one, k times\nmethod rotate_v1(a: seq<int>, k: int) returns (b: seq<int>)\n  requires |a| > 0\n  requires k >= 0\n  ensures b == Rotated(a, k)\n  ensures a == old(a)\n{\n  var array := a[..]; // copy\n  var n := |array|;\n  var i := 0;\n  while i < k\n    invariant 0 <= i <= k\n    invariant |array| == n\n    invariant array == Rotated(a, i)\n  {\n    var temp := array[n - 1];\n    var j := n - 1;\n    while j > 0\n      invariant 0 <= j <= n - 1\n      invariant |array| == n\n      invariant array[j..] == Rotated(a, i)[j..]\n      invariant array[..j] == Rotated(a, i)[..j]\n    {\n      array[j] := array[j - 1];\n      j := j - 1;\n    }\n    array[0] := temp;\n    i := i + 1;\n  }\n  b := array;\n}\n\n// Helper for reverse\nmethod reverse(arr: array<int>, a: int, b: int)\n  requires arr != null\n  requires 0 <= a <= b < arr.Length\n  modifies arr\n  ensures forall i :: 0 <= i < arr.Length ==>\n    (a <= i <= b ==> arr[i] == old(arr)[a + b - i]) &&\n    (i < a || i > b ==> arr[i] == old(arr)[i])\n{\n  var left := a;\n  var right := b;\n  while left < right\n    invariant a <= left <= right + 1 <= b + 2\n    invariant forall i :: 0 <= i < arr.Length ==>\n      (a <= i < left || right < i <= b ==> arr[i] == old(arr)[a + b - i])\n    invariant forall i :: 0 <= i < arr.Length ==>\n      (i < a || i > b ==> arr[i] == old(arr)[i])\n    invariant forall i :: left <= i <= right ==> arr[i] == old(arr)[i]\n  {\n    var tmp := arr[left];\n    arr[left] := arr[right];\n    arr[right] := tmp;\n    left := left + 1;\n    right := right - 1;\n  }\n}\n\n// Version 2: Rotate by reversing parts\nmethod rotate_v2(a: seq<int>, k: int) returns (b: seq<int>)\n  requires |a| > 0\n  requires k >= 0\n  ensures b == Rotated(a, k)\n  ensures a == old(a)\n{\n  var n := |a|;\n  var arr := new int[n];\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall j :: 0 <= j < i ==> arr[j] == a[j]\n  {\n    arr[i] := a[i];\n    i := i + 1;\n  }\n  var m := if n == 0 then 0 else k % n;\n  reverse(arr, 0, n - m - 1);\n  reverse(arr, n - m, n - 1);\n  reverse(arr, 0, n - 1);\n  b := arr[..];\n}\n\n// Version 3: Rotate using slicing\nmethod rotate_v3(a: seq<int>, k: int) returns (b: seq<int>)\n  requires a != null ==> |a| > 0\n  requires k >= 0\n  ensures (a == null ==> b == null)\n  ensures (a != null ==> b == Rotated(a, k))\n{\n  if a == null {\n    b := null;\n    return;\n  }\n  var n := |a|;\n  var m := if n == 0 then 0 else k % n;\n  b := a[n - m ..] + a[.. n - m];\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 15.505,
+        "duration_formatted": "15.51s",
+        "tokens": {
+          "input": 571,
+          "output": 949,
+          "total": 1520
+        },
+        "cost_usd": 0.008734,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:00:32.526447"
+      }
+    },
+    {
+      "file_path": "python/016_3Sum_Closest.py",
+      "code": "class Solution(object):\n\n    def threeSumClosest(self, nums, target):\n        ls = len(nums)\n        sort_nums = sorted(nums)\n        res = nums[0] + nums[1] + nums[2]\n        for i in range(ls - 2):\n            j, k = (i + 1, ls - 1)\n            while j < k:\n                temp = sort_nums[i] + sort_nums[j] + sort_nums[k]\n                if abs(target - temp) < abs(target - res):\n                    res = temp\n                if temp < target:\n                    j += 1\n                else:\n                    k -= 1\n        return res",
+      "program_specification": "```dafny\nmodule SolutionModule {\n\n  function abs(x: int): int {\n    if x < 0 then -x else x\n  }\n\n  function sum3(a: int, b: int, c: int): int {\n    a + b + c\n  }\n\n  function Sorted(s: seq<int>): seq<int>\n    ensures |Sorted(s)| == |s|\n    ensures multiset(Sorted(s)) == multiset(s)\n    ensures forall i, j :: 0 <= i < j < |s| ==> Sorted(s)[i] <= Sorted(s)[j]\n  {\n    if |s| <= 1 then s\n    else\n      var pivot := s[0];\n      Sorted([x | x <- s[1..], x < pivot]) +\n      [pivot] +\n      Sorted([x | x <- s[1..], x >= pivot])\n  }\n\n  method ThreeSumClosest(nums: seq<int>, target: int) returns (res: int)\n    requires |nums| >= 3\n    ensures exists i, j, k :: 0 <= i < j < k < |nums| && res == nums[i] + nums[j] + nums[k]\n    ensures forall i, j, k :: 0 <= i < j < k < |nums| ==>\n      abs(target - res) <= abs(target - (nums[i] + nums[j] + nums[k]))\n  {\n    var ls := |nums|;\n    var sort_nums := Sorted(nums);\n    res := sort_nums[0] + sort_nums[1] + sort_nums[2];\n\n    var i: int := 0;\n    while i <= ls - 3\n      invariant 0 <= i <= ls - 2\n      invariant exists i0, j0, k0 :: 0 <= i0 < j0 < k0 < ls && res == sort_nums[i0] + sort_nums[j0] + sort_nums[k0]\n      invariant forall i1, j1, k1 :: 0 <= i1 < j1 < k1 < ls && i1 < i ==>\n        abs(target - res) <= abs(target - (sort_nums[i1] + sort_nums[j1] + sort_nums[k1]))\n    {\n      var j: int := i + 1;\n      var k: int := ls - 1;\n      while j < k\n        invariant i + 1 <= j <= k <= ls - 1\n        invariant i < j < k < ls ==> true\n        invariant exists i0, j0, k0 :: 0 <= i0 < j0 < k0 < ls && res == sort_nums[i0] + sort_nums[j0] + sort_nums[k0]\n        invariant forall i1, j1, k1 :: 0 <= i1 < j1 < k1 < ls && (i1 < i || (i1 == i && (j1 < j || (j1 == j && k1 < k)))) ==>\n          abs(target - res) <= abs(target - (sort_nums[i1] + sort_nums[j1] + sort_nums[k1]))\n      {\n        var temp := sort_nums[i] + sort_nums[j] + sort_nums[k];\n        if abs(target - temp) < abs(target - res) {\n          res := temp;\n        }\n        if temp < target {\n          j := j + 1;\n        } else {\n          k := k - 1;\n        }\n      }\n      i := i + 1;\n    }\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 12.651,
+        "duration_formatted": "12.65s",
+        "tokens": {
+          "input": 476,
+          "output": 739,
+          "total": 1215
+        },
+        "cost_usd": 0.006864,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:00:55.181256"
+      }
+    },
+    {
+      "file_path": "python/035_Search_Insert_Position.py",
+      "code": "class Solution:\n\n    def searchInsert(self, nums, target):\n        l, r = (int(0), len(nums) - 1)\n        while l < r:\n            mid = int((l + r) / 2)\n            if nums[mid] < target:\n                l = mid + 1\n            else:\n                r = mid\n        if nums[l] < target:\n            return l + 1\n        return l\nif __name__ == '__main__':\n    s = Solution()\n    print(s.searchInsert([1, 3, 5, 6], 5))",
+      "program_specification": "```dafny\n// Specification: Returns the index at which 'target' should be inserted in sorted array 'nums'.\n// If 'target' is found, returns its index; otherwise, returns the index where it can be inserted to maintain order.\n\nmethod SearchInsert(nums: seq<int>, target: int) returns (idx: int)\n  requires nums == nums[..] // nums is a sequence (immutable)\n  requires forall i :: 0 <= i < |nums| - 1 ==> nums[i] <= nums[i+1] // nums is sorted non-decreasingly\n  ensures 0 <= idx <= |nums|\n  ensures (idx < |nums| ==> nums[idx] >= target)\n  ensures (idx == 0 || nums[idx-1] < target)\n  ensures (idx < |nums| && nums[idx] == target) <==> (exists i :: 0 <= i < |nums| && nums[i] == target)\n{\n  var l: int := 0;\n  var r: int := |nums| - 1;\n\n  // Binary search loop\n  while l < r\n    invariant 0 <= l <= r + 1 <= |nums|\n    invariant forall i :: 0 <= i < l ==> nums[i] < target\n    invariant forall i :: r+1 <= i < |nums| ==> nums[i] >= target\n  {\n    var mid: int := (l + r) / 2;\n    if nums[mid] < target {\n      l := mid + 1;\n    } else {\n      r := mid;\n    }\n  }\n\n  // After the loop, l == r or l > r (if nums is empty)\n  if l < |nums| && nums[l] < target {\n    idx := l + 1;\n  } else {\n    idx := l;\n  }\n}\n\nmethod Main()\n{\n  var nums: seq<int> := [1, 3, 5, 6];\n  var target: int := 5;\n  var idx := SearchInsert(nums, target);\n  print idx, \"\\n\";\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 6.483,
+        "duration_formatted": "6.48s",
+        "tokens": {
+          "input": 464,
+          "output": 436,
+          "total": 900
+        },
+        "cost_usd": 0.004416,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:01:11.667200"
+      }
+    },
+    {
+      "file_path": "python/045_Jump_Game_II.py",
+      "code": "class Solution:\n\n    def jump(self, nums):\n        if len(nums) <= 1:\n            return 0\n        end = 0 + nums[0]\n        start = 0\n        step = 1\n        maxDis = 0 + nums[0]\n        while end < len(nums) - 1:\n            for i in range(start + 1, end + 1):\n                maxDis = max(maxDis, nums[i] + i)\n            start = end\n            end = maxDis\n            step += 1\n        return step",
+      "program_specification": "```dafny\nmethod Jump(nums: seq<int>) returns (steps: int)\n  requires |nums| > 0\n  ensures steps >= 0\n  ensures (|nums| == 1 ==> steps == 0)\n  ensures (|nums| > 1 ==> \n    // If nums allows reaching the end, steps is minimal number of jumps\n    (forall path: seq<int> :: \n      path[0] == 0 &&\n      (forall i :: 0 <= i < |path| - 1 ==> 0 <= path[i] < |nums| - 1 && 1 <= path[i+1] - path[i] <= nums[path[i]]) &&\n      path[|path|-1] >= |nums|-1\n      ==> |path|-1 >= steps\n    )\n  )\n{\n  if |nums| <= 1 {\n    steps := 0;\n    return;\n  }\n  var end := nums[0];\n  var start := 0;\n  steps := 1;\n  var maxDis := nums[0];\n  // Invariant: 0 <= start <= end <= maxDis <= |nums| - 1 or maxDis >= end\n  // Invariant: steps >= 1\n  // Invariant: end < |nums| ==> can reach any index <= end in steps jumps\n  while end < |nums| - 1\n    invariant 0 <= start <= end <= maxDis\n    invariant steps >= 1\n    invariant end < |nums| ==> (forall i :: 0 <= i <= end ==> CanReach(nums, i, steps))\n    invariant maxDis >= end\n    decreases |nums| - end\n  {\n    var i := start + 1;\n    // Invariant: start+1 <= i <= end+1\n    // Invariant: maxDis >= old(maxDis)\n    while i <= end\n      invariant start + 1 <= i <= end + 1\n      invariant maxDis >= end\n      invariant maxDis >= old(maxDis)\n      decreases end - i + 1\n    {\n      if i < |nums| {\n        if maxDis < nums[i] + i {\n          maxDis := nums[i] + i;\n        }\n      }\n      i := i + 1;\n    }\n    start := end;\n    end := maxDis;\n    steps := steps + 1;\n  }\n}\n\nfunction CanReach(nums: seq<int>, idx: int, maxJumps: int): bool\n  requires 0 <= idx < |nums|\n  requires |nums| > 0\n{\n  if idx == 0 then\n    true\n  else if maxJumps == 0 then\n    false\n  else\n    exists prev: int :: 0 <= prev < idx && nums[prev] >= idx - prev && CanReach(nums, prev, maxJumps - 1)\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 13.048,
+        "duration_formatted": "13.05s",
+        "tokens": {
+          "input": 457,
+          "output": 606,
+          "total": 1063
+        },
+        "cost_usd": 0.005762,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:01:34.718225"
+      }
+    },
+    {
+      "file_path": "bit_manipulation/count_1s_brian_kernighan_method.py",
+      "code": "def get_1s_count(number: int) -> int:\n    if not isinstance(number, int) or number < 0:\n        raise ValueError('Input must be a non-negative integer')\n    count = 0\n    while number:\n        number &= number - 1\n        count += 1\n    return count\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nfunction method CountOnes(n: nat): nat\n  decreases n\n{\n  if n == 0 then 0\n  else 1 + CountOnes(n & (n - 1))\n}\n\nmethod Get1sCount(number: nat) returns (count: nat)\n  requires number >= 0\n  ensures count == CountOnes(number)\n{\n  var n := number;\n  count := 0;\n  while n != 0\n    invariant 0 <= n <= number\n    invariant count == CountOnes(number) - CountOnes(n)\n    invariant number == n | (number ^ n) // n is always a subset of bits of number\n    decreases n\n  {\n    n := n & (n - 1);\n    count := count + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 4.507,
+        "duration_formatted": "4.51s",
+        "tokens": {
+          "input": 426,
+          "output": 173,
+          "total": 599
+        },
+        "cost_usd": 0.002236,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:01:49.229923"
+      }
+    },
+    {
+      "file_path": "bit_manipulation/highest_set_bit.py",
+      "code": "def get_highest_set_bit_position(number: int) -> int:\n    if not isinstance(number, int):\n        raise TypeError(\"Input value must be an 'int' type\")\n    position = 0\n    while number:\n        position += 1\n        number >>= 1\n    return position\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nmethod GetHighestSetBitPosition(number: int) returns (position: nat)\n  requires number >= 0\n  ensures (number == 0 ==> position == 0)\n  ensures (number > 0 ==> 1 << (position - 1) <= number < 1 << position)\n{\n  var n := number;\n  position := 0;\n  while n > 0\n    invariant 0 <= n <= number\n    invariant position >= 0\n    invariant number == 0 ==> position == 0\n    invariant number > 0 ==> (n == number >> position)\n    invariant number > 0 ==> (position <= 64) // To avoid overflow for practical ints\n  {\n    position := position + 1;\n    n := n >> 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 4.201,
+        "duration_formatted": "4.20s",
+        "tokens": {
+          "input": 421,
+          "output": 170,
+          "total": 591
+        },
+        "cost_usd": 0.002202,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:02:03.436397"
+      }
+    },
+    {
+      "file_path": "dynamic_programming/max_non_adjacent_sum.py",
+      "code": "from __future__ import annotations\n\ndef maximum_non_adjacent_sum(nums: list[int]) -> int:\n    if not nums:\n        return 0\n    max_including = nums[0]\n    max_excluding = 0\n    for num in nums[1:]:\n        max_including, max_excluding = (max_excluding + num, max(max_including, max_excluding))\n    return max(max_excluding, max_including)\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\n// Function to compute the maximum sum of non-adjacent elements in a sequence\nfunction method MaxNonAdjacentSum(nums: seq<int>): int\n  decreases nums\n{\n  if |nums| == 0 then 0\n  else if |nums| == 1 then nums[0]\n  else\n    var include := nums[0] + MaxNonAdjacentSum(nums[2..]);\n    var exclude := MaxNonAdjacentSum(nums[1..]);\n    if include > exclude then include else exclude\n}\n\nmethod MaximumNonAdjacentSum(nums: array<int>) returns (res: int)\n  requires nums != null\n  ensures res == MaxNonAdjacentSum(nums[..])\n{\n  if nums.Length == 0 {\n    res := 0;\n    return;\n  }\n  var max_including := nums[0];\n  var max_excluding := 0;\n  var i := 1;\n  while i < nums.Length\n    invariant 1 <= i <= nums.Length\n    invariant max_including == MaxNonAdjacentSum(nums[..i][..^1] + [nums[i-1]])\n      || max_including == MaxNonAdjacentSum(nums[..i])\n    invariant max_excluding == MaxNonAdjacentSum(nums[..i])\n  {\n    var new_including := max_excluding + nums[i];\n    var new_excluding := if max_including > max_excluding then max_including else max_excluding;\n    max_including, max_excluding := new_including, new_excluding;\n    i := i + 1;\n  }\n  res := if max_including > max_excluding then max_including else max_excluding;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 5.771,
+        "duration_formatted": "5.77s",
+        "tokens": {
+          "input": 451,
+          "output": 346,
+          "total": 797
+        },
+        "cost_usd": 0.00367,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:02:19.208009"
+      }
+    },
+    {
+      "file_path": "dynamic_programming/min_distance_up_bottom.py",
+      "code": "import functools\n\ndef min_distance_up_bottom(word1: str, word2: str) -> int:\n    len_word1 = len(word1)\n    len_word2 = len(word2)\n\n    @functools.cache\n    def min_distance(index1: int, index2: int) -> int:\n        if index1 >= len_word1:\n            return len_word2 - index2\n        if index2 >= len_word2:\n            return len_word1 - index1\n        diff = int(word1[index1] != word2[index2])\n        return min(1 + min_distance(index1 + 1, index2), 1 + min_distance(index1, index2 + 1), diff + min_distance(index1 + 1, index2 + 1))\n    return min_distance(0, 0)\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\n// Levenshtein Distance (Edit Distance) in Dafny\n\nfunction method Min3(a: int, b: int, c: int): int\n  ensures Min3(a, b, c) == if a <= b && a <= c then a else if b <= a && b <= c then b else c\n{\n  if a <= b && a <= c then a\n  else if b <= a && b <= c then b\n  else c\n}\n\nfunction method EditDistanceRec(s1: seq<char>, s2: seq<char>, i: nat, j: nat): nat\n  decreases |s1| - i, |s2| - j\n  requires i <= |s1| && j <= |s2|\n  ensures EditDistanceRec(s1, s2, i, j) >= 0\n  ensures EditDistanceRec(s1, s2, i, j) <= |s1| - i + |s2| - j\n{\n  if i == |s1| then |s2| - j\n  else if j == |s2| then |s1| - i\n  else\n    if s1[i] == s2[j] then\n      EditDistanceRec(s1, s2, i + 1, j + 1)\n    else\n      Min3(\n        1 + EditDistanceRec(s1, s2, i + 1, j),      // delete from s1\n        1 + EditDistanceRec(s1, s2, i, j + 1),      // insert into s1\n        1 + EditDistanceRec(s1, s2, i + 1, j + 1)   // substitute\n      )\n}\n\nmethod MinDistanceUpBottom(word1: seq<char>, word2: seq<char>) returns (dist: nat)\n  requires true\n  ensures dist == EditDistanceRec(word1, word2, 0, 0)\n  ensures dist >= 0\n  ensures dist <= |word1| + |word2|\n{\n  var len1 := |word1|;\n  var len2 := |word2|;\n\n  var dp := new int[len1 + 1, len2 + 1];\n\n  // Initialize base cases\n  var i: int := 0;\n  while i <= len1\n    invariant 0 <= i <= len1 + 1\n    invariant forall k :: 0 <= k < i ==> dp[k, len2] == len1 - k\n  {\n    dp[i, len2] := len1 - i;\n    i := i + 1;\n  }\n  var j: int := 0;\n  while j <= len2\n    invariant 0 <= j <= len2 + 1\n    invariant forall k :: 0 <= k < j ==> dp[len1, k] == len2 - k\n  {\n    dp[len1, j] := len2 - j;\n    j := j + 1;\n  }\n\n  i := len1 - 1;\n  while i >= 0\n    invariant -1 <= i < len1\n    decreases i + 1\n  {\n    j := len2 - 1;\n    while j >= 0\n      invariant -1 <= j < len2\n      decreases j + 1\n    {\n      var diff := if word1[i] == word2[j] then 0 else 1;\n      dp[i, j] := Min3(\n        1 + dp[i + 1, j],      // delete\n        1 + dp[i, j + 1],      // insert\n        diff + dp[i + 1, j + 1] // substitute or match\n      );\n      j := j - 1;\n    }\n    i := i - 1;\n  }\n  dist := dp[0, 0];\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 13.092,
+        "duration_formatted": "13.09s",
+        "tokens": {
+          "input": 529,
+          "output": 822,
+          "total": 1351
+        },
+        "cost_usd": 0.007634,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:02:42.303791"
+      }
+    },
+    {
+      "file_path": "electronics/resonant_frequency.py",
+      "code": "from __future__ import annotations\nfrom math import pi, sqrt\n\ndef resonant_frequency(inductance: float, capacitance: float) -> tuple:\n    if inductance <= 0:\n        raise ValueError('Inductance cannot be 0 or negative')\n    elif capacitance <= 0:\n        raise ValueError('Capacitance cannot be 0 or negative')\n    else:\n        return ('Resonant frequency', float(1 / (2 * pi * sqrt(inductance * capacitance))))\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nmodule ResonantFrequency {\n\n  import opened Math\n\n  datatype ResonantResult = Result(label: string, frequency: real)\n\n  function RealSqrt(x: real): real\n    requires x >= 0.0\n    ensures RealSqrt(x) * RealSqrt(x) == x\n    decreases x\n  {\n    if x == 0.0 then 0.0 else sqrt(x)\n  }\n\n  function RealPi(): real\n    ensures 3.1415 < RealPi() < 3.1416\n  {\n    3.14159265358979323846\n  }\n\n  method resonantFrequency(inductance: real, capacitance: real) returns (res: ResonantResult)\n    requires inductance > 0.0\n    requires capacitance > 0.0\n    ensures res.label == \"Resonant frequency\"\n    ensures res.frequency == 1.0 / (2.0 * RealPi() * RealSqrt(inductance * capacitance))\n  {\n    var freq := 1.0 / (2.0 * RealPi() * RealSqrt(inductance * capacitance));\n    res := Result(\"Resonant frequency\", freq);\n  }\n\n  // Example usage\n  method Main()\n  {\n    var L: real := 0.01; // 10 mH\n    var C: real := 0.000001; // 1 uF\n    if L > 0.0 && C > 0.0 {\n      var res := resonantFrequency(L, C);\n      print res.label, \": \", res.frequency, \"\\n\";\n    }\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 4.651,
+        "duration_formatted": "4.65s",
+        "tokens": {
+          "input": 464,
+          "output": 351,
+          "total": 815
+        },
+        "cost_usd": 0.003736,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:02:56.958356"
+      }
+    },
+    {
+      "file_path": "graphs/gale_shapley_bigraph.py",
+      "code": "from __future__ import annotations\n\ndef stable_matching(donor_pref: list[list[int]], recipient_pref: list[list[int]]) -> list[int]:\n    assert len(donor_pref) == len(recipient_pref)\n    n = len(donor_pref)\n    unmatched_donors = list(range(n))\n    donor_record = [-1] * n\n    rec_record = [-1] * n\n    num_donations = [0] * n\n    while unmatched_donors:\n        donor = unmatched_donors[0]\n        donor_preference = donor_pref[donor]\n        recipient = donor_preference[num_donations[donor]]\n        num_donations[donor] += 1\n        rec_preference = recipient_pref[recipient]\n        prev_donor = rec_record[recipient]\n        if prev_donor != -1:\n            if rec_preference.index(prev_donor) > rec_preference.index(donor):\n                rec_record[recipient] = donor\n                donor_record[donor] = recipient\n                unmatched_donors.append(prev_donor)\n                unmatched_donors.remove(donor)\n        else:\n            rec_record[recipient] = donor\n            donor_record[donor] = recipient\n            unmatched_donors.remove(donor)\n    return donor_record",
+      "program_specification": "```dafny\npredicate ValidPreferenceMatrix(prefs: seq<seq<int>>, n: nat)\n  reads prefs\n{\n  |prefs| == n &&\n  forall i :: 0 <= i < n ==> |prefs[i]| == n &&\n    multiset(prefs[i]) == multiset([j | j := 0 .. n-1])\n}\n\npredicate IsStableMatching(donor_pref: seq<seq<int>>, recipient_pref: seq<seq<int>>, matching: seq<int>)\n  requires |donor_pref| == |recipient_pref| == |matching|\n{\n  // Each donor is matched to a unique recipient\n  (forall d1, d2 :: 0 <= d1 < |matching| && 0 <= d2 < |matching| && d1 != d2 ==> matching[d1] != matching[d2]) &&\n  // Each recipient is matched to at most one donor\n  (forall r :: 0 <= r < |matching| ==> exists d :: 0 <= d < |matching| && matching[d] == r) &&\n  // No blocking pairs\n  (forall d, r ::\n    0 <= d < |matching| && 0 <= r < |matching| &&\n    (donor_pref[d].indexOf(r) < donor_pref[d].indexOf(matching[d])) &&\n    (recipient_pref[r].indexOf(d) < recipient_pref[r].indexOf(\n      (if exists d2 :: 0 <= d2 < |matching| && matching[d2] == r then\n        (var d2 :| 0 <= d2 < |matching| && matching[d2] == r; d2)\n      else -1)))\n    ==>\n      false\n  )\n}\n\nmethod StableMatching(donor_pref: seq<seq<int>>, recipient_pref: seq<seq<int>>) returns (donor_record: seq<int>)\n  requires |donor_pref| == |recipient_pref|\n  requires ValidPreferenceMatrix(donor_pref, |donor_pref|)\n  requires ValidPreferenceMatrix(recipient_pref, |recipient_pref|)\n  ensures |donor_record| == |donor_pref|\n  ensures multiset(donor_record) == multiset([i | i := 0 .. |donor_pref|-1])\n  ensures IsStableMatching(donor_pref, recipient_pref, donor_record)\n{\n  var n := |donor_pref|;\n  var unmatched_donors := new seq<int>(n);\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |unmatched_donors| == n\n  {\n    unmatched_donors[i] := i;\n    i := i + 1;\n  }\n  var donor_record_mut := new seq<int>(n);\n  i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |donor_record_mut| == n\n  {\n    donor_record_mut[i] := -1;\n    i := i + 1;\n  }\n  var rec_record := new seq<int>(n);\n  i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |rec_record| == n\n  {\n    rec_record[i] := -1;\n    i := i + 1;\n  }\n  var num_donations := new seq<int>(n);\n  i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |num_donations| == n\n  {\n    num_donations[i] := 0;\n    i := i + 1;\n  }\n\n  var unmatched := unmatched_donors[..];\n  while |unmatched| > 0\n    invariant 0 <= |unmatched| <= n\n    invariant forall d :: 0 <= d < n ==> 0 <= num_donations[d] <= n\n    invariant forall d :: 0 <= d < n ==> -1 <= donor_record_mut[d] < n || donor_record_mut[d] == -1\n    invariant forall r :: 0 <= r < n ==> -1 <= rec_record[r] < n || rec_record[r] == -1\n    invariant multiset([d | d := 0 .. n-1 where donor_record_mut[d] != -1]) + multiset(unmatched) == multiset([i | i := 0 .. n-1])\n    decreases |unmatched|\n  {\n    var donor := unmatched[0];\n    var donor_preference := donor_pref[donor];\n    var recipient := donor_preference[num_donations[donor]];\n    num_donations[donor] := num_donations[donor] + 1;\n    var rec_preference := recipient_pref[recipient];\n    var prev_donor := rec_record[recipient];\n    if prev_donor != -1 {\n      if rec_preference.indexOf(prev_donor) > rec_preference.indexOf(donor) {\n        rec_record[recipient] := donor;\n        donor_record_mut[donor] := recipient;\n        unmatched := unmatched[1..] + [prev_donor];\n      } else {\n        unmatched := unmatched[1..];\n      }\n    } else {\n      rec_record[recipient] := donor;\n      donor_record_mut[donor] := recipient;\n      unmatched := unmatched[1..];\n    }\n  }\n  donor_record := donor_record_mut;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 30.122,
+        "duration_formatted": "30.12s",
+        "tokens": {
+          "input": 607,
+          "output": 1128,
+          "total": 1735
+        },
+        "cost_usd": 0.010238,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:03:37.083552"
+      }
+    },
+    {
+      "file_path": "greedy_methods/fractional_knapsack_2.py",
+      "code": "from __future__ import annotations\n\ndef fractional_knapsack(value: list[int], weight: list[int], capacity: int) -> tuple[float, list[float]]:\n    index = list(range(len(value)))\n    ratio = [v / w for v, w in zip(value, weight)]\n    index.sort(key=lambda i: ratio[i], reverse=True)\n    max_value: float = 0\n    fractions: list[float] = [0] * len(value)\n    for i in index:\n        if weight[i] <= capacity:\n            fractions[i] = 1\n            max_value += value[i]\n            capacity -= weight[i]\n        else:\n            fractions[i] = capacity / weight[i]\n            max_value += value[i] * capacity / weight[i]\n            break\n    return (max_value, fractions)\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nmethod FractionalKnapsack(value: seq<int>, weight: seq<int>, capacity: int) returns (maxValue: real, fractions: seq<real>)\n  requires |value| == |weight|\n  requires forall i :: 0 <= i < |weight| ==> weight[i] > 0\n  requires capacity >= 0\n  ensures |fractions| == |value|\n  ensures forall i :: 0 <= i < |fractions| ==> 0.0 <= fractions[i] <= 1.0\n  ensures maxValue == sum i | 0 <= i < |value| :: value[i] * fractions[i]\n  ensures sum i | 0 <= i < |value| :: weight[i] * fractions[i] <= capacity\n  ensures forall i, j :: \n    0 <= i < |value| && 0 <= j < |value| && \n    (weight[i] * fractions[i] > 0.0) && (weight[j] * fractions[j] < weight[j]) ==>\n      (value[i] as real / weight[i] as real) >= (value[j] as real / weight[j] as real)\n{\n  var n := |value|;\n  var idx := new int[n];\n  var ratio := new real[n];\n  var i: int := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall j :: 0 <= j < i ==> idx[j] == j\n    invariant forall j :: 0 <= j < i ==> ratio[j] == value[j] as real / weight[j] as real\n  {\n    idx[i] := i;\n    ratio[i] := value[i] as real / weight[i] as real;\n    i := i + 1;\n  }\n\n  // Sort indices by decreasing ratio\n  // Simple selection sort for clarity and specification\n  var j: int := 0;\n  while j < n\n    invariant 0 <= j <= n\n    invariant forall k :: 0 <= k < j ==> \n      forall l :: j <= l < n ==> ratio[idx[k]] >= ratio[idx[l]]\n    decreases n - j\n  {\n    var maxIdx := j;\n    var k: int := j + 1;\n    while k < n\n      invariant j + 1 <= k <= n\n      invariant j <= maxIdx < n\n      invariant forall l :: j <= l < k ==> ratio[idx[maxIdx]] >= ratio[idx[l]]\n      decreases n - k\n    {\n      if ratio[idx[k]] > ratio[idx[maxIdx]] {\n        maxIdx := k;\n      }\n      k := k + 1;\n    }\n    // Swap idx[j] and idx[maxIdx]\n    var tmp := idx[j];\n    idx[j] := idx[maxIdx];\n    idx[maxIdx] := tmp;\n    j := j + 1;\n  }\n\n  var fractionsArr := new real[n];\n  var cap := capacity;\n  maxValue := 0.0;\n  i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant 0 <= cap <= capacity\n    invariant forall k :: 0 <= k < n ==> 0.0 <= fractionsArr[k] <= 1.0\n    invariant forall k :: 0 <= k < i ==> \n      fractionsArr[idx[k]] == if weight[idx[k]] <= old(capacity) - (cap + sum l | 0 <= l < k :: weight[idx[l]] * fractionsArr[idx[l]]) then 1.0\n                              else if cap > 0 then (old(capacity) - (cap + sum l | 0 <= l < k :: weight[idx[l]] * fractionsArr[idx[l]])) / weight[idx[k]] as real\n                              else 0.0\n    invariant maxValue == sum k | 0 <= k < i :: value[idx[k]] * fractionsArr[idx[k]]\n    decreases n - i\n  {\n    var wi := weight[idx[i]];\n    var vi := value[idx[i]];\n    if wi <= cap {\n      fractionsArr[idx[i]] := 1.0;\n      maxValue := maxValue + vi as real;\n      cap := cap - wi;\n    } else {\n      if cap > 0 {\n        fractionsArr[idx[i]] := cap as real / wi as real;\n        maxValue := maxValue + vi as real * (cap as real / wi as real);\n        cap := 0;\n      } else {\n        fractionsArr[idx[i]] := 0.0;\n      }\n      break;\n    }\n    i := i + 1;\n  }\n  // Fill remaining fractions with 0.0 if not already set\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall k :: 0 <= k < i ==> 0.0 <= fractionsArr[k] <= 1.0\n    decreases n - i\n  {\n    fractionsArr[idx[i]] := 0.0;\n    i := i + 1;\n  }\n  fractions := fractionsArr[..];\n}\n\n// Helper function for sum with real\nfunction sum(f: int -> real, lo: int, hi: int): real\n  requires lo <= hi\n{\n  if lo == hi then 0.0 else f(lo) + sum(f, lo + 1, hi)\n}\n\n// Overload for sum with comprehension\nfunction sum(i: int | lo <= i < hi :: r: real): real\n  decreases hi - lo\n{\n  if lo >= hi then 0.0 else (if lo <= i < hi then r else 0.0) + sum(i, lo + 1, hi :: r)\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 19.317,
+        "duration_formatted": "19.32s",
+        "tokens": {
+          "input": 526,
+          "output": 1197,
+          "total": 1723
+        },
+        "cost_usd": 0.010628,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:04:06.402305"
+      }
+    },
+    {
+      "file_path": "greedy_methods/optimal_merge_pattern.py",
+      "code": "def optimal_merge_pattern(files: list) -> float:\n    optimal_merge_cost = 0\n    while len(files) > 1:\n        temp = 0\n        for _ in range(2):\n            min_index = files.index(min(files))\n            temp += files[min_index]\n            files.pop(min_index)\n        files.append(temp)\n        optimal_merge_cost += temp\n    return optimal_merge_cost\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nmethod OptimalMergePattern(files: seq<int>) returns (optimal_merge_cost: int)\n  requires |files| >= 1\n  requires forall f :: 0 <= f < |files| ==> files[f] >= 0\n  ensures |files| == 1 ==> optimal_merge_cost == 0\n  ensures forall f :: 0 <= f < |files| ==> files[f] >= 0\n  ensures optimal_merge_cost >= 0\n  // The result is the minimal total cost to merge all files into one by always merging the two smallest files\n{\n  var workingFiles := files[..];\n  optimal_merge_cost := 0;\n  while |workingFiles| > 1\n    invariant |workingFiles| >= 1\n    invariant forall f :: 0 <= f < |workingFiles| ==> workingFiles[f] >= 0\n    invariant optimal_merge_cost >= 0\n    decreases |workingFiles|\n  {\n    // Find the index of the smallest file\n    var min1 := workingFiles[0];\n    var idx1 := 0;\n    var i := 1;\n    while i < |workingFiles|\n      invariant 1 <= i <= |workingFiles|\n      invariant 0 <= idx1 < |workingFiles|\n      invariant min1 == workingFiles[idx1]\n      invariant forall j :: 0 <= j < i ==> workingFiles[j] >= min1\n      decreases |workingFiles| - i\n    {\n      if workingFiles[i] < min1 {\n        min1 := workingFiles[i];\n        idx1 := i;\n      }\n      i := i + 1;\n    }\n\n    // Remove the smallest file\n    var filesAfterFirstPop := workingFiles[..idx1] + workingFiles[idx1+1..];\n\n    // Find the index of the next smallest file\n    var min2 := filesAfterFirstPop[0];\n    var idx2 := 0;\n    i := 1;\n    while i < |filesAfterFirstPop|\n      invariant 1 <= i <= |filesAfterFirstPop|\n      invariant 0 <= idx2 < |filesAfterFirstPop|\n      invariant min2 == filesAfterFirstPop[idx2]\n      invariant forall j :: 0 <= j < i ==> filesAfterFirstPop[j] >= min2\n      decreases |filesAfterFirstPop| - i\n    {\n      if filesAfterFirstPop[i] < min2 {\n        min2 := filesAfterFirstPop[i];\n        idx2 := i;\n      }\n      i := i + 1;\n    }\n\n    // Remove the second smallest file\n    var filesAfterSecondPop := filesAfterFirstPop[..idx2] + filesAfterFirstPop[idx2+1..];\n\n    var temp := min1 + min2;\n    // Append the merged file\n    workingFiles := filesAfterSecondPop + [temp];\n    optimal_merge_cost := optimal_merge_cost + temp;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 6.501,
+        "duration_formatted": "6.50s",
+        "tokens": {
+          "input": 440,
+          "output": 608,
+          "total": 1048
+        },
+        "cost_usd": 0.005744,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:04:22.906590"
+      }
+    },
+    {
+      "file_path": "knapsack/knapsack.py",
+      "code": "from __future__ import annotations\n\ndef knapsack(capacity: int, weights: list[int], values: list[int], counter: int) -> int:\n    if counter == 0 or capacity == 0:\n        return 0\n    if weights[counter - 1] > capacity:\n        return knapsack(capacity, weights, values, counter - 1)\n    else:\n        left_capacity = capacity - weights[counter - 1]\n        new_value_included = values[counter - 1] + knapsack(left_capacity, weights, values, counter - 1)\n        without_new_value = knapsack(capacity, weights, values, counter - 1)\n        return max(new_value_included, without_new_value)\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nfunction method KnapsackValue(capacity: nat, weights: seq<nat>, values: seq<nat>, counter: nat): nat\n  requires |weights| == |values|\n  requires counter <= |weights|\n{\n  if counter == 0 || capacity == 0 then\n    0\n  else if weights[counter - 1] > capacity then\n    KnapsackValue(capacity, weights, values, counter - 1)\n  else\n    max(\n      values[counter - 1] + KnapsackValue(capacity - weights[counter - 1], weights, values, counter - 1),\n      KnapsackValue(capacity, weights, values, counter - 1)\n    )\n}\n\nmethod Knapsack(capacity: nat, weights: seq<nat>, values: seq<nat>, counter: nat) returns (result: nat)\n  requires |weights| == |values|\n  requires counter <= |weights|\n  ensures result == KnapsackValue(capacity, weights, values, counter)\n{\n  if counter == 0 || capacity == 0 {\n    result := 0;\n    return;\n  }\n  if weights[counter - 1] > capacity {\n    result := Knapsack(capacity, weights, values, counter - 1);\n    return;\n  } else {\n    var left_capacity := capacity - weights[counter - 1];\n    var new_value_included := values[counter - 1] + Knapsack(left_capacity, weights, values, counter - 1);\n    var without_new_value := Knapsack(capacity, weights, values, counter - 1);\n    if new_value_included > without_new_value {\n      result := new_value_included;\n    } else {\n      result := without_new_value;\n    }\n    return;\n  }\n}\n\n// Example usage and test\nmethod Main()\n{\n  var weights := [2, 3, 4, 5];\n  var values := [3, 4, 5, 6];\n  var capacity := 5;\n  var n := |weights|;\n  var result := Knapsack(capacity, weights, values, n);\n  assert result == 7; // The optimal value for this example is 7\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 4.789,
+        "duration_formatted": "4.79s",
+        "tokens": {
+          "input": 507,
+          "output": 459,
+          "total": 966
+        },
+        "cost_usd": 0.004686,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:04:37.699519"
+      }
+    },
+    {
+      "file_path": "maths/average_median.py",
+      "code": "from __future__ import annotations\n\ndef median(nums: list) -> int | float:\n    sorted_list: list[int] = sorted(nums)\n    length = len(sorted_list)\n    mid_index = length >> 1\n    return (sorted_list[mid_index] + sorted_list[mid_index - 1]) / 2 if length % 2 == 0 else sorted_list[mid_index]\n\ndef main():\n    import doctest\n    doctest.testmod()\nif __name__ == '__main__':\n    main()",
+      "program_specification": "```dafny\n// Dafny implementation of median function with formal specifications\n\n// Helper function to check if a sequence is sorted non-decreasingly\nfunction method IsSorted(s: seq<int>): bool\n{\n  forall i, j :: 0 <= i < j < |s| ==> s[i] <= s[j]\n}\n\n// Helper function to sort a sequence (using selection sort for demonstration)\nmethod SelectionSort(a: array<int>) returns (b: seq<int>)\n  requires a != null\n  ensures |b| == a.Length\n  ensures multiset(b) == multiset(a[..])\n  ensures IsSorted(b)\n{\n  var n := a.Length;\n  var arr := new int[n];\n  // Copy elements\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall k :: 0 <= k < i ==> arr[k] == a[k]\n  {\n    arr[i] := a[i];\n    i := i + 1;\n  }\n  // Selection sort\n  i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall k :: 0 <= k < i < n ==> arr[k] <= arr[j]  // arr[0..i) is sorted\n    invariant multiset(arr[..]) == multiset(a[..])\n  {\n    var minIdx := i;\n    var j := i + 1;\n    while j < n\n      invariant i + 1 <= j <= n\n      invariant i <= minIdx < n\n      invariant forall k :: i < k < j ==> arr[minIdx] <= arr[k]\n    {\n      if arr[j] < arr[minIdx] {\n        minIdx := j;\n      }\n      j := j + 1;\n    }\n    // Swap arr[i] and arr[minIdx]\n    var tmp := arr[i];\n    arr[i] := arr[minIdx];\n    arr[minIdx] := tmp;\n    i := i + 1;\n  }\n  b := arr[..];\n}\n\n// Median function: returns the median value of a non-empty sequence of integers\nmethod Median(nums: array<int>) returns (m: real)\n  requires nums != null && nums.Length > 0\n  ensures exists sorted: seq<int> :: \n            |sorted| == nums.Length &&\n            multiset(sorted) == multiset(nums[..]) &&\n            IsSorted(sorted) &&\n            (\n              if nums.Length % 2 == 0 then\n                m == (sorted[nums.Length/2] + sorted[nums.Length/2 - 1]) / 2.0\n              else\n                m == sorted[nums.Length/2]\n            )\n{\n  var sorted: seq<int>;\n  sorted := SelectionSort(nums);\n  var length := |sorted|;\n  var mid_index := length / 2;\n  if length % 2 == 0 {\n    // Even number of elements: average of two middle values\n    m := (sorted[mid_index] + sorted[mid_index - 1]) / 2.0;\n  } else {\n    // Odd number of elements: middle value\n    m := sorted[mid_index];\n  }\n}\n\n// Example main method to demonstrate usage\nmethod Main()\n{\n  var arr := new int[5];\n  arr[0], arr[1], arr[2], arr[3], arr[4] := 3, 1, 4, 1, 5;\n  var med := Median(arr);\n  print \"Median: \", med, \"\\n\";\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 15.799,
+        "duration_formatted": "15.80s",
+        "tokens": {
+          "input": 443,
+          "output": 738,
+          "total": 1181
+        },
+        "cost_usd": 0.00679,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:05:03.503126"
+      }
+    },
+    {
+      "file_path": "maths/check_polygon.py",
+      "code": "from __future__ import annotations\n\ndef check_polygon(nums: list[float]) -> bool:\n    if len(nums) < 2:\n        raise ValueError('Monogons and Digons are not polygons in the Euclidean space')\n    if any((i <= 0 for i in nums)):\n        raise ValueError('All values must be greater than 0')\n    copy_nums = nums.copy()\n    copy_nums.sort()\n    return copy_nums[-1] < sum(copy_nums[:-1])\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nmethod CheckPolygon(nums: seq<real>) returns (isPolygon: bool)\n  requires |nums| >= 2\n    // There must be at least 2 sides (no monogon or digon)\n  requires forall i :: 0 <= i < |nums| ==> nums[i] > 0.0\n    // All side lengths must be strictly positive\n  ensures isPolygon == (Sorted(nums)[|nums|-1] < Sum(Sorted(nums)[..|nums|-1]))\n    // The polygon inequality: largest side < sum of all other sides\n{\n  var n := |nums|;\n  var copy_nums := nums;\n  // Sort copy_nums in non-decreasing order\n  var arr := new real[n];\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall j :: 0 <= j < i ==> arr[j] == copy_nums[j]\n  {\n    arr[i] := copy_nums[i];\n    i := i + 1;\n  }\n  Sort(arr);\n  // arr is now sorted\n  var largest := arr[n-1];\n  var sum := 0.0;\n  i := 0;\n  while i < n-1\n    invariant 0 <= i <= n-1\n    invariant sum == Sum(arr[..i])\n  {\n    sum := sum + arr[i];\n    i := i + 1;\n  }\n  isPolygon := largest < sum;\n}\n\n// Helper function: returns a sorted sequence (non-decreasing)\nfunction Sorted(s: seq<real>): seq<real>\n  ensures |Sorted(s)| == |s|\n  ensures multiset(Sorted(s)) == multiset(s)\n  ensures forall i, j :: 0 <= i < j < |s| ==> Sorted(s)[i] <= Sorted(s)[j]\n{\n  // Selection sort specification\n  if |s| == 0 then s\n  else\n    var minIdx := (argmin i | 0 <= i < |s| :: s[i]);\n    [s[minIdx]] + Sorted(s[..minIdx] + s[minIdx+1..])\n}\n\n// Helper function: sum of a sequence\nfunction Sum(s: seq<real>): real\n  decreases |s|\n{\n  if |s| == 0 then 0.0 else s[0] + Sum(s[1..])\n}\n\n// Helper: argmin\nfunction argmin(p: int -> bool, f: int -> real): (k: int)\n  requires exists i :: p(i)\n  ensures p(k)\n  ensures forall i :: p(i) ==> f(k) <= f(i)\n{\n  var found := false;\n  var minVal := 0.0;\n  var minIdx := 0;\n  var i := 0;\n  while (exists j :: 0 <= j < i <==> p(j))\n    invariant 0 <= i <= 1000 // arbitrary large bound for total correctness\n    decreases 1000 - i\n  {\n    if p(i) {\n      if !found || f(i) < minVal {\n        minVal := f(i);\n        minIdx := i;\n        found := true;\n      }\n    }\n    i := i + 1;\n  }\n  minIdx\n}\n\n// In-place sort (selection sort)\nmethod Sort(a: array<real>)\n  requires a != null\n  modifies a\n  ensures forall i, j :: 0 <= i < j < a.Length ==> a[i] <= a[j]\n  ensures multiset(a[..]) == multiset(old(a[..]))\n{\n  var n := a.Length;\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall k, l :: 0 <= k < l < i ==> a[k] <= a[l]\n    invariant multiset(a[..]) == multiset(old(a[..]))\n  {\n    var minIdx := i;\n    var j := i + 1;\n    while j < n\n      invariant i+1 <= j <= n\n      invariant i <= minIdx < n\n      invariant forall k :: i <= k < j ==> a[minIdx] <= a[k]\n    {\n      if a[j] < a[minIdx] {\n        minIdx := j;\n      }\n      j := j + 1;\n    }\n    if minIdx != i {\n      var tmp := a[i];\n      a[i] := a[minIdx];\n      a[minIdx] := tmp;\n    }\n    i := i + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 18.732,
+        "duration_formatted": "18.73s",
+        "tokens": {
+          "input": 459,
+          "output": 956,
+          "total": 1415
+        },
+        "cost_usd": 0.008566,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:05:32.237632"
+      }
+    },
+    {
+      "file_path": "maths/euler_method.py",
+      "code": "from collections.abc import Callable\nimport numpy as np\n\ndef explicit_euler(ode_func: Callable, y0: float, x0: float, step_size: float, x_end: float) -> np.ndarray:\n    n = int(np.ceil((x_end - x0) / step_size))\n    y = np.zeros((n + 1,))\n    y[0] = y0\n    x = x0\n    for k in range(n):\n        y[k + 1] = y[k] + step_size * ode_func(x, y[k])\n        x += step_size\n    return y\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\n// Dafny translation of explicit_euler ODE solver\n\n// Define the type for ODE functions: takes (x: real, y: real) and returns real\ntype ODEFunc = function (x: real, y: real): real\n\n// Helper function: ceiling of a real number\nfunction ceil(r: real): int\n  ensures real(ceil(r)) >= r\n  ensures real(ceil(r) - 1) < r\n{\n  if r == real(floor(r))) then floor(r) else floor(r) + 1\n}\n\n// Helper function: floor of a real number\nfunction floor(r: real): int\n  ensures real(floor(r)) <= r < real(floor(r) + 1)\n{\n  if r >= 0.0 then\n    if r == real((r as int)) then r as int else (r as int)\n  else\n    if r == real((r as int)) then r as int else (r as int) - 1\n}\n\n// Main method: explicit_euler\nmethod explicit_euler(ode_func: ODEFunc, y0: real, x0: real, step_size: real, x_end: real) returns (y: array<real>)\n  requires step_size > 0.0\n  requires x_end >= x0\n  ensures y.Length == ceil((x_end - x0) / step_size) + 1\n  ensures y[0] == y0\n  // For all k in 0..y.Length-2, y[k+1] == y[k] + step_size * ode_func(x0 + k*step_size, y[k])\n{\n  var n: int := ceil((x_end - x0) / step_size);\n  y := new real[n + 1];\n  y[0] := y0;\n  var x: real := x0;\n  var k: int := 0;\n  while k < n\n    invariant 0 <= k <= n\n    invariant y.Length == n + 1\n    invariant y[0] == y0\n    invariant forall i :: 0 <= i < k ==> y[i + 1] == y[i] + step_size * ode_func(x0 + i * step_size, y[i])\n    invariant x == x0 + k * step_size\n  {\n    y[k + 1] := y[k] + step_size * ode_func(x, y[k]);\n    x := x + step_size;\n    k := k + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 7.135,
+        "duration_formatted": "7.14s",
+        "tokens": {
+          "input": 486,
+          "output": 538,
+          "total": 1024
+        },
+        "cost_usd": 0.005276,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:05:49.376818"
+      }
+    },
+    {
+      "file_path": "maths/euler_modified.py",
+      "code": "from collections.abc import Callable\nimport numpy as np\n\ndef euler_modified(ode_func: Callable, y0: float, x0: float, step_size: float, x_end: float) -> np.ndarray:\n    n = int(np.ceil((x_end - x0) / step_size))\n    y = np.zeros((n + 1,))\n    y[0] = y0\n    x = x0\n    for k in range(n):\n        y_get = y[k] + step_size * ode_func(x, y[k])\n        y[k + 1] = y[k] + step_size / 2 * (ode_func(x, y[k]) + ode_func(x + step_size, y_get))\n        x += step_size\n    return y\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\n// Dafny implementation of the Modified Euler Method (Heun's Method) for solving ODEs\n\n// Define a type alias for the ODE function: takes (x: real, y: real) and returns real\ntype ODEFunc = function (x: real, y: real): real\n\n// Helper function to compute the ceiling of a real number as an int\nfunction Ceiling(r: real): int\n  ensures real(Ceiling(r)) >= r\n  ensures real(Ceiling(r)) - 1.0 < r\n{\n  if r == real(floor(r)) then floor(r) as int else floor(r) as int + 1\n}\n\n// The main method implementing the modified Euler method\nmethod EulerModified(ode_func: ODEFunc, y0: real, x0: real, step_size: real, x_end: real) returns (y: array<real>)\n  requires step_size > 0.0\n  requires x_end >= x0\n  ensures y.Length == Ceiling((x_end - x0) / step_size) + 1\n  ensures y[0] == y0\n  // The postcondition below expresses the recurrence relation for the method\n  ensures forall k: int :: 0 <= k < y.Length - 1 ==>\n    var xk := x0 + step_size * k;\n    var yk := y[k];\n    var y_predict := yk + step_size * ode_func(xk, yk);\n    y[k+1] == yk + step_size / 2.0 * (ode_func(xk, yk) + ode_func(xk + step_size, y_predict))\n{\n  var n: int := Ceiling((x_end - x0) / step_size);\n  y := new real[n + 1];\n  y[0] := y0;\n  var x: real := x0;\n  var k: int := 0;\n  while k < n\n    invariant 0 <= k <= n\n    invariant x == x0 + step_size * k\n    invariant y.Length == n + 1\n    invariant y[0] == y0\n    invariant forall i: int :: 0 <= i <= k ==>\n      (\n        if i == 0 then y[i] == y0\n        else\n          var xi := x0 + step_size * (i - 1);\n          var yi := y[i - 1];\n          var y_predict := yi + step_size * ode_func(xi, yi);\n          y[i] == yi + step_size / 2.0 * (ode_func(xi, yi) + ode_func(xi + step_size, y_predict))\n      )\n  {\n    var y_predict := y[k] + step_size * ode_func(x, y[k]);\n    y[k + 1] := y[k] + step_size / 2.0 * (ode_func(x, y[k]) + ode_func(x + step_size, y_predict));\n    x := x + step_size;\n    k := k + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 10.852,
+        "duration_formatted": "10.85s",
+        "tokens": {
+          "input": 519,
+          "output": 650,
+          "total": 1169
+        },
+        "cost_usd": 0.006238,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:06:10.232814"
+      }
+    },
+    {
+      "file_path": "maths/sin.py",
+      "code": "from math import factorial, radians\n\ndef sin(angle_in_degrees: float, accuracy: int=18, rounded_values_count: int=10) -> float:\n    angle_in_degrees = angle_in_degrees - angle_in_degrees // 360.0 * 360.0\n    angle_in_radians = radians(angle_in_degrees)\n    result = angle_in_radians\n    a = 3\n    b = -1\n    for _ in range(accuracy):\n        result += b * angle_in_radians ** a / factorial(a)\n        b = -b\n        a += 2\n    return round(result, rounded_values_count)\nif __name__ == '__main__':\n    __import__('doctest').testmod()",
+      "program_specification": "```dafny\n// Helper function: factorial\nfunction method factorial(n: nat): nat\n  requires n >= 0\n  decreases n\n{\n  if n == 0 then 1 else n * factorial(n - 1)\n}\n\n// Helper function: power (x^n for n >= 0)\nfunction method pow(x: real, n: nat): real\n  decreases n\n{\n  if n == 0 then 1.0 else x * pow(x, n - 1)\n}\n\n// Helper function: degrees to radians\nfunction method radians(degrees: real): real\n{\n  degrees * 3.14159265358979323846 / 180.0\n}\n\n// Helper function: round a real to a given number of decimal places\nfunction method roundTo(x: real, decimals: nat): real\n{\n  // Multiply by 10^decimals, round, then divide back\n  var factor := pow(10.0, decimals);\n  real((x * factor + 0.5).Floor) / factor\n}\n\n// Helper function: modulo for real numbers\nfunction method real_mod(x: real, y: real): real\n  requires y > 0.0\n{\n  x - ((x / y).Floor) * y\n}\n\n// The main sine approximation method\nmethod SinApprox(angle_in_degrees: real, accuracy: nat, rounded_values_count: nat) returns (result: real)\n  requires accuracy >= 0\n  requires rounded_values_count >= 0\n  ensures\n    // result is the sum of the first (accuracy+1) terms of the Taylor series for sin(angle_in_degrees)\n    var angle := real_mod(angle_in_degrees, 360.0);\n    var rad := radians(angle);\n    result == roundTo(\n      TaylorSin(rad, accuracy),\n      rounded_values_count\n    )\n{\n  var angle := real_mod(angle_in_degrees, 360.0);\n  var rad := radians(angle);\n\n  var res: real := rad;\n  var a: nat := 3;\n  var b: int := -1;\n  var i: nat := 0;\n\n  // Invariant: res is the sum of the first i+1 terms of the Taylor series for sin(rad)\n  // That is, res == sum_{k=0}^{i} (-1)^k * rad^{2k+1} / (2k+1)!\n  while i < accuracy\n    invariant 0 <= i <= accuracy\n    invariant a == 2 * i + 3\n    invariant b == if i % 2 == 0 then -1 else 1\n    invariant res == TaylorSinPartial(rad, i)\n    decreases accuracy - i\n  {\n    res := res + b * pow(rad, a) / factorial(a);\n    b := -b;\n    a := a + 2;\n    i := i + 1;\n  }\n  result := roundTo(res, rounded_values_count);\n}\n\n// Helper function: sum of first (n+1) terms of Taylor series for sin(x)\nfunction method TaylorSinPartial(x: real, n: nat): real\n  decreases n\n{\n  if n == 0 then x\n  else TaylorSinPartial(x, n - 1) + (-1)^(n) * pow(x, 2*n+1) / factorial(2*n+1)\n}\n\n// Helper function: sum of first (accuracy+1) terms of Taylor series for sin(x)\nfunction method TaylorSin(x: real, accuracy: nat): real\n{\n  TaylorSinPartial(x, accuracy)\n}\n\n// Example usage\nmethod Main()\n{\n  var angle: real := 30.0;\n  var accuracy: nat := 18;\n  var rounded_values_count: nat := 10;\n  var s := SinApprox(angle, accuracy, rounded_values_count);\n  print \"sin(\", angle, \") ≈ \", s, \"\\n\";\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 15.748,
+        "duration_formatted": "15.75s",
+        "tokens": {
+          "input": 493,
+          "output": 817,
+          "total": 1310
+        },
+        "cost_usd": 0.007522,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:06:35.986687"
+      }
+    },
+    {
+      "file_path": "physics/archimedes_principle_of_buoyant_force.py",
+      "code": "g = 9.80665\n\ndef archimedes_principle(fluid_density: float, volume: float, gravity: float=g) -> float:\n    if fluid_density <= 0:\n        raise ValueError('Impossible fluid density')\n    if volume <= 0:\n        raise ValueError('Impossible object volume')\n    if gravity < 0:\n        raise ValueError('Impossible gravity')\n    return fluid_density * gravity * volume\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\nmodule ArchimedesPrinciple {\n\n  const g: real := 9.80665\n\n  function {:opaque} archimedesPrinciple(fluid_density: real, volume: real, gravity: real): real\n    requires fluid_density > 0.0\n    requires volume > 0.0\n    requires gravity >= 0.0\n    ensures archimedesPrinciple(fluid_density, volume, gravity) == fluid_density * gravity * volume\n  {\n    fluid_density * gravity * volume\n  }\n\n  method ArchimedesPrinciple(fluid_density: real, volume: real, gravity: real := g) returns (buoyant_force: real)\n    requires fluid_density > 0.0\n      // Impossible fluid density\n    requires volume > 0.0\n      // Impossible object volume\n    requires gravity >= 0.0\n      // Impossible gravity\n    ensures buoyant_force == archimedesPrinciple(fluid_density, volume, gravity)\n    ensures buoyant_force == fluid_density * gravity * volume\n  {\n    buoyant_force := fluid_density * gravity * volume;\n  }\n\n  // Example usage (not required for formal verification)\n  method Main()\n  {\n    var fluid_density: real := 1000.0;\n    var volume: real := 0.5;\n    var gravity: real := g;\n    var force: real;\n    force := archimedesPrinciple(fluid_density, volume, gravity);\n    // force should be 1000.0 * 9.80665 * 0.5 = 4903.325\n    assert force == 4903.325;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 6.074,
+        "duration_formatted": "6.07s",
+        "tokens": {
+          "input": 448,
+          "output": 349,
+          "total": 797
+        },
+        "cost_usd": 0.003688,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:06:52.065705"
+      }
+    },
+    {
+      "file_path": "scheduling/job_sequencing_with_deadline.py",
+      "code": "def job_sequencing_with_deadlines(jobs: list) -> list:\n    jobs = sorted(jobs, key=lambda value: value[2], reverse=True)\n    max_deadline = max(jobs, key=lambda value: value[1])[1]\n    time_slots = [-1] * max_deadline\n    count = 0\n    max_profit = 0\n    for job in jobs:\n        for i in range(job[1] - 1, -1, -1):\n            if time_slots[i] == -1:\n                time_slots[i] = job[0]\n                count += 1\n                max_profit += job[2]\n                break\n    return [count, max_profit]\nif __name__ == '__main__':\n    import doctest\n    doctest.testmod()",
+      "program_specification": "```dafny\n// Dafny representation of a Job: (id, deadline, profit)\ndatatype Job = Job(id: int, deadline: int, profit: int)\n\nfunction SortedByProfitDesc(jobs: seq<Job>): bool\n  decreases jobs\n{\n  forall i :: 0 <= i < |jobs| - 1 ==> jobs[i].profit >= jobs[i+1].profit\n}\n\nfunction MaxDeadline(jobs: seq<Job>): int\n  requires |jobs| > 0\n{\n  if |jobs| == 0 then 0 else\n    var m := jobs[0].deadline;\n    var i := 1;\n    while i < |jobs|\n      decreases |jobs| - i\n    {\n      m := if jobs[i].deadline > m then jobs[i].deadline else m;\n      i := i + 1;\n    }\n    m\n}\n\nmethod SortJobsByProfitDesc(jobs: seq<Job>) returns (sorted: seq<Job>)\n  requires |jobs| >= 0\n  ensures |sorted| == |jobs|\n  ensures multiset(sorted) == multiset(jobs)\n  ensures SortedByProfitDesc(sorted)\n{\n  // Simple selection sort for specification purposes\n  var arr := jobs[..];\n  var n := |arr|;\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant |arr| == n\n    invariant multiset(arr) == multiset(jobs)\n    invariant forall k :: 0 <= k < i-1 ==> arr[k].profit >= arr[k+1].profit\n  {\n    var maxIdx := i;\n    var j := i + 1;\n    while j < n\n      invariant i+1 <= j <= n\n      invariant maxIdx >= i && maxIdx < n\n      invariant forall k :: i <= k < j ==> arr[maxIdx].profit >= arr[k].profit\n    {\n      if arr[j].profit > arr[maxIdx].profit {\n        maxIdx := j;\n      }\n      j := j + 1;\n    }\n    if maxIdx != i {\n      var tmp := arr[i];\n      arr[i] := arr[maxIdx];\n      arr[maxIdx] := tmp;\n    }\n    i := i + 1;\n  }\n  sorted := arr;\n}\n\nmethod JobSequencingWithDeadlines(jobs: seq<Job>) returns (result: seq<int>)\n  requires |jobs| > 0\n  requires forall job :: job in jobs ==> job.deadline > 0 && job.profit >= 0\n  ensures |result| == 2\n  ensures result[0] <= |jobs| // count of jobs scheduled\n  ensures result[1] >= 0      // total profit is non-negative\n  // Ensures: result[0] is the number of jobs scheduled, result[1] is the max profit\n{\n  var sortedJobs := SortJobsByProfitDesc(jobs);\n  var maxDeadline := MaxDeadline(sortedJobs);\n  var timeSlots := new int[maxDeadline];\n  var k := 0;\n  while k < maxDeadline\n    invariant 0 <= k <= maxDeadline\n    invariant forall i :: 0 <= i < k ==> timeSlots[i] == -1\n  {\n    timeSlots[k] := -1;\n    k := k + 1;\n  }\n\n  var count := 0;\n  var maxProfit := 0;\n  var idx := 0;\n  while idx < |sortedJobs|\n    invariant 0 <= idx <= |sortedJobs|\n    invariant 0 <= count <= idx\n    invariant maxProfit >= 0\n    invariant forall i :: 0 <= i < maxDeadline ==> timeSlots[i] == -1 || (exists j :: 0 <= j < idx && sortedJobs[j].id == timeSlots[i])\n    invariant forall i :: 0 <= i < maxDeadline && timeSlots[i] != -1 ==> exists j :: 0 <= j < idx && sortedJobs[j].id == timeSlots[i]\n  {\n    var job := sortedJobs[idx];\n    var i := job.deadline - 1;\n    var scheduled := false;\n    while i >= 0 && !scheduled\n      invariant -1 <= i < job.deadline\n      invariant !scheduled ==> forall t :: i+1 <= t < job.deadline ==> timeSlots[t] != -1\n    {\n      if timeSlots[i] == -1 {\n        timeSlots[i] := job.id;\n        count := count + 1;\n        maxProfit := maxProfit + job.profit;\n        scheduled := true;\n      }\n      i := i - 1;\n    }\n    idx := idx + 1;\n  }\n  result := [count, maxProfit];\n}\n\n// Example usage\nmethod Main()\n{\n  var jobs: seq<Job> := [\n    Job(1, 2, 100),\n    Job(2, 1, 19),\n    Job(3, 2, 27),\n    Job(4, 1, 25),\n    Job(5, 3, 15)\n  ];\n  var res := JobSequencingWithDeadlines(jobs);\n  print \"Jobs scheduled: \"; print res[0]; print \", Max profit: \"; print res[1]; print \"\\n\";\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 22.506,
+        "duration_formatted": "22.51s",
+        "tokens": {
+          "input": 506,
+          "output": 1106,
+          "total": 1612
+        },
+        "cost_usd": 0.00986,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:07:24.576042"
+      }
+    },
+    {
+      "file_path": "1-100q/03.py",
+      "code": "class Solution(object):\n\n    def lengthOfLongestSubstring(self, s):\n        mapSet = {}\n        start, result = (0, 0)\n        for end in range(len(s)):\n            if s[end] in mapSet:\n                start = max(mapSet[s[end]], start)\n            result = max(result, end - start + 1)\n            mapSet[s[end]] = end + 1\n        return result",
+      "program_specification": "```dafny\nmodule SolutionModule {\n\n  function method IsUniqueSubstring(s: seq<char>, start: int, end: int): bool\n    requires 0 <= start <= end <= |s|\n    decreases end - start\n  {\n    if end - start <= 1 then true\n    else\n      (forall i, j :: start <= i < j < end ==> s[i] != s[j])\n  }\n\n  function method LongestUniqueSubstringLength(s: seq<char>): nat\n    decreases |s|\n  {\n    if |s| == 0 then 0\n    else\n      var maxLen: nat := 0;\n      // For all possible substrings, check if unique and take the max length\n      (if exists start, end :: 0 <= start <= end <= |s| && IsUniqueSubstring(s, start, end)\n        then\n          max({end - start | start, end :: 0 <= start <= end <= |s| && IsUniqueSubstring(s, start, end)})\n        else 0)\n  }\n\n  method LengthOfLongestSubstring(s: seq<char>) returns (result: nat)\n    requires true\n    ensures 0 <= result <= |s|\n    ensures result == LongestUniqueSubstringLength(s)\n  {\n    var mapSet := map[]; // map from char to int (last seen index + 1)\n    var start: int := 0;\n    result := 0;\n    var end: int := 0;\n\n    while end < |s|\n      invariant 0 <= start <= end <= |s|\n      invariant forall c: char :: c in mapSet ==> 1 <= mapSet[c] <= end + 1\n      invariant forall c: char :: c in mapSet ==> s[mapSet[c] - 1] == c\n      invariant forall i: int :: start <= i < end ==> s[i] !in s[start .. i]\n      invariant result <= end - start + 1\n      invariant result <= LongestUniqueSubstringLength(s[..end])\n      invariant result == (if exists st :: 0 <= st <= start then max({e - st | st, e :: 0 <= st <= e <= end && IsUniqueSubstring(s, st, e)}) else 0)\n    {\n      if s[end] in mapSet {\n        start := if mapSet[s[end]] > start then mapSet[s[end]] else start;\n      }\n      var currLen := end - start + 1;\n      if currLen > result {\n        result := currLen;\n      }\n      mapSet := mapSet[s[end] := end + 1];\n      end := end + 1;\n    }\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 16.485,
+        "duration_formatted": "16.48s",
+        "tokens": {
+          "input": 426,
+          "output": 564,
+          "total": 990
+        },
+        "cost_usd": 0.005364,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:07:51.064187"
+      }
+    },
+    {
+      "file_path": "1-100q/26.py",
+      "code": "class Solution(object):\n\n    def removeDuplicates(self, nums):\n        if not nums:\n            return 0\n        index_i = 0\n        for index_j in range(1, len(nums)):\n            if nums[index_i] != nums[index_j]:\n                index_i += 1\n                nums[index_i] = nums[index_j]\n        return index_i + 1",
+      "program_specification": "```dafny\nmethod RemoveDuplicates(nums: array<int>) returns (k: int)\n  requires nums != null\n  ensures 0 <= k <= nums.Length\n  ensures forall i, j :: 0 <= i < k && 0 <= j < k && i != j ==> nums[i] != nums[j]\n  ensures forall i :: 1 <= i < k ==> exists j :: 0 <= j < nums.Length && nums[j] == nums[i]\n  ensures forall i :: 0 <= i < k ==> exists j :: 0 <= j < nums.Length && nums[j] == nums[i]\n  ensures forall i :: 0 <= i < nums.Length ==> (exists j :: 0 <= j < k && nums[j] == nums[i]) || (forall j :: 0 <= j < k ==> nums[j] != nums[i])\n{\n  if nums.Length == 0 {\n    return 0;\n  }\n  var index_i: int := 0;\n  var index_j: int := 1;\n  while index_j < nums.Length\n    invariant 1 <= index_j <= nums.Length\n    invariant 0 <= index_i < index_j\n    invariant forall x, y :: 0 <= x < index_i + 1 && 0 <= y < index_i + 1 && x != y ==> nums[x] != nums[y]\n    invariant forall x :: 0 <= x < index_i + 1 ==> exists y :: 0 <= y < index_j && nums[x] == nums[y]\n    invariant forall y :: 0 <= y < index_j ==> exists x :: 0 <= x < index_i + 1 && nums[x] == nums[y] || (forall x :: 0 <= x < index_i + 1 ==> nums[x] != nums[y])\n  {\n    if nums[index_i] != nums[index_j] {\n      index_i := index_i + 1;\n      nums[index_i] := nums[index_j];\n    }\n    index_j := index_j + 1;\n  }\n  k := index_i + 1;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 6.436,
+        "duration_formatted": "6.44s",
+        "tokens": {
+          "input": 416,
+          "output": 432,
+          "total": 848
+        },
+        "cost_usd": 0.004288,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:08:07.505266"
+      }
+    },
+    {
+      "file_path": "1-100q/32.py",
+      "code": "class Solution(object):\n\n    def longestValidParentheses(self, s):\n        stack, result = ([-1], 0)\n        for index in range(len(s)):\n            if s[index] == '(':\n                stack.append(index)\n            else:\n                currIndex = stack.pop()\n                if currIndex == -1:\n                    stack.append(index)\n                else:\n                    result = max(result, index - currIndex + 1)\n        return result",
+      "program_specification": "```dafny\nmethod LongestValidParentheses(s: seq<char>) returns (result: int)\n  requires forall c :: c in s ==> c == '(' || c == ')'\n  ensures 0 <= result <= |s|\n  ensures forall i, j :: 0 <= i <= j < |s| && IsValidParentheses(s[i..j+1]) ==> result >= j - i + 1\n  ensures exists i, j :: 0 <= i <= j < |s| && IsValidParentheses(s[i..j+1]) && result == j - i + 1 || result == 0\n{\n  var stack := new seq<int>(1);\n  stack[0] := -1;\n  var res := 0;\n  var idx := 0;\n  while idx < |s|\n    invariant 0 <= idx <= |s|\n    invariant -1 in stack\n    invariant forall k :: 0 <= k < |stack| ==> -1 <= stack[k] < idx\n    invariant res >= 0\n    invariant res <= idx\n    invariant forall i, j :: 0 <= i <= j < idx && IsValidParentheses(s[i..j+1]) ==> res >= j - i + 1\n  {\n    if s[idx] == '(' {\n      stack := stack + [idx];\n    } else {\n      if |stack| > 0 {\n        var currIndex := stack[|stack|-1];\n        stack := stack[..|stack|-1];\n        if currIndex == -1 {\n          stack := stack + [idx];\n        } else {\n          res := if res > idx - currIndex then res else idx - currIndex;\n        }\n      } else {\n        stack := stack + [idx];\n      }\n    }\n    idx := idx + 1;\n  }\n  result := res;\n}\n\nfunction IsValidParentheses(s: seq<char>): bool\n  decreases |s|\n{\n  if |s| == 0 then true\n  else if s[0] == ')' then false\n  else\n    var balance := 0;\n    forall i :: 0 <= i < |s| ==>\n      (if s[i] == '(' then balance := balance + 1 else balance := balance - 1; balance >= 0)\n    &&\n    (balance == 0)\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 8.614,
+        "duration_formatted": "8.61s",
+        "tokens": {
+          "input": 430,
+          "output": 491,
+          "total": 921
+        },
+        "cost_usd": 0.004788,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:08:26.122792"
+      }
+    },
+    {
+      "file_path": "1-100q/40.py",
+      "code": "class Solution(object):\n\n    def combinationSum2(self, candidates, target):\n        result = []\n        candidates.sort()\n\n        def recursive(candidates, target, currList, index):\n            if target < 0:\n                return\n            if target == 0:\n                result.append(currList)\n                return\n            previous = -1\n            for start in range(index, len(candidates)):\n                if previous != candidates[start]:\n                    recursive(candidates, target - candidates[start], currList + [candidates[start]], start + 1)\n                    previous = candidates[start]\n        recursive(candidates, target, [], 0)\n        return result",
+      "program_specification": "```dafny\n// Dafny program for combinationSum2\n\n// Returns all unique combinations in 'candidates' where the numbers sum to 'target'.\n// Each number in candidates may only be used once in the combination.\n// The solution set must not contain duplicate combinations.\n\nmethod CombinationSum2(candidates: seq<int>, target: int) returns (result: seq<seq<int>>)\n  requires forall x :: 0 <= x < |candidates| ==> candidates[x] >= 0\n  ensures forall comb :: comb in result ==> \n            |comb| > 0 &&\n            (forall i :: 0 <= i < |comb| ==> comb[i] in candidates) &&\n            (forall i :: 0 <= i < |comb| - 1 ==> comb[i] <= comb[i+1]) &&\n            sum(comb) == target\n  ensures forall i, j :: 0 <= i < |result| && 0 <= j < |result| && i != j ==> result[i] != result[j]\n{\n  var sortedCandidates := SortSeq(candidates);\n  var res: seq<seq<int>> := [];\n  Recursive(sortedCandidates, target, [], 0, res);\n  result := res;\n}\n\n// Helper function: sum of a sequence\nfunction sum(s: seq<int>): int\n{\n  if |s| == 0 then 0 else s[0] + sum(s[1..])\n}\n\n// Helper function: sorts a sequence in non-decreasing order\nfunction SortSeq(s: seq<int>): seq<int>\n  ensures |SortSeq(s)| == |s|\n  ensures multiset(SortSeq(s)) == multiset(s)\n  ensures forall i :: 0 <= i < |SortSeq(s)| - 1 ==> SortSeq(s)[i] <= SortSeq(s)[i+1]\n{\n  if |s| == 0 then []\n  else\n    var m := min(s);\n    [m] + SortSeq(RemoveFirst(s, m))\n}\n\n// Helper function: removes the first occurrence of x from s\nfunction RemoveFirst(s: seq<int>, x: int): seq<int>\n  ensures |RemoveFirst(s, x)| == |s| - (if x in s then 1 else 0)\n  ensures multiset(RemoveFirst(s, x)) == multiset(s) - multiset([x])\n{\n  if |s| == 0 then []\n  else if s[0] == x then s[1..]\n  else [s[0]] + RemoveFirst(s[1..], x)\n}\n\n// Helper function: returns the minimum element in a non-empty sequence\nfunction min(s: seq<int>): int\n  requires |s| > 0\n  ensures min(s) in s\n  ensures forall x :: x in s ==> min(s) <= x\n{\n  if |s| == 1 then s[0]\n  else if s[0] < min(s[1..]) then s[0] else min(s[1..])\n}\n\n// Recursive helper method\nmethod Recursive(candidates: seq<int>, target: int, currList: seq<int>, index: int, \n                 modifies res: seq<seq<int>>)\n  requires forall x :: 0 <= x < |candidates| ==> candidates[x] >= 0\n  requires 0 <= index <= |candidates|\n  requires forall i :: 0 <= i < |currList| - 1 ==> currList[i] <= currList[i+1]\n  modifies res\n  ensures forall comb :: comb in res ==> \n            |comb| > 0 &&\n            (forall i :: 0 <= i < |comb| ==> comb[i] in candidates) &&\n            (forall i :: 0 <= i < |comb| - 1 ==> comb[i] <= comb[i+1]) &&\n            sum(comb) == target\n  decreases target, |candidates| - index\n{\n  if target < 0 {\n    return;\n  }\n  if target == 0 {\n    res := res + [currList];\n    return;\n  }\n  var previous: int := -1;\n  var start: int := index;\n  while start < |candidates|\n    invariant index <= start <= |candidates|\n    invariant previous == -1 || previous < 1000000 // arbitrary large int\n    invariant forall i :: index <= i < start ==> previous != candidates[i]\n    decreases |candidates| - start\n  {\n    if previous == -1 || previous != candidates[start] {\n      Recursive(candidates, target - candidates[start], currList + [candidates[start]], start + 1, res);\n      previous := candidates[start];\n    }\n    start := start + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 17.998,
+        "duration_formatted": "18.00s",
+        "tokens": {
+          "input": 469,
+          "output": 985,
+          "total": 1454
+        },
+        "cost_usd": 0.008818,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:08:54.125440"
+      }
+    },
+    {
+      "file_path": "1-100q/05.py",
+      "code": "class Solution(object):\n\n    def longestPalindrome(self, s):\n        dp = [[0 for _ in range(len(s))] for _ in range(len(s))]\n        maxLength, result = (1, '')\n        for index in range(len(s)):\n            dp[index][index] = 1\n            result = s[index]\n        length = 2\n        while length <= len(s):\n            index_i = 0\n            while index_i < len(s) - length + 1:\n                index_j = index_i + length - 1\n                if length == 2 and s[index_i] == s[index_j]:\n                    dp[index_i][index_j] = 1\n                    maxLength = max(maxLength, 2)\n                    result = s[index_i:index_j + 1]\n                elif s[index_i] == s[index_j] and dp[index_i + 1][index_j - 1]:\n                    dp[index_i][index_j] = 1\n                    if length > maxLength:\n                        maxLength = length\n                        result = s[index_i:index_j + 1]\n                index_i += 1\n            length += 1\n        return result\n\nclass Solution(object):\n\n    def longestPalindrome(self, s):\n\n        def expand(s, left, right):\n            while left >= 0 and right < len(s) and (s[left] == s[right]):\n                left -= 1\n                right += 1\n            return right - left - 1\n        start, end = (0, 0)\n        for index in range(len(s)):\n            even_len = expand(s, index, index + 1)\n            odd_len = expand(s, index, index)\n            length = max(even_len, odd_len)\n            if length > end - start:\n                start = index - (length - 1) / 2\n                end = index + length / 2\n        return s[start:end + 1]",
+      "program_specification": "```dafny\n// Helper function to check if a substring s[i..j] is a palindrome\nfunction method IsPalindrome(s: seq<char>, i: int, j: int): bool\n  requires 0 <= i <= j < |s|\n{\n  forall k :: 0 <= k <= (j - i) / 2 ==> s[i + k] == s[j - k]\n}\n\n// Returns the longest palindromic substring of s\nmethod LongestPalindromeDP(s: seq<char>) returns (res: seq<char>)\n  requires |s| >= 0\n  ensures |res| > 0 ==> IsPalindrome(s, IndexOf(s, res), IndexOf(s, res) + |res| - 1)\n  ensures res in Substrings(s)\n  ensures forall t :: t in Substrings(s) && IsPalindrome(s, IndexOf(s, t), IndexOf(s, t) + |t| - 1) ==> |t| <= |res|\n{\n  if |s| == 0 {\n    res := [];\n    return;\n  }\n  var n := |s|;\n  var dp := new bool[n][n];\n  var maxLength := 1;\n  var start := 0;\n\n  // All substrings of length 1 are palindromes\n  var i := 0;\n  while i < n\n    invariant 0 <= i <= n\n    invariant forall k :: 0 <= k < i ==> dp[k][k] == true\n  {\n    dp[i][i] := true;\n    i := i + 1;\n  }\n\n  // Check for substring of length 2\n  i := 0;\n  while i < n - 1\n    invariant 0 <= i <= n - 1\n    invariant forall k :: 0 <= k < i ==> (s[k] == s[k+1] ==> dp[k][k+1] == true)\n  {\n    if s[i] == s[i+1] {\n      dp[i][i+1] := true;\n      if maxLength < 2 {\n        start := i;\n        maxLength := 2;\n      }\n    }\n    i := i + 1;\n  }\n\n  // Check for lengths greater than 2\n  var length := 3;\n  while length <= n\n    invariant 3 <= length <= n + 1\n    invariant 1 <= maxLength <= length - 1\n    invariant 0 <= start < n\n  {\n    i := 0;\n    while i < n - length + 1\n      invariant 0 <= i <= n - length + 1\n    {\n      var j := i + length - 1;\n      if s[i] == s[j] && dp[i+1][j-1] {\n        dp[i][j] := true;\n        if length > maxLength {\n          start := i;\n          maxLength := length;\n        }\n      }\n      i := i + 1;\n    }\n    length := length + 1;\n  }\n  res := s[start .. start + maxLength];\n}\n\n// Helper function: returns the index of the first occurrence of t in s, or -1 if not found\nfunction method IndexOf(s: seq<char>, t: seq<char>): int\n  decreases |s|, |t|\n{\n  if |t| == 0 then 0\n  else\n    var found := -1;\n    var i := 0;\n    while i <= |s| - |t| {\n      if s[i .. i + |t|] == t {\n        found := i;\n        break;\n      }\n      i := i + 1;\n    }\n    found\n}\n\n// Helper function: returns all substrings of s\nfunction Substrings(s: seq<char>): set<seq<char>>\n{\n  set t | exists i, j :: 0 <= i <= j < |s| && t == s[i .. j + 1]\n}\n\n// Expand Around Center approach\nmethod LongestPalindromeExpand(s: seq<char>) returns (res: seq<char>)\n  requires |s| >= 0\n  ensures |res| > 0 ==> IsPalindrome(s, IndexOf(s, res), IndexOf(s, res) + |res| - 1)\n  ensures res in Substrings(s)\n  ensures forall t :: t in Substrings(s) && IsPalindrome(s, IndexOf(s, t), IndexOf(s, t) + |t| - 1) ==> |t| <= |res|\n{\n  if |s| == 0 {\n    res := [];\n    return;\n  }\n  var start := 0;\n  var end := 0;\n  var i := 0;\n  while i < |s|\n    invariant 0 <= i <= |s|\n    invariant 0 <= start <= end < |s|\n    invariant end - start + 1 <= i + 1\n    invariant IsPalindrome(s, start, end)\n  {\n    var len1 := ExpandAroundCenter(s, i, i);\n    var len2 := ExpandAroundCenter(s, i, i + 1);\n    var len := if len1 > len2 then len1 else len2;\n    if len > end - start + 1 {\n      start := i - (len - 1) / 2;\n      end := i + len / 2;\n    }\n    i := i + 1;\n  }\n  res := s[start .. end + 1];\n}\n\n// Helper method: expands around center and returns length of palindrome\nmethod ExpandAroundCenter(s: seq<char>, left: int, right: int) returns (length: int)\n  requires 0 <= left < |s|\n  requires 0 <= right <= |s|\n  ensures length >= 0\n  ensures left - (length - 1) / 2 >= 0 ==> IsPalindrome(s, left - (length - 1) / 2, right + (length / 2) - 1)\n{\n  var l := left;\n  var r := right;\n  while l >= 0 && r < |s| && s[l] == s[r]\n    invariant -1 <= l <= left\n    invariant right <= r <= |s|\n    invariant left - l == r - right\n    invariant 0 <= l + 1 <= r\n    invariant forall k :: l + 1 <= k < r ==> s[k] == s[left + right - k - 1]\n  {\n    l := l - 1;\n    r := r + 1;\n  }\n  length := r - l - 1;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 18.174,
+        "duration_formatted": "18.17s",
+        "tokens": {
+          "input": 741,
+          "output": 1389,
+          "total": 2130
+        },
+        "cost_usd": 0.012594,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:09:22.303714"
+      }
+    },
+    {
+      "file_path": "1-100q/15.py",
+      "code": "class Solution(object):\n\n    def threeSum(self, nums):\n        nums.sort()\n        if len(nums) >= 3 and nums[0] == nums[len(nums) - 1] and (nums[0] == 0):\n            return [[0, 0, 0]]\n        result = []\n        for index in range(len(nums) - 1):\n            left = index + 1\n            right = len(nums) - 1\n            while left < right:\n                currSum = nums[index] + nums[left] + nums[right]\n                if currSum == 0:\n                    result.append([nums[index], nums[left], nums[right]])\n                    left += 1\n                    right -= 1\n                elif currSum < 0:\n                    left += 1\n                else:\n                    right -= 1\n        return [list(t) for t in set((tuple(element) for element in result))]",
+      "program_specification": "```dafny\ndatatype Triplet = Triplet(a: int, b: int, c: int)\n\nfunction method sorted(s: seq<int>): bool\n  decreases s\n{\n  forall i :: 0 <= i < |s| - 1 ==> s[i] <= s[i+1]\n}\n\nfunction method isThreeSumTriplet(nums: seq<int>, t: Triplet): bool\n{\n  var (a, b, c) := (t.a, t.b, t.c);\n  exists i, j, k :: \n    0 <= i < j < k < |nums| &&\n    nums[i] == a && nums[j] == b && nums[k] == c &&\n    a + b + c == 0\n}\n\nfunction method allThreeSumTriplets(nums: seq<int>): set<Triplet>\n{\n  set t | \n    exists i, j, k :: \n      0 <= i < j < k < |nums| &&\n      nums[i] + nums[j] + nums[k] == 0 &&\n      t == Triplet(nums[i], nums[j], nums[k])\n}\n\nmethod Sort(nums: array<int>)\n  requires nums != null\n  modifies nums\n  ensures sorted(nums[..])\n  ensures multiset(nums[..]) == multiset(old(nums[..]))\n{\n  // Simple insertion sort for specification purposes\n  var n := nums.Length;\n  var i := 1;\n  while i < n\n    invariant 1 <= i <= n\n    invariant multiset(nums[..]) == multiset(old(nums[..]))\n    invariant forall k :: 0 <= k < i-1 ==> nums[k] <= nums[k+1]\n  {\n    var j := i;\n    while j > 0 && nums[j-1] > nums[j]\n      invariant 0 <= j <= i\n      invariant multiset(nums[..]) == multiset(old(nums[..]))\n      invariant forall k :: 0 <= k < i-1 ==> nums[k] <= nums[k+1] || k == j-1\n    {\n      var tmp := nums[j-1];\n      nums[j-1] := nums[j];\n      nums[j] := tmp;\n      j := j - 1;\n    }\n    i := i + 1;\n  }\n}\n\nmethod ThreeSum(nums: array<int>) returns (result: seq<seq<int>>)\n  requires nums != null\n  ensures forall t: Triplet :: t in allThreeSumTriplets(nums[..]) <==> exists r :: r in result && r == [t.a, t.b, t.c]\n  ensures forall r :: r in result ==> |r| == 3 && r[0] <= r[1] <= r[2]\n  ensures forall i, j :: 0 <= i < |result| && 0 <= j < |result| && i != j ==> result[i] != result[j]\n{\n  var n := nums.Length;\n  var arr := new int[n];\n  // Copy nums to arr for sorting\n  var k := 0;\n  while k < n\n    invariant 0 <= k <= n\n    invariant forall m :: 0 <= m < k ==> arr[m] == nums[m]\n  {\n    arr[k] := nums[k];\n    k := k + 1;\n  }\n  Sort(arr);\n\n  // Special case: all zeros and at least 3 elements\n  if n >= 3 && arr[0] == 0 && arr[n-1] == 0 {\n    result := [[0, 0, 0]];\n    return;\n  }\n\n  var resSet := set {};\n  var index := 0;\n  while index < n - 1\n    invariant 0 <= index <= n-1\n    invariant forall t: Triplet :: t in resSet ==> isThreeSumTriplet(arr[..], t)\n    invariant sorted(arr[..])\n  {\n    var left := index + 1;\n    var right := n - 1;\n    while left < right\n      invariant index + 1 <= left <= right + 1 <= n\n      invariant forall t: Triplet :: t in resSet ==> isThreeSumTriplet(arr[..], t)\n      invariant sorted(arr[..])\n    {\n      var currSum := arr[index] + arr[left] + arr[right];\n      if currSum == 0 {\n        resSet := resSet + {Triplet(arr[index], arr[left], arr[right])};\n        left := left + 1;\n        right := right - 1;\n      } else if currSum < 0 {\n        left := left + 1;\n      } else {\n        right := right - 1;\n      }\n    }\n    index := index + 1;\n  }\n\n  // Convert set of Triplet to sequence of sorted lists, removing duplicates\n  var resSeq := [];\n  var seen := set {};\n  for t in resSet {\n    var trip := [t.a, t.b, t.c];\n    // Sort the triplet (since arr is sorted, this is already sorted)\n    if !(trip in seen) {\n      resSeq := resSeq + [trip];\n      seen := seen + {trip};\n    }\n  }\n  result := resSeq;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 16.608,
+        "duration_formatted": "16.61s",
+        "tokens": {
+          "input": 528,
+          "output": 1091,
+          "total": 1619
+        },
+        "cost_usd": 0.009784,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:09:48.917259"
+      }
+    },
+    {
+      "file_path": "1-100q/16.py",
+      "code": "class Solution(object):\n\n    def threeSumClosest(self, nums, target):\n        nums.sort()\n        result, min_diff = (0, float('inf'))\n        for index in range(len(nums) - 1):\n            left = index + 1\n            right = len(nums) - 1\n            while left < right:\n                currSum = nums[index] + nums[left] + nums[right]\n                diff = abs(target - currSum)\n                if diff == 0:\n                    return target\n                if diff < min_diff:\n                    min_diff = diff\n                    result = currSum\n                if currSum < target:\n                    left += 1\n                else:\n                    right -= 1\n        return result",
+      "program_specification": "```dafny\nmethod ThreeSumClosest(nums: array<int>, target: int) returns (result: int)\n  requires nums != null\n  requires |nums| >= 3\n  ensures exists i, j, k :: 0 <= i < j < k < |nums| && result == nums[i] + nums[j] + nums[k]\n  ensures forall i, j, k :: 0 <= i < j < k < |nums| ==>\n            (abs(target - result) <= abs(target - (nums[i] + nums[j] + nums[k])))\n{\n  // Make a copy of nums to sort, since Dafny arrays are mutable and we should not mutate the input\n  var arr := new int[|nums|];\n  var idx := 0;\n  while idx < |nums|\n    invariant 0 <= idx <= |nums|\n    invariant forall k :: 0 <= k < idx ==> arr[k] == nums[k]\n  {\n    arr[idx] := nums[idx];\n    idx := idx + 1;\n  }\n\n  // Sort the array (simple insertion sort for specification)\n  var i := 1;\n  while i < |arr|\n    invariant 1 <= i <= |arr|\n    invariant forall k :: 0 <= k < i ==> forall l :: 0 <= l < k ==> arr[l] <= arr[k]\n    decreases |arr| - i\n  {\n    var j := i;\n    while j > 0 && arr[j-1] > arr[j]\n      invariant 0 <= j <= i\n      invariant forall k :: 0 <= k < i ==> forall l :: 0 <= l < k ==> arr[l] <= arr[k] || (l == j-1 && k == j)\n      decreases j\n    {\n      var tmp := arr[j-1];\n      arr[j-1] := arr[j];\n      arr[j] := tmp;\n      j := j - 1;\n    }\n    i := i + 1;\n  }\n\n  var min_diff := 2147483647; // Max int\n  var found := false;\n  result := 0;\n\n  var index := 0;\n  while index < |arr| - 2\n    invariant 0 <= index <= |arr| - 2\n    invariant forall i', j', k' :: 0 <= i' < j' < k' < index + 2 ==>\n      (found ==> abs(target - result) <= abs(target - (arr[i'] + arr[j'] + arr[k'])))\n    invariant (found ==> exists i', j', k' :: 0 <= i' < j' < k' < index + 2 && result == arr[i'] + arr[j'] + arr[k'])\n    decreases |arr| - 2 - index\n  {\n    var left := index + 1;\n    var right := |arr| - 1;\n    while left < right\n      invariant index + 1 <= left <= right + 1 <= |arr|\n      invariant forall i', j', k' :: 0 <= i' < j' < k' < |arr| && i' == index && left <= j' < k' <= right ==>\n        (found ==> abs(target - result) <= abs(target - (arr[i'] + arr[j'] + arr[k'])))\n      invariant (found ==> exists i', j', k' :: 0 <= i' < j' < k' < |arr| && i' == index && left0 <= j' < k' <= right0 && result == arr[i'] + arr[j'] + arr[k'])\n      decreases right - left\n    {\n      var currSum := arr[index] + arr[left] + arr[right];\n      var diff := if currSum >= target then currSum - target else target - currSum;\n      if diff == 0 {\n        result := target;\n        return;\n      }\n      if diff < min_diff {\n        min_diff := diff;\n        result := currSum;\n        found := true;\n      }\n      if currSum < target {\n        left := left + 1;\n      } else {\n        right := right - 1;\n      }\n    }\n    index := index + 1;\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 17.701,
+        "duration_formatted": "17.70s",
+        "tokens": {
+          "input": 487,
+          "output": 886,
+          "total": 1373
+        },
+        "cost_usd": 0.008062,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:10:16.623963"
+      }
+    },
+    {
+      "file_path": "1-100q/18.py",
+      "code": "class Solution(object):\n\n    def fourSum(self, nums, target):\n        sumMapping = {}\n        for index_i in range(len(nums) - 1):\n            for index_j in range(index_i + 1, len(nums)):\n                currSum = nums[index_i] + nums[index_j]\n                if currSum in sumMapping:\n                    sumMapping[currSum].append((index_i, index_j))\n                else:\n                    sumMapping[currSum] = [(index_i, index_j)]\n        result = set()\n        for key, value in sumMapping.iteritems():\n            diff = target - key\n            if diff in sumMapping:\n                firstSet = value\n                secondSet = sumMapping[diff]\n                for i, j in firstSet:\n                    for k, l in secondSet:\n                        fourlet = [i, j, k, l]\n                        if len(set(fourlet)) != len(fourlet):\n                            continue\n                        fourlist = [nums[i], nums[j], nums[k], nums[l]]\n                        fourlist.sort()\n                        result.add(tuple(fourlist))\n        return list(result)",
+      "program_specification": "```dafny\ndatatype Quadruple = Quadruple(a: int, b: int, c: int, d: int)\n\nfunction SortedQuadruple(q: seq<int>): seq<int>\n  requires |q| == 4\n{\n  if q[0] <= q[1] then\n    if q[1] <= q[2] then\n      if q[2] <= q[3] then q\n      else if q[1] <= q[3] then [q[0], q[1], q[3], q[2]]\n      else if q[0] <= q[3] then [q[0], q[3], q[1], q[2]]\n      else [q[3], q[0], q[1], q[2]]\n    else if q[0] <= q[2] then\n      if q[2] <= q[3] then [q[0], q[2], q[1], q[3]]\n      else if q[0] <= q[3] then [q[0], q[3], q[2], q[1]]\n      else [q[3], q[0], q[2], q[1]]\n    else\n      if q[0] <= q[3] then [q[2], q[0], q[1], q[3]]\n      else if q[2] <= q[3] then [q[2], q[3], q[0], q[1]]\n      else [q[3], q[2], q[0], q[1]]\n  else\n    SortedQuadruple([q[1], q[0], q[2], q[3]])\n}\n\nmethod FourSum(nums: seq<int>, target: int) returns (result: set<seq<int>>)\n  requires |nums| >= 0\n  ensures forall q :: q in result ==> |q| == 4 && q[0] <= q[1] <= q[2] <= q[3]\n  ensures forall q :: q in result ==> q[0] + q[1] + q[2] + q[3] == target\n  ensures forall q :: q in result ==> exists i, j, k, l :: \n    0 <= i < j < k < l < |nums| && \n    multiset{q[0], q[1], q[2], q[3]} == multiset{nums[i], nums[j], nums[k], nums[l]}\n  ensures forall i, j, k, l :: \n    0 <= i < j < k < l < |nums| && \n    nums[i] + nums[j] + nums[k] + nums[l] == target ==>\n      SortedQuadruple([nums[i], nums[j], nums[k], nums[l]]) in result\n{\n  var sumMapping := map<int, seq<(int, int)>>{};\n  var n := |nums|;\n\n  // Build sumMapping: sum -> list of index pairs\n  var index_i := 0;\n  while index_i < n - 1\n    invariant 0 <= index_i <= n - 1\n    invariant forall s :: s in sumMapping ==> forall p :: p in sumMapping[s] ==> 0 <= p.0 < p.1 < index_i + 1 <= n\n    decreases n - 1 - index_i\n  {\n    var index_j := index_i + 1;\n    while index_j < n\n      invariant index_i + 1 <= index_j <= n\n      invariant forall s :: s in sumMapping ==> forall p :: p in sumMapping[s] ==> 0 <= p.0 < p.1 < index_j <= n\n      decreases n - index_j\n    {\n      var currSum := nums[index_i] + nums[index_j];\n      if currSum in sumMapping {\n        sumMapping := sumMapping[currSum := sumMapping[currSum] + [(index_i, index_j)]];\n      } else {\n        sumMapping := sumMapping[currSum := [(index_i, index_j)]];\n      }\n      index_j := index_j + 1;\n    }\n    index_i := index_i + 1;\n  }\n\n  var res: set<seq<int>> := {};\n\n  var keys := sumMapping.Keys;\n  var keyArr := keys[..];\n  var keyIdx := 0;\n  while keyIdx < |keyArr|\n    invariant 0 <= keyIdx <= |keyArr|\n    invariant forall idx :: 0 <= idx < keyIdx ==> \n      forall q :: q in res ==> |q| == 4 && q[0] <= q[1] <= q[2] <= q[3] && q[0] + q[1] + q[2] + q[3] == target\n    decreases |keyArr| - keyIdx\n  {\n    var key := keyArr[keyIdx];\n    var diff := target - key;\n    if diff in sumMapping {\n      var firstSet := sumMapping[key];\n      var secondSet := sumMapping[diff];\n      var i := 0;\n      while i < |firstSet|\n        invariant 0 <= i <= |firstSet|\n        decreases |firstSet| - i\n      {\n        var j := 0;\n        while j < |secondSet|\n          invariant 0 <= j <= |secondSet|\n          decreases |secondSet| - j\n        {\n          var (a, b) := firstSet[i];\n          var (c, d) := secondSet[j];\n          var indices := [a, b, c, d];\n          var unique := set indices;\n          if |unique| == 4 {\n            var quad := [nums[a], nums[b], nums[c], nums[d]];\n            var sortedQuad := quad[..];\n            sortedQuad := sortedQuad.Sort();\n            res := res + {sortedQuad};\n          }\n          j := j + 1;\n        }\n        i := i + 1;\n      }\n    }\n    keyIdx := keyIdx + 1;\n  }\n\n  result := res;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 20.114,
+        "duration_formatted": "20.11s",
+        "tokens": {
+          "input": 565,
+          "output": 1289,
+          "total": 1854
+        },
+        "cost_usd": 0.011442,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:10:46.742977"
+      }
+    },
+    {
+      "file_path": "1-100q/23.py",
+      "code": "class Solution(object):\n\n    def mergeKLists(self, lists):\n        from heapq import heappush, heappop\n        heap = []\n        head = point = ListNode(0)\n        for element in lists:\n            if element:\n                heapq.heappush(heap, (element.val, element))\n        while heap:\n            value, node = heapq.heappop(heap)\n            head.next = ListNode(value)\n            head = head.next\n            node = node.next\n            if node:\n                heapq.heappush(heap, (node.val, node))\n        return point.next\n\nclass Solution(object):\n\n    def mergeKLists(self, lists):\n\n        def merge2Lists(l1, l2):\n            head = point = ListNode(0)\n            while l1 and l2:\n                if l1.val <= l2.val:\n                    point.next = ListNode(l1.val)\n                    l1 = l1.next\n                else:\n                    point.next = ListNode(l2.val)\n                    l2 = l2.next\n                point = point.next\n            if l1:\n                point.next = l1\n            else:\n                point.next = l2\n            return head.next\n        if not lists:\n            return lists\n        interval = 1\n        while interval < len(lists):\n            for index in range(0, len(lists) - interval, interval * 2):\n                lists[index] = merge2Lists(lists[index], lists[index + interval])\n            interval *= 2\n        return lists[0]",
+      "program_specification": "```dafny\n// Definition of singly-linked list node\nclass ListNode {\n  var val: int;\n  var next: ListNode?;\n\n  constructor(v: int, n: ListNode?)\n    ensures val == v && next == n\n  {\n    val := v;\n    next := n;\n  }\n}\n\n// Converts a linked list to a sequence of values\nfunction method ListToSeq(l: ListNode?): seq<int>\n{\n  if l == null then []\n  else [l.val] + ListToSeq(l.next)\n}\n\n// Checks if a sequence is sorted non-decreasingly\nfunction method Sorted(s: seq<int>): bool\n{\n  forall i, j :: 0 <= i < j < |s| ==> s[i] <= s[j]\n}\n\n// Merges two sorted sequences into a sorted sequence\nfunction method MergeSortedSeqs(a: seq<int>, b: seq<int>): seq<int>\n  requires Sorted(a) && Sorted(b)\n  ensures Sorted(MergeSortedSeqs(a, b))\n  ensures multiset(MergeSortedSeqs(a, b)) == multiset(a) + multiset(b)\n{\n  if |a| == 0 then b\n  else if |b| == 0 then a\n  else if a[0] <= b[0] then [a[0]] + MergeSortedSeqs(a[1..], b)\n  else [b[0]] + MergeSortedSeqs(a, b[1..])\n}\n\n// Merges a sequence of sorted sequences into a single sorted sequence\nfunction method MergeKSortedSeqs(lists: seq<seq<int>>): seq<int>\n  requires forall s :: s in lists ==> Sorted(s)\n  ensures Sorted(MergeKSortedSeqs(lists))\n  ensures multiset(MergeKSortedSeqs(lists)) == multiset(SeqFlatten(lists))\n{\n  if |lists| == 0 then []\n  else if |lists| == 1 then lists[0]\n  else MergeSortedSeqs(MergeKSortedSeqs(lists[..|lists|/2]), MergeKSortedSeqs(lists[|lists|/2..]))\n}\n\n// Flattens a sequence of sequences\nfunction method SeqFlatten(lists: seq<seq<int>>): seq<int>\n{\n  if |lists| == 0 then []\n  else lists[0] + SeqFlatten(lists[1..])\n}\n\n// Merges two sorted linked lists into a new sorted linked list\nmethod Merge2Lists(l1: ListNode?, l2: ListNode?) returns (head: ListNode?)\n  requires Sorted(ListToSeq(l1)) && Sorted(ListToSeq(l2))\n  ensures Sorted(ListToSeq(head))\n  ensures multiset(ListToSeq(head)) == multiset(ListToSeq(l1)) + multiset(ListToSeq(l2))\n{\n  var dummy := new ListNode(0, null);\n  var tail := dummy;\n  var a := l1;\n  var b := l2;\n  while a != null && b != null\n    invariant Sorted(ListToSeq(a))\n    invariant Sorted(ListToSeq(b))\n    invariant Sorted(ListToSeq(dummy.next))\n    invariant multiset(ListToSeq(dummy.next)) + multiset(ListToSeq(a)) + multiset(ListToSeq(b)) == multiset(ListToSeq(l1)) + multiset(ListToSeq(l2))\n    decreases |ListToSeq(a)| + |ListToSeq(b)|\n  {\n    if a.val <= b.val {\n      tail.next := new ListNode(a.val, null);\n      tail := tail.next;\n      a := a.next;\n    } else {\n      tail.next := new ListNode(b.val, null);\n      tail := tail.next;\n      b := b.next;\n    }\n  }\n  if a != null {\n    tail.next := a;\n  } else {\n    tail.next := b;\n  }\n  head := dummy.next;\n}\n\n// Merges k sorted linked lists into a single sorted linked list (divide and conquer)\nmethod MergeKLists(lists: array<ListNode?>) returns (result: ListNode?)\n  requires lists != null\n  requires forall i :: 0 <= i < lists.Length ==> Sorted(ListToSeq(lists[i]))\n  ensures Sorted(ListToSeq(result))\n  ensures multiset(ListToSeq(result)) == multiset(SeqFlatten(ListsToSeq(lists)))\n{\n  if lists.Length == 0 {\n    result := null;\n    return;\n  }\n  var interval := 1;\n  var n := lists.Length;\n  while interval < n\n    invariant 1 <= interval <= n\n    invariant forall i :: 0 <= i < n ==> Sorted(ListToSeq(lists[i]))\n    invariant forall i :: 0 <= i < n ==> multiset(ListToSeq(lists[i])) == multiset(Old(ListsToSeq(lists))[i])\n    decreases n - interval\n  {\n    var i := 0;\n    while i + interval < n\n      invariant 0 <= i <= n\n      invariant forall j :: 0 <= j < n ==> Sorted(ListToSeq(lists[j]))\n      decreases n - i\n    {\n      lists[i] := Merge2Lists(lists[i], lists[i + interval]);\n      i := i + interval * 2;\n    }\n    interval := interval * 2;\n  }\n  result := lists[0];\n}\n\n// Converts an array of ListNode? to a sequence of sequences of int\nfunction method ListsToSeq(lists: array<ListNode?>): seq<seq<int>>\n  requires lists != null\n{\n  if lists.Length == 0 then []\n  else [ListToSeq(lists[0])] + ListsToSeq(lists[1..])\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 15.313,
+        "duration_formatted": "15.31s",
+        "tokens": {
+          "input": 658,
+          "output": 1183,
+          "total": 1841
+        },
+        "cost_usd": 0.01078,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:11:12.058806"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1043.py",
+      "code": "class Solution(object):\n\n    def maxSumAfterPartitioning(self, A, K):\n        if not A:\n            return 0\n        N = len(A)\n        dp = [0] * (N + 1)\n        for index_i in range(N):\n            maxi = 0\n            for index_j in range(index_i, index_i - K, -1):\n                if index_j >= 0 and index_j < len(A):\n                    maxi = max(maxi, A[index_j])\n                    dp[index_i + 1] = max(dp[index_i + 1], maxi * (index_i - index_j + 1) + dp[index_j])\n        return dp[-1]",
+      "program_specification": "```dafny\nmethod MaxSumAfterPartitioning(A: seq<int>, K: nat) returns (result: int)\n  requires K > 0\n  ensures |A| == 0 ==> result == 0\n  ensures |A| > 0 ==> result == maxSumAfterPartitioningSpec(A, K)\n{\n  if |A| == 0 {\n    return 0;\n  }\n  var N := |A|;\n  var dp := new int[N + 1];\n  // dp[0] == 0 by default\n  var index_i: int := 0;\n  while index_i < N\n    invariant 0 <= index_i <= N\n    invariant dp[0] == 0\n    invariant forall i :: 0 <= i <= index_i ==> dp[i] == maxSumAfterPartitioningSpec(A[..i], K)\n    invariant forall i :: index_i < i <= N ==> dp[i] == 0\n  {\n    var maxi := 0;\n    var index_j: int := index_i;\n    while index_j >= index_i - K + 1 && index_j >= 0\n      invariant index_i - K <= index_j <= index_i\n      invariant 0 <= index_j + 1 <= N\n      invariant 0 <= index_i < N\n      invariant 0 <= maxi <= if index_j < |A| then max(A[..index_i+1]) else 0\n    {\n      if 0 <= index_j < |A| {\n        if A[index_j] > maxi {\n          maxi := A[index_j];\n        }\n        var length := index_i - index_j + 1;\n        var candidate := maxi * length + dp[index_j];\n        if candidate > dp[index_i + 1] {\n          dp[index_i + 1] := candidate;\n        }\n      }\n      index_j := index_j - 1;\n    }\n    index_i := index_i + 1;\n  }\n  result := dp[N];\n}\n\nfunction maxSumAfterPartitioningSpec(A: seq<int>, K: nat): int\n  requires K > 0\n{\n  if |A| == 0 then 0\n  else\n    var best := 0;\n    // Consider all possible last partitions of length l (1 <= l <= min(K, |A|))\n    best := max(\n      set l | 1 <= l <= if K < |A| then K else |A| ::\n        max(A[|A|-l..]) * l + maxSumAfterPartitioningSpec(A[..|A|-l], K)\n    );\n    best\n}\n\nfunction max(s: set<int>): int\n  requires |s| > 0\n{\n  if |s| == 1 then s[*]\n  else\n    var x := s[*];\n    var rest := s - {x};\n    var m := max(rest);\n    if x > m then x else m\n}\n\nfunction max(A: seq<int>): int\n  requires |A| > 0\n{\n  if |A| == 1 then A[0]\n  else\n    var m := max(A[1..]);\n    if A[0] > m then A[0] else m\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 13.407,
+        "duration_formatted": "13.41s",
+        "tokens": {
+          "input": 481,
+          "output": 677,
+          "total": 1158
+        },
+        "cost_usd": 0.006378,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:11:35.471200"
+      }
+    },
+    {
+      "file_path": "1000-1100q/1087.py",
+      "code": "class Solution(object):\n\n    def permute(self, S):\n        if not S:\n            return []\n        if '{' not in S:\n            return [S]\n        stack, stack2 = ([], [])\n        brace = 0\n        for char in S:\n            if char == '{':\n                brace = 1\n            elif char == '}':\n                if not stack:\n                    stack = stack2\n                else:\n                    new_stack = []\n                    for char in stack:\n                        for char2 in stack2:\n                            new_stack.append(char + char2)\n                    stack = new_stack\n                stack2 = []\n                brace = 2\n            elif char != ',':\n                if brace == 1:\n                    stack2.append(char)\n                elif brace == 2:\n                    stack = [c + char for c in stack]\n                    stack2 = []\n                else:\n                    stack.append(char)\n        stack.sort()\n        stack.sort(key=len)\n        return stack",
+      "program_specification": "```dafny\nmodule SolutionModule {\n\n  // Helper function: checks if a string contains a character\n  function method ContainsChar(s: seq<char>, c: char): bool\n    ensures ContainsChar(s, c) <==> (exists i :: 0 <= i < |s| && s[i] == c)\n  {\n    exists i :: 0 <= i < |s| && s[i] == c\n  }\n\n  // Helper function: sorts a sequence of strings lexicographically\n  function method LexSort(ss: seq<seq<char>>): seq<seq<char>>\n    decreases ss\n    ensures multiset(LexSort(ss)) == multiset(ss)\n    ensures |LexSort(ss)| == |ss|\n  {\n    if |ss| <= 1 then ss\n    else\n      var pivot := ss[0];\n      LexSort([s | s <- ss[1..], s < pivot]) +\n      [pivot] +\n      LexSort([s | s <- ss[1..], !(s < pivot)])\n  }\n\n  // Helper function: sorts a sequence of strings by length (stable)\n  function method LengthSort(ss: seq<seq<char>>): seq<seq<char>>\n    decreases ss\n    ensures multiset(LengthSort(ss)) == multiset(ss)\n    ensures |LengthSort(ss)| == |ss|\n  {\n    if |ss| <= 1 then ss\n    else\n      var pivot := ss[0];\n      LengthSort([s | s <- ss[1..], |s| < |pivot|]) +\n      [pivot] +\n      LengthSort([s | s <- ss[1..], |s| >= |pivot|])\n  }\n\n  // Main method: permute\n  method permute(S: seq<char>) returns (result: seq<seq<char>>)\n    requires true\n    ensures (|S| == 0) ==> (result == [])\n    ensures (!ContainsChar(S, '{')) ==> (result == [S])\n    // If S contains braces, result contains all possible expansions, sorted lex and by length\n  {\n    if |S| == 0 {\n      result := [];\n      return;\n    }\n    if !ContainsChar(S, '{') {\n      result := [S];\n      return;\n    }\n\n    var stack: seq<seq<char>> := [];\n    var stack2: seq<seq<char>> := [];\n    var brace: int := 0;\n    var i: int := 0;\n\n    while i < |S|\n      invariant 0 <= i <= |S|\n      invariant 0 <= brace <= 2\n      invariant stack != null && stack2 != null\n      // Invariant: stack and stack2 contain partial expansions up to S[..i]\n    {\n      var char := S[i];\n      if char == '{' {\n        brace := 1;\n      } else if char == '}' {\n        if |stack| == 0 {\n          stack := stack2;\n        } else {\n          var new_stack: seq<seq<char>> := [];\n          var j: int := 0;\n          while j < |stack|\n            invariant 0 <= j <= |stack|\n            invariant |new_stack| <= |stack| * (if |stack2| == 0 then 1 else |stack2|)\n          {\n            var k: int := 0;\n            while k < |stack2|\n              invariant 0 <= k <= |stack2|\n              invariant |new_stack| <= |stack| * (if |stack2| == 0 then 1 else |stack2|)\n            {\n              new_stack := new_stack + [stack[j] + stack2[k]];\n              k := k + 1;\n            }\n            j := j + 1;\n          }\n          stack := new_stack;\n        }\n        stack2 := [];\n        brace := 2;\n      } else if char != ',' {\n        if brace == 1 {\n          stack2 := stack2 + [[char]];\n        } else if brace == 2 {\n          var new_stack: seq<seq<char>> := [];\n          var j: int := 0;\n          while j < |stack|\n            invariant 0 <= j <= |stack|\n            invariant |new_stack| <= |stack|\n          {\n            new_stack := new_stack + [stack[j] + [char]];\n            j := j + 1;\n          }\n          stack := new_stack;\n          stack2 := [];\n        } else {\n          stack := stack + [[char]];\n        }\n      }\n      i := i + 1;\n    }\n\n    // Lexicographical sort\n    var sorted_stack := LexSort(stack);\n    // Sort by length (stable)\n    result := LengthSort(sorted_stack);\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 12.643,
+        "duration_formatted": "12.64s",
+        "tokens": {
+          "input": 535,
+          "output": 986,
+          "total": 1521
+        },
+        "cost_usd": 0.008958,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:11:58.118493"
+      }
+    },
+    {
+      "file_path": "1200-1300q/1277.py",
+      "code": "class Solution(object):\n\n    def countSquares(self, matrix):\n        p_arr = [[0 for i in range(len(matrix[0]))] for j in range(len(matrix))]\n        result = 0\n        for index_i in range(1, len(matrix)):\n            for index_j in range(1, len(matrix[0])):\n                if matrix[index_i][index_j] == 1:\n                    matrix[index_i][index_j] = min(matrix[index_i - 1][index_j - 1], min(matrix[index_i - 1][index_j], matrix[index_i][index_j - 1])) + 1\n        return sum([sum(x) for x in matrix])",
+      "program_specification": "```dafny\nmethod CountSquares(matrix: array2<int>) returns (result: int)\n  requires matrix != null\n  requires matrix.Height > 0 && matrix.Width > 0\n  requires forall i :: 0 <= i < matrix.Height ==> forall j :: 0 <= j < matrix.Width ==> matrix[i, j] == 0 || matrix[i, j] == 1\n  modifies matrix\n  ensures result == sumSquares(matrix[.., ..])\n{\n  var m := matrix.Height;\n  var n := matrix.Width;\n  result := 0;\n\n  // The algorithm modifies the matrix in-place, so we need to save the original values for the postcondition\n  var orig := new int[m][];\n  var i := 0;\n  while i < m\n    invariant 0 <= i <= m\n    invariant orig.Length == m\n    invariant forall k :: 0 <= k < i ==> orig[k].Length == n\n    invariant forall k :: 0 <= k < i ==> forall l :: 0 <= l < n ==> orig[k][l] == matrix[k, l] || orig[k][l] == 0 || orig[k][l] == 1\n  {\n    orig[i] := new int[n];\n    var j := 0;\n    while j < n\n      invariant 0 <= j <= n\n      invariant forall l :: 0 <= l < j ==> orig[i][l] == matrix[i, l] || orig[i][l] == 0 || orig[i][l] == 1\n    {\n      orig[i][j] := matrix[i, j];\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n\n  i := 1;\n  while i < m\n    invariant 1 <= i <= m\n    invariant forall ii :: 1 <= ii < i ==>\n      forall jj :: 1 <= jj < n ==>\n        matrix[ii, jj] >= 0\n    invariant forall ii :: 0 <= ii < m ==>\n      forall jj :: 0 <= jj < n ==>\n        matrix[ii, jj] >= 0\n    decreases m - i\n  {\n    var j := 1;\n    while j < n\n      invariant 1 <= j <= n\n      invariant forall jj :: 1 <= jj < j ==> matrix[i, jj] >= 0\n      decreases n - j\n    {\n      if matrix[i, j] == 1 {\n        var minVal := matrix[i - 1, j - 1];\n        if matrix[i - 1, j] < minVal {\n          minVal := matrix[i - 1, j];\n        }\n        if matrix[i, j - 1] < minVal {\n          minVal := matrix[i, j - 1];\n        }\n        matrix[i, j] := minVal + 1;\n      }\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n\n  // Sum all elements in the matrix\n  result := 0;\n  i := 0;\n  while i < m\n    invariant 0 <= i <= m\n    invariant result == sumRows(matrix, i)\n    decreases m - i\n  {\n    var j := 0;\n    while j < n\n      invariant 0 <= j <= n\n      invariant result == sumRows(matrix, i) + sumRow(matrix, i, j)\n      decreases n - j\n    {\n      result := result + matrix[i, j];\n      j := j + 1;\n    }\n    i := i + 1;\n  }\n}\n\n// Helper function: sum all elements in the matrix\nfunction sumSquares(matrix: array2<int>): int\n  requires matrix != null\n  requires matrix.Height > 0 && matrix.Width > 0\n{\n  var m := matrix.Height;\n  var n := matrix.Width;\n  sumRows(matrix, m)\n}\n\n// Helper function: sum all elements in the first 'rows' rows of the matrix\nfunction sumRows(matrix: array2<int>, rows: int): int\n  requires matrix != null\n  requires 0 <= rows <= matrix.Height\n{\n  if rows == 0 then 0\n  else sumRows(matrix, rows - 1) + sumRow(matrix, rows - 1, matrix.Width)\n}\n\n// Helper function: sum all elements in row 'row' up to column 'cols'\nfunction sumRow(matrix: array2<int>, row: int, cols: int): int\n  requires matrix != null\n  requires 0 <= row < matrix.Height\n  requires 0 <= cols <= matrix.Width\n{\n  if cols == 0 then 0\n  else sumRow(matrix, row, cols - 1) + matrix[row, cols - 1]\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 15.037,
+        "duration_formatted": "15.04s",
+        "tokens": {
+          "input": 479,
+          "output": 1005,
+          "total": 1484
+        },
+        "cost_usd": 0.008998,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:12:23.163674"
+      }
+    },
+    {
+      "file_path": "1200-1300q/1291.py",
+      "code": "class Solution(object):\n\n    def sequentialDigits(self, low, high):\n        result = []\n        start = int(str(low)[0])\n        for val in range(1, len(str(low))):\n            new_val = start % 10 + 1\n            start = start * 10 + new_val\n        if start > high:\n            return result\n        result.append(start)\n        while result[-1] <= high:\n            temp = str(result[-1])\n            next_elem = int(temp[-1]) + 1\n            if next_elem > 9:\n                next_greater = 0\n                for index in range(len(temp) + 1):\n                    next_greater = next_greater * 10 + (index + 1)\n            else:\n                next_greater = int(temp[1:]) * 10 + next_elem\n            if next_greater <= high:\n                result.append(next_greater)\n            else:\n                break\n        final_result = []\n        for val in result:\n            if '0' not in str(val) and val >= low:\n                final_result.append(val)\n        return final_result",
+      "program_specification": "```dafny\n// Helper function: returns true if n is a sequential digits number\nfunction IsSequentialDigits(n: nat): bool\n  decreases n\n{\n  if n < 10 then false\n  else\n    var s := n.ToString();\n    (forall i :: 0 <= i < |s|-1 ==> s[i+1] as int == (s[i] as int) + 1)\n    && (forall i :: 0 <= i < |s| ==> s[i] != '0')\n}\n\n// Helper function: returns the number of digits in n\nfunction NumDigits(n: nat): nat\n{\n  if n == 0 then 1 else |n.ToString()|\n}\n\n// Helper function: returns the first digit of n\nfunction FirstDigit(n: nat): nat\n  requires n > 0\n{\n  var s := n.ToString();\n  s[0] as int - '0' as int\n}\n\n// Helper function: builds the smallest sequential number with given length and starting digit\nfunction BuildSequential(start: nat, length: nat): nat\n  requires 1 <= start <= 9\n  requires 1 <= length <= 10 - start + 1\n{\n  if length == 1 then start\n  else start * 10^(length-1) + BuildSequential(start+1, length-1)\n}\n\n// Helper function: returns all sequential digits numbers in [low, high]\nfunction AllSequentialDigitsInRange(low: nat, high: nat): seq<nat>\n{\n  var res := [];\n  for len := NumDigits(low) to NumDigits(high)\n    for start := 1 to 10 - len\n      var num := BuildSequential(start, len);\n      if low <= num <= high then\n        res := res + [num];\n  res\n}\n\nmethod SequentialDigits(low: nat, high: nat) returns (final_result: seq<nat>)\n  requires 1 <= low <= high <= 987654321\n  ensures forall x :: 0 <= x < |final_result| ==> low <= final_result[x] <= high && IsSequentialDigits(final_result[x])\n  ensures forall x :: low <= x <= high && IsSequentialDigits(x) ==> x in final_result\n  ensures final_result == AllSequentialDigitsInRange(low, high)\n{\n  var result := new seq<nat>[];\n  var lowLen := NumDigits(low);\n  var highLen := NumDigits(high);\n\n  // Build all sequential numbers of lengths from lowLen to highLen\n  var len := lowLen;\n  while len <= highLen\n    invariant lowLen <= len <= highLen + 1\n    invariant forall i :: 0 <= i < |result| ==> low <= result[i] <= high && IsSequentialDigits(result[i])\n    decreases highLen - len + 1\n  {\n    var start := 1;\n    while start <= 10 - len\n      invariant 1 <= start <= 11 - len\n      invariant forall i :: 0 <= i < |result| ==> low <= result[i] <= high && IsSequentialDigits(result[i])\n      decreases 10 - len - start + 1\n    {\n      var num := BuildSequential(start, len);\n      if low <= num <= high {\n        result := result + [num];\n      }\n      start := start + 1;\n    }\n    len := len + 1;\n  }\n  final_result := result;\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 12.632,
+        "duration_formatted": "12.63s",
+        "tokens": {
+          "input": 572,
+          "output": 716,
+          "total": 1288
+        },
+        "cost_usd": 0.006872,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:12:45.799507"
+      }
+    },
+    {
+      "file_path": "Python/3sum-closest.py",
+      "code": "class Solution(object):\n\n    def threeSumClosest(self, nums, target):\n        result, min_diff = (0, float('inf'))\n        nums.sort()\n        for i in reversed(xrange(2, len(nums))):\n            if i + 1 < len(nums) and nums[i] == nums[i + 1]:\n                continue\n            left, right = (0, i - 1)\n            while left < right:\n                total = nums[left] + nums[right] + nums[i]\n                if total < target:\n                    left += 1\n                elif total > target:\n                    right -= 1\n                else:\n                    return target\n                if abs(total - target) < min_diff:\n                    min_diff = abs(total - target)\n                    result = total\n        return result",
+      "program_specification": "```dafny\nmethod ThreeSumClosest(nums: array<int>, target: int) returns (result: int)\n  requires nums != null && nums.Length >= 3\n  ensures\n    // result is the sum of three distinct elements in nums\n    exists i, j, k :: 0 <= i < j < k < nums.Length && result == nums[i] + nums[j] + nums[k]\n  ensures\n    // result is the sum closest to target among all possible triplets\n    forall i, j, k :: 0 <= i < j < k < nums.Length ==>\n      abs(nums[i] + nums[j] + nums[k] - target) >= abs(result - target)\n{\n  var n := nums.Length;\n  // Make a copy to avoid mutating input\n  var arr := new int[n];\n  var idx := 0;\n  while idx < n\n    invariant 0 <= idx <= n\n    invariant forall j :: 0 <= j < idx ==> arr[j] == nums[j]\n  {\n    arr[idx] := nums[idx];\n    idx := idx + 1;\n  }\n\n  // Sort arr in non-decreasing order\n  Sort(arr);\n\n  var minDiff := int.Max;\n  var foundResult := 0;\n  var i := n - 1;\n  while i >= 2\n    invariant 2 <= n\n    invariant -1 <= i <= n - 1\n    invariant forall ii :: i < ii <= n - 1 ==>\n      forall jj, kk :: 0 <= jj < kk < ii ==>\n        abs(arr[jj] + arr[kk] + arr[ii] - target) >= minDiff\n    decreases i\n  {\n    if i + 1 < n && arr[i] == arr[i + 1] {\n      i := i - 1;\n      continue;\n    }\n    var left := 0;\n    var right := i - 1;\n    while left < right\n      invariant 0 <= left <= right + 1 <= i\n      invariant forall l, r :: 0 <= l < left && l < r < i ==>\n        abs(arr[l] + arr[r] + arr[i] - target) >= minDiff\n      invariant forall r :: right < r < i ==>\n        forall l :: 0 <= l < r ==>\n          abs(arr[l] + arr[r] + arr[i] - target) >= minDiff\n      decreases right - left\n    {\n      var total := arr[left] + arr[right] + arr[i];\n      if total < target {\n        left := left + 1;\n      } else if total > target {\n        right := right - 1;\n      } else {\n        result := target;\n        return;\n      }\n      if abs(total - target) < minDiff {\n        minDiff := abs(total - target);\n        foundResult := total;\n      }\n    }\n    i := i - 1;\n  }\n  result := foundResult;\n}\n\n// Helper: In-place insertion sort for array<int>\nmethod Sort(a: array<int>)\n  requires a != null\n  modifies a\n  ensures forall i, j :: 0 <= i < j < a.Length ==> a[i] <= a[j]\n  ensures multiset(a[..]) == multiset(old(a[..]))\n{\n  var n := a.Length;\n  var i := 1;\n  while i < n\n    invariant 1 <= i <= n\n    invariant forall k :: 0 <= k < i - 1 ==> a[k] <= a[k + 1]\n    invariant multiset(a[..]) == multiset(old(a[..]))\n  {\n    var j := i;\n    while j > 0 && a[j - 1] > a[j]\n      invariant 0 <= j <= i\n      invariant forall k :: 0 <= k < j - 1 ==> a[k] <= a[k + 1]\n      invariant multiset(a[..]) == multiset(old(a[..]))\n      decreases j\n    {\n      var tmp := a[j - 1];\n      a[j - 1] := a[j];\n      a[j] := tmp;\n      j := j - 1;\n    }\n    i := i + 1;\n  }\n}\n\n// Helper: absolute value\nfunction abs(x: int): int\n{\n  if x < 0 then -x else x\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 45.114,
+        "duration_formatted": "45.11s",
+        "tokens": {
+          "input": 502,
+          "output": 915,
+          "total": 1417
+        },
+        "cost_usd": 0.008324,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:13:40.918651"
+      }
+    },
+    {
+      "file_path": "Python/abbreviating-the-product-of-a-range.py",
+      "code": "import math\n\nclass Solution(object):\n\n    def abbreviateProduct(self, left, right):\n        PREFIX_LEN = SUFFIX_LEN = 5\n        MOD = 10 ** (PREFIX_LEN + SUFFIX_LEN)\n        curr, zeros = (1, 0)\n        abbr = False\n        for i in xrange(left, right + 1):\n            curr *= i\n            while not curr % 10:\n                curr //= 10\n                zeros += 1\n            q, curr = divmod(curr, MOD)\n            if q:\n                abbr = True\n        if not abbr:\n            return '%se%s' % (curr, zeros)\n        decimal = reduce(lambda x, y: (x + y) % 1, (math.log10(i) for i in xrange(left, right + 1)))\n        prefix = str(int(10 ** (decimal + (PREFIX_LEN - 1))))\n        suffix = str(curr % 10 ** SUFFIX_LEN).zfill(SUFFIX_LEN)\n        return '%s...%se%s' % (prefix, suffix, zeros)",
+      "program_specification": "```dafny\nimport opened Math\n\nclass Solution {\n  const PREFIX_LEN: nat := 5;\n  const SUFFIX_LEN: nat := 5;\n  const MOD: nat := 10000000000; // 10^(PREFIX_LEN + SUFFIX_LEN)\n\n  method AbbreviateProduct(left: nat, right: nat) returns (res: string)\n    requires left <= right\n    ensures\n      // If the product has no abbreviation, the result is of the form \"<digits>e<zeros>\"\n      (forall i :: left <= i <= right ==> i > 0) ==>\n        (if not AbbreviationNeeded(left, right) then\n          var prod := Product(left, right);\n          var zeros := TrailingZeros(prod);\n          res == ProductToString(prod, zeros)\n        else\n          true // If abbreviated, see below\n        )\n    ensures\n      // If the product is abbreviated, the result is of the form \"<prefix>...<suffix>e<zeros>\"\n      (forall i :: left <= i <= right ==> i > 0) ==>\n        (if AbbreviationNeeded(left, right) then\n          var prod := Product(left, right);\n          var zeros := TrailingZeros(prod);\n          var prefix := ComputePrefix(left, right, PREFIX_LEN);\n          var suffix := ComputeSuffix(prod, SUFFIX_LEN);\n          res == prefix + \"...\" + suffix + \"e\" + zeros.ToString()\n        else\n          true\n        )\n  {\n    var curr: nat := 1;\n    var zeros: nat := 0;\n    var abbr: bool := false;\n    var i: nat := left;\n    while i <= right\n      invariant left <= i <= right + 1\n      invariant curr > 0\n      invariant zeros >= 0\n      invariant abbr ==> curr < MOD\n    {\n      curr := curr * i;\n      while curr % 10 == 0 && curr > 0\n        invariant curr >= 0\n        invariant zeros >= 0\n      {\n        curr := curr / 10;\n        zeros := zeros + 1;\n      }\n      var q := curr / MOD;\n      curr := curr % MOD;\n      if q > 0 {\n        abbr := true;\n      }\n      i := i + 1;\n    }\n    if !abbr {\n      res := curr.ToString() + \"e\" + zeros.ToString();\n      return;\n    }\n    // Compute prefix using logs\n    var decimal: real := 0.0;\n    i := left;\n    while i <= right\n      invariant left <= i <= right + 1\n      invariant decimal >= 0.0\n    {\n      decimal := (decimal + Log10(i as real)) % 1.0;\n      i := i + 1;\n    }\n    var prefixVal: real := Pow(10.0, decimal + (PREFIX_LEN as real - 1.0));\n    var prefix: string := (prefixVal.Floor as int).ToString();\n    var suffixNum := curr % (Pow(10, SUFFIX_LEN) as nat);\n    var suffix := SuffixPad(suffixNum, SUFFIX_LEN);\n    res := prefix + \"...\" + suffix + \"e\" + zeros.ToString();\n  }\n\n  // Helper: Compute the product of all integers in [left, right]\n  function Product(left: nat, right: nat): nat\n    requires left <= right\n    decreases right - left\n  {\n    if left > right then 1\n    else left * Product(left + 1, right)\n  }\n\n  // Helper: Count trailing zeros in n\n  function TrailingZeros(n: nat): nat\n    decreases n\n  {\n    if n == 0 then 0\n    else if n % 10 == 0 then 1 + TrailingZeros(n / 10)\n    else 0\n  }\n\n  // Helper: Return string representation \"<digits>e<zeros>\"\n  function ProductToString(prod: nat, zeros: nat): string\n  {\n    prod.ToString() + \"e\" + zeros.ToString()\n  }\n\n  // Helper: Determine if abbreviation is needed (i.e., product exceeds MOD at any step)\n  function AbbreviationNeeded(left: nat, right: nat): bool\n    decreases right - left\n  {\n    // Simulate the process: if at any step, product >= MOD, abbreviation is needed\n    AbbreviationNeededAux(left, right, 1)\n  }\n\n  function AbbreviationNeededAux(i: nat, right: nat, curr: nat): bool\n    decreases right - i\n  {\n    if i > right then false\n    else\n      var next := curr * i;\n      var reduced := RemoveTrailingZeros(next);\n      if reduced >= MOD then true\n      else AbbreviationNeededAux(i + 1, right, reduced % MOD)\n  }\n\n  // Helper: Remove all trailing zeros from n\n  function RemoveTrailingZeros(n: nat): nat\n    decreases n\n  {\n    if n == 0 then 0\n    else if n % 10 == 0 then RemoveTrailingZeros(n / 10)\n    else n\n  }\n\n  // Helper: Compute the prefix as in the Python code\n  function ComputePrefix(left: nat, right: nat, prefixLen: nat): string\n    requires left <= right\n  {\n    var decimal := ComputeDecimalSum(left, right);\n    var prefixVal := Pow(10.0, decimal + (prefixLen as real - 1.0));\n    (prefixVal.Floor as int).ToString()\n  }\n\n  // Helper: Compute the sum of logs mod 1\n  function ComputeDecimalSum(left: nat, right: nat): real\n    requires left <= right\n    decreases right - left\n  {\n    if left > right then 0.0\n    else (Log10(left as real) + ComputeDecimalSum(left + 1, right)) % 1.0\n  }\n\n  // Helper: Compute the suffix, zero-padded to SUFFIX_LEN\n  function ComputeSuffix(prod: nat, suffixLen: nat): string\n  {\n    SuffixPad(prod % (Pow(10, suffixLen) as nat), suffixLen)\n  }\n\n  // Helper: Pad a number with leading zeros to length len\n  function SuffixPad(n: nat, len: nat): string\n    decreases len\n  {\n    if |n.ToString()| >= len then n.ToString()\n    else \"0\" + SuffixPad(n, len - 1)\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 19.802,
+        "duration_formatted": "19.80s",
+        "tokens": {
+          "input": 566,
+          "output": 1380,
+          "total": 1946
+        },
+        "cost_usd": 0.012172,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:14:10.724882"
+      }
+    },
+    {
+      "file_path": "Python/add-binary.py",
+      "code": "class Solution(object):\n\n    def addBinary(self, a, b):\n        result, carry, val = ('', 0, 0)\n        for i in xrange(max(len(a), len(b))):\n            val = carry\n            if i < len(a):\n                val += int(a[-(i + 1)])\n            if i < len(b):\n                val += int(b[-(i + 1)])\n            carry, val = divmod(val, 2)\n            result += str(val)\n        if carry:\n            result += str(carry)\n        return result[::-1]\nfrom itertools import izip_longest\n\nclass Solution2(object):\n\n    def addBinary(self, a, b):\n        result = ''\n        carry = 0\n        for x, y in izip_longest(reversed(a), reversed(b), fillvalue='0'):\n            carry, remainder = divmod(int(x) + int(y) + carry, 2)\n            result += str(remainder)\n        if carry:\n            result += str(carry)\n        return result[::-1]",
+      "program_specification": "```dafny\n// Helper function: Converts a binary string to its integer value\nfunction method BinStrToInt(s: seq<char>): nat\n  requires forall c :: c in s ==> c == '0' || c == '1'\n  decreases s\n{\n  if |s| == 0 then 0\n  else 2 * BinStrToInt(s[..|s|-1]) + if s[|s|-1] == '1' then 1 else 0\n}\n\n// Helper function: Converts a non-negative integer to its binary string representation (no leading zeros, except for \"0\")\nfunction method IntToBinStr(n: nat): seq<char>\n  decreases n\n{\n  if n == 0 then ['0']\n  else\n    var s := IntToBinStr(n / 2);\n    if n / 2 == 0 then\n      [if n % 2 == 1 then '1' else '0']\n    else\n      s + [if n % 2 == 1 then '1' else '0']\n}\n\n// Helper function: Removes leading zeros from a binary string, except for \"0\"\nfunction method RemoveLeadingZeros(s: seq<char>): seq<char>\n  decreases s\n{\n  if |s| == 0 then ['0']\n  else if |s| == 1 then s\n  else if s[0] == '0' then RemoveLeadingZeros(s[1..])\n  else s\n}\n\n// Main method: Adds two binary strings and returns their sum as a binary string\nmethod AddBinary(a: seq<char>, b: seq<char>) returns (res: seq<char>)\n  requires forall c :: c in a ==> c == '0' || c == '1'\n  requires forall c :: c in b ==> c == '0' || c == '1'\n  ensures BinStrToInt(res) == BinStrToInt(a) + BinStrToInt(b)\n  ensures forall c :: c in res ==> c == '0' || c == '1'\n  ensures RemoveLeadingZeros(res) == res // no leading zeros except for \"0\"\n{\n  var i: int := 0;\n  var carry: int := 0;\n  var n: int := |a|;\n  var m: int := |b|;\n  var result: seq<char> := [];\n\n  while i < n || i < m\n    invariant 0 <= i <= n || i <= m\n    invariant 0 <= carry <= 1\n    invariant |result| == i\n    invariant forall c :: c in result ==> c == '0' || c == '1'\n    invariant BinStrToInt(result[..]) + (if i < n || i < m then (BinStrToInt(a[..max(0, n-i)]) + BinStrToInt(b[..max(0, m-i)]) + carry * (1 << i)) else 0)\n              == BinStrToInt(a) + BinStrToInt(b)\n  {\n    var val: int := carry;\n    if i < n {\n      if a[n - i - 1] == '1' {\n        val := val + 1;\n      }\n    }\n    if i < m {\n      if b[m - i - 1] == '1' {\n        val := val + 1;\n      }\n    }\n    carry := val / 2;\n    var digit: char := if val % 2 == 1 then '1' else '0';\n    result := result + [digit];\n    i := i + 1;\n  }\n  if carry != 0 {\n    result := result + ['1'];\n  }\n  // Reverse the result to get the correct order\n  var rev: seq<char> := [];\n  var j: int := |result| - 1;\n  while j >= 0\n    invariant -1 <= j < |result|\n    invariant |rev| == |result| - 1 - j\n    invariant rev == result[|result|-1..|result|-1-(|rev|-1):-1]\n  {\n    rev := rev + [result[j]];\n    j := j - 1;\n  }\n  // Remove leading zeros except for \"0\"\n  res := RemoveLeadingZeros(rev);\n}\n\n// Alternative method: Adds two binary strings using \"zip longest\" approach\nmethod AddBinaryZipLongest(a: seq<char>, b: seq<char>) returns (res: seq<char>)\n  requires forall c :: c in a ==> c == '0' || c == '1'\n  requires forall c :: c in b ==> c == '0' || c == '1'\n  ensures BinStrToInt(res) == BinStrToInt(a) + BinStrToInt(b)\n  ensures forall c :: c in res ==> c == '0' || c == '1'\n  ensures RemoveLeadingZeros(res) == res // no leading zeros except for \"0\"\n{\n  var n: int := |a|;\n  var m: int := |b|;\n  var i: int := 0;\n  var carry: int := 0;\n  var result: seq<char> := [];\n\n  while i < n || i < m\n    invariant 0 <= i <= n || i <= m\n    invariant 0 <= carry <= 1\n    invariant |result| == i\n    invariant forall c :: c in result ==> c == '0' || c == '1'\n    invariant BinStrToInt(result[..]) + (if i < n || i < m then (BinStrToInt(a[..max(0, n-i)]) + BinStrToInt(b[..max(0, m-i)]) + carry * (1 << i)) else 0)\n              == BinStrToInt(a) + BinStrToInt(b)\n  {\n    var x: char := if i < n then a[n - i - 1] else '0';\n    var y: char := if i < m then b[m - i - 1] else '0';\n    var sum: int := (if x == '1' then 1 else 0) + (if y == '1' then 1 else 0) + carry;\n    carry := sum / 2;\n    var remainder: char := if sum % 2 == 1 then '1' else '0';\n    result := result + [remainder];\n    i := i + 1;\n  }\n  if carry != 0 {\n    result := result + ['1'];\n  }\n  // Reverse the result to get the correct order\n  var rev: seq<char> := [];\n  var j: int := |result| - 1;\n  while j >= 0\n    invariant -1 <= j < |result|\n    invariant |rev| == |result| - 1 - j\n    invariant rev == result[|result|-1..|result|-1-(|rev|-1):-1]\n  {\n    rev := rev + [result[j]];\n    j := j - 1;\n  }\n  // Remove leading zeros except for \"0\"\n  res := RemoveLeadingZeros(rev);\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 17.525,
+        "duration_formatted": "17.53s",
+        "tokens": {
+          "input": 558,
+          "output": 1495,
+          "total": 2053
+        },
+        "cost_usd": 0.013076,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:14:38.260953"
+      }
+    },
+    {
+      "file_path": "Python/add-edges-to-make-degrees-of-all-nodes-even.py",
+      "code": "class Solution(object):\n\n    def isPossible(self, n, edges):\n        adj = [set() for _ in xrange(n)]\n        for u, v in edges:\n            adj[u - 1].add(v - 1)\n            adj[v - 1].add(u - 1)\n        odds = [u for u in xrange(n) if len(adj[u]) % 2]\n        if len(odds) == 0:\n            return True\n        if len(odds) == 2:\n            return any((odds[0] not in adj[u] and odds[1] not in adj[u] for u in range(n)))\n        if len(odds) == 4:\n            return odds[0] not in adj[odds[1]] and odds[2] not in adj[odds[3]] or (odds[0] not in adj[odds[2]] and odds[1] not in adj[odds[3]]) or (odds[0] not in adj[odds[3]] and odds[1] not in adj[odds[2]])\n        return False",
+      "program_specification": "```dafny\nmodule SolutionModule {\n\n  // Helper function: returns true if u and v are adjacent in adj\n  function IsAdjacent(adj: seq<set<int>>, u: int, v: int): bool\n    requires 0 <= u < |adj|\n    requires 0 <= v < |adj|\n  {\n    v in adj[u]\n  }\n\n  // Helper function: returns the set of vertices with odd degree\n  function OddDegreeVertices(adj: seq<set<int>>): set<int>\n    requires forall s :: s in adj ==> forall x :: 0 <= x < |adj| ==> x in s ==> 0 <= x < |adj|\n  {\n    set u | 0 <= u < |adj| && |adj[u]| % 2 == 1\n  }\n\n  // Build adjacency list from edge list\n  method BuildAdj(n: nat, edges: seq<seq<int>>) returns (adj: seq<set<int>>)\n    requires forall e :: e in edges ==> |e| == 2 && 1 <= e[0] <= n && 1 <= e[1] <= n\n    ensures |adj| == n\n    ensures forall u :: 0 <= u < n ==> forall v :: 0 <= v < n ==> (v in adj[u]) <==> (exists e :: e in edges && ((e[0] == u+1 && e[1] == v+1) || (e[1] == u+1 && e[0] == v+1)))\n  {\n    adj := [];\n    var i := 0;\n    while i < n\n      invariant 0 <= i <= n\n      invariant |adj| == i\n    {\n      adj := adj + [set []];\n      i := i + 1;\n    }\n    var j := 0;\n    while j < |edges|\n      invariant 0 <= j <= |edges|\n      invariant |adj| == n\n      invariant forall k :: 0 <= k < n ==> forall v :: v in adj[k] ==> 0 <= v < n\n    {\n      var u := edges[j][0] - 1;\n      var v := edges[j][1] - 1;\n      adj[u] := adj[u] + {v};\n      adj[v] := adj[v] + {u};\n      j := j + 1;\n    }\n  }\n\n  method isPossible(n: nat, edges: seq<seq<int>>) returns (possible: bool)\n    requires n > 0\n    requires forall e :: e in edges ==> |e| == 2 && 1 <= e[0] <= n && 1 <= e[1] <= n\n    ensures possible <==>\n      // There exists a way to add at most two edges (possibly none) to make all degrees even\n      (exists addEdges: set<(int,int)> ::\n        |addEdges| <= 2 &&\n        forall (u,v) :: (u,v) in addEdges ==> 0 <= u < n && 0 <= v < n && u != v &&\n          (forall e :: e in edges ==> !((e[0] == u+1 && e[1] == v+1) || (e[1] == u+1 && e[0] == v+1))) &&\n        var adj := BuildAdjSeq(n, edges, addEdges);\n        OddDegreeVertices(adj) == {}\n      )\n  {\n    var adj := BuildAdjSeq(n, edges, {});\n    var odds := [];\n    var u := 0;\n    while u < n\n      invariant 0 <= u <= n\n      invariant odds == [v | v := 0 .. u-1, |adj[v]| % 2 == 1]\n    {\n      if |adj[u]| % 2 == 1 {\n        odds := odds + [u];\n      }\n      u := u + 1;\n    }\n    if |odds| == 0 {\n      possible := true;\n      return;\n    }\n    if |odds| == 2 {\n      // Try to add an edge between the two odd degree vertices, or connect each to a third vertex\n      var found := false;\n      var x := odds[0];\n      var y := odds[1];\n      // Try to add edge (x, y) if not already present\n      if !(y in adj[x]) {\n        found := true;\n      } else {\n        // Try to find a third vertex z not adjacent to x and y\n        var z := 0;\n        while z < n\n          invariant 0 <= z <= n\n          invariant !found ==> forall k :: 0 <= k < z ==> (k in adj[x] || k in adj[y] || k == x || k == y)\n        {\n          if z != x && z != y && !(z in adj[x]) && !(z in adj[y]) {\n            found := true;\n            break;\n          }\n          z := z + 1;\n        }\n      }\n      possible := found;\n      return;\n    }\n    if |odds| == 4 {\n      // Try all three pairings\n      var a := odds[0];\n      var b := odds[1];\n      var c := odds[2];\n      var d := odds[3];\n      if (!(b in adj[a]) && !(d in adj[c])) {\n        possible := true;\n        return;\n      }\n      if (!(c in adj[a]) && !(d in adj[b])) {\n        possible := true;\n        return;\n      }\n      if (!(d in adj[a]) && !(c in adj[b])) {\n        possible := true;\n        return;\n      }\n      possible := false;\n      return;\n    }\n    possible := false;\n  }\n\n  // Helper function: builds adjacency list from edges and additional edges\n  function BuildAdjSeq(n: nat, edges: seq<seq<int>>, addEdges: set<(int,int)>): seq<set<int>>\n    requires n > 0\n    requires forall e :: e in edges ==> |e| == 2 && 1 <= e[0] <= n && 1 <= e[1] <= n\n    requires forall p :: p in addEdges ==> 0 <= p.0 < n && 0 <= p.1 < n && p.0 != p.1\n  {\n    var base := [set [] | i := 0 .. n-1];\n    var adj := base;\n    // Add original edges\n    adj := AddEdges(adj, edges);\n    // Add additional edges\n    adj := AddEdgePairs(adj, addEdges);\n    adj\n  }\n\n  // Helper function: adds edges from edge list to adjacency list\n  function AddEdges(adj: seq<set<int>>, edges: seq<seq<int>>): seq<set<int>>\n    requires |adj| > 0\n    requires forall e :: e in edges ==> |e| == 2 && 0 <= e[0]-1 < |adj| && 0 <= e[1]-1 < |adj|\n  {\n    if |edges| == 0 then adj\n    else\n      var u := edges[0][0] - 1;\n      var v := edges[0][1] - 1;\n      AddEdges(adj[..u] + [adj[u] + {v}] + adj[u+1..], edges[1..])\n        [v := adj[v] + {u}]\n  }\n\n  // Helper function: adds edges from set of pairs to adjacency list\n  function AddEdgePairs(adj: seq<set<int>>, addEdges: set<(int,int)>): seq<set<int>>\n    requires |adj| > 0\n    requires forall p :: p in addEdges ==> 0 <= p.0 < |adj| && 0 <= p.1 < |adj| && p.0 != p.1\n  {\n    if |addEdges| == 0 then adj\n    else\n      var p: (int,int) :| p in addEdges;\n      var u := p.0;\n      var v := p.1;\n      AddEdgePairs(adj[..u] + [adj[u] + {v}] + adj[u+1..][..v] + [adj[v] + {u}] + adj[v+1..], addEdges - {p})\n  }\n}\n```",
+      "spec_type": "transformed",
+      "transformation_type": "remove_docstrings",
+      "usage_stats": {
+        "duration_seconds": 33.093,
+        "duration_formatted": "33.09s",
+        "tokens": {
+          "input": 579,
+          "output": 1760,
+          "total": 2339
+        },
+        "cost_usd": 0.015238,
+        "model": "gpt-4.1",
+        "timestamp": "2025-08-15T11:15:21.359060"
+      }
+    }
+  ]
+}
