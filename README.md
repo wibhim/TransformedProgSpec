@@ -1,5 +1,4 @@
 # Research Project - Master of Compter Science
-# The University of Melbourne
 
 This repository contains a Master of Computer Science Research Project, titled:
 
