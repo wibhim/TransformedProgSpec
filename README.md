@@ -12,7 +12,7 @@ Student ID: 1529970
 
 #
 
-This repository represent a thesis submitted in partial fulfillment for the
+This repository used for the thesis submitted in partial fulfillment for the
  degree of Master of Computer Science in:
  
  School of Computing and Information Systems, 
