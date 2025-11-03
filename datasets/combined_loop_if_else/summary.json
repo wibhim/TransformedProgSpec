@@ -1,0 +1,17 @@
+{
+  "total_programs": 500,
+  "programs_with_any_if": 278,
+  "programs_with_loops": 230,
+  "programs_with_both": 177,
+  "notes": {
+    "if_definition": "Any ast.If counts (including only-if, elif, and if-else).",
+    "loops_definition": "Any ast.For or ast.While counts.",
+    "compat": "filtered_if_else.json now contains ANY if (not just if-else)."
+  },
+  "output_dir": "C:\\Users\\Wibhi Miasa\\Documents\\Research Project\\Prototype\\datasets\\combined_filtered_2",
+  "output_files": {
+    "if_else": "datasets\\combined_filtered_2\\filtered_if_else.json",
+    "loops": "datasets\\combined_filtered_2\\filtered_loops.json",
+    "both": "datasets\\combined_filtered_2\\filtered_if_else_and_loops.json"
+  }
+}
