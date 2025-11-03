@@ -4,7 +4,8 @@ Note: This transformation is tricky with AST as it's more about syntax than stru
 """
 
 import re
-from transformation.base import BaseTransformer
+import ast
+from src.transformation.base import BaseTransformer
 
 class ReplaceParenthesesTransformer(BaseTransformer):
     """Transformer that replaces parentheses with spaces."""
@@ -14,36 +15,34 @@ class ReplaceParenthesesTransformer(BaseTransformer):
         self.transformation_name = "replace_parentheses"
     
     def transform(self, code_string):
-        """Override the transform method for direct string manipulation.
-        
-        This can't be easily done with AST since parentheses are part of the syntax.
-        
-        Args:
-            code_string: Original Python code as a string
-            
-        Returns:
-            Transformed code with parentheses replaced by spaces
-        """
+        """Override the transform method to remove all parentheses from the code string."""
         try:
-            # Replace parentheses with spaces, but be careful with syntax
-            # This is a simplified approach that will likely break valid Python syntax
-            
-            # Strategy: replace () with spaces but keep minimal function call syntax
-            def replace_paren(match):
-                # Count the number of characters and replace with same number of spaces
-                return ' ' * len(match.group(0))
-            
-            # First, handle the easy cases - empty parentheses
-            modified_code = re.sub(r'\(\s*\)', '  ', code_string)
-            
-            # Now handle the more complex cases
-            # This is extremely simplified and will likely break syntax
-            modified_code = re.sub(r'\(([^()]*)\)', r' \1 ', modified_code)
-            
+            # Remove all '(' and ')' characters from the code string
+            modified_code = code_string.replace('(', '').replace(')', '')
             return modified_code
         except Exception as e:
             print(f"Error in {self.transformation_name} transformation: {str(e)}")
             return code_string
+    
+    def visit(self, node):
+        """Override the visit method to handle AST nodes."""
+        # First use the standard visitor pattern to traverse the AST
+        node = super().visit(node)
+        
+        # Then, after getting the AST back, convert it to source code,
+        # apply our string-based transformation, and parse it back to AST
+        try:
+            # Convert the AST to source code
+            code = ast.unparse(node)
+            
+            # Apply our string transformation to remove parentheses
+            transformed_code = self.transform(code)
+            
+            # Parse the transformed code back to an AST
+            return ast.parse(transformed_code)
+        except Exception as e:
+            print(f"Error in {self.transformation_name} AST transformation: {str(e)}")
+            return node
     
     def describe(self):
         return "Replaces parentheses with spaces (warning: likely breaks syntax)"

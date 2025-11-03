@@ -16,6 +16,10 @@ def pipeline_transform(code, transformation_names=None, include_core=True, verbo
     import ast
     import astor
     from .transforms import TRANSFORMERS
+    try:
+        from .transforms import STRING_TRANSFORMERS
+    except Exception:
+        STRING_TRANSFORMERS = set()
     from .transforms.control_flow import ControlFlowSimplifier
     from .transforms.variable_naming import VariableRenamer
     from .transforms.expression import ExpressionDecomposer
@@ -30,7 +34,8 @@ def pipeline_transform(code, transformation_names=None, include_core=True, verbo
         tree = ast.parse(code)
         
         # Build the list of transformers
-        transformers = []
+        ast_transformers = []
+        string_transformers = []  # store names; instantiate later
         
         # Add core transformers if requested
         if include_core:
@@ -41,40 +46,61 @@ def pipeline_transform(code, transformation_names=None, include_core=True, verbo
                 ExpressionDecomposer(verbose=verbose),  # Decompose expressions
                 VariableRenamer(verbose=verbose)        # Rename variables last
             ]
-            transformers.extend(core_transformers)
+            ast_transformers.extend(core_transformers)
             
         # Add requested transformers from the TRANSFORMERS dictionary
         if transformation_names:
             for name in transformation_names:
                 if name in TRANSFORMERS:
-                    transformer_class = TRANSFORMERS[name]
-                    transformers.append(transformer_class(verbose=verbose))
-                    if verbose:
-                        print(f"Added transformer: {name}")
+                    if name in STRING_TRANSFORMERS:
+                        string_transformers.append(name)
+                        if verbose:
+                            print(f"Queued string transformer: {name}")
+                    else:
+                        transformer_class = TRANSFORMERS[name]
+                        ast_transformers.append(transformer_class(verbose=verbose))
+                        if verbose:
+                            print(f"Added AST transformer: {name}")
                 else:
                     if verbose:
                         print(f"Warning: Transformer '{name}' not found")
         
         # If no transformers are specified and include_core is False, use all transformers
-        if not transformers:
+        if not transformation_names:
             if verbose:
                 print("No specific transformers provided. Using all available transformers.")
-            transformers.extend([cls(verbose=verbose) for name, cls in TRANSFORMERS.items()])
+            for name, cls in TRANSFORMERS.items():
+                if name in STRING_TRANSFORMERS:
+                    string_transformers.append(name)
+                else:
+                    ast_transformers.append(cls(verbose=verbose))
         
         # Apply each transformation
-        for transformer in transformers:
+        for transformer in ast_transformers:
             tree = transformer.visit(tree)
             ast.fix_missing_locations(tree)
-            if verbose:
+            if verbose and hasattr(transformer, 'report'):
                 print(transformer.report())
         
-        # Convert back to code
+        # Convert AST back to code
         try:
             # Python 3.9+ has ast.unparse
             transformed_code = ast.unparse(tree)
         except AttributeError:
             # Fallback for older Python versions
             transformed_code = astor.to_source(tree)
+        
+        # Apply string-only transformers at the end (no reparse)
+        for name in string_transformers:
+            try:
+                transformer_class = TRANSFORMERS[name]
+                transformer = transformer_class(verbose=verbose)
+                transformed_code = transformer.transform(transformed_code)
+                if verbose and hasattr(transformer, 'report'):
+                    print(transformer.report())
+            except Exception as e:
+                if verbose:
+                    print(f"Error in string transformer '{name}': {e}")
         
         # Final cleanup
         transformed_code = transformed_code.strip()

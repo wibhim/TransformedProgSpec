@@ -19,6 +19,13 @@ from .transforms.expression import ExpressionDecomposer
 from .transforms.loop_standard import LoopStandardizer
 from .transforms.function_extract import FunctionExtractor
 
+# Optional registry of available transformers and string-only markers
+try:
+    from .transforms import TRANSFORMERS, STRING_TRANSFORMERS
+except Exception:
+    TRANSFORMERS = {}
+    STRING_TRANSFORMERS = set()
+
 def transform_code(code, transformers=None, transformation_names=None, include_core=True, verbose=False):
     """Apply selected transformations to a code snippet.
     
@@ -33,12 +40,11 @@ def transform_code(code, transformers=None, transformation_names=None, include_c
         tuple: (transformed_code, error_message)
     """
     if transformers is None:
-        # Import TRANSFORMERS dictionary from transforms module
-        from .transforms import TRANSFORMERS
-        
-        transformers = []
-        
-        # Add core transformers if requested
+        # Build AST and string transformer queues
+        ast_transformers = []
+        string_transformers = []  # store names; instantiate later
+
+        # Add core AST transformers if requested
         if include_core:
             core_transformers = [
                 FunctionExtractor(verbose=verbose),     # Extract functions first
@@ -47,25 +53,36 @@ def transform_code(code, transformers=None, transformation_names=None, include_c
                 ExpressionDecomposer(verbose=verbose),  # Decompose expressions
                 VariableRenamer(verbose=verbose)        # Rename variables last
             ]
-            transformers.extend(core_transformers)
-            
+            ast_transformers.extend(core_transformers)
+
         # Add requested transformers from the TRANSFORMERS dictionary
         if transformation_names:
             for name in transformation_names:
                 if name in TRANSFORMERS:
-                    transformer_class = TRANSFORMERS[name]
-                    transformers.append(transformer_class(verbose=verbose))
-                    if verbose:
-                        print(f"Added transformer: {name}")
+                    if name in STRING_TRANSFORMERS:
+                        string_transformers.append(name)
+                        if verbose:
+                            print(f"Queued string transformer: {name}")
+                    else:
+                        transformer_class = TRANSFORMERS[name]
+                        ast_transformers.append(transformer_class(verbose=verbose))
+                        if verbose:
+                            print(f"Added AST transformer: {name}")
                 else:
                     if verbose:
                         print(f"Warning: Transformer '{name}' not found")
-        
-        # If no transformers are specified and include_core is False, use all transformers
-        if not transformers:
+
+        # If no transformers were specified at all, include all available ones
+        if not transformation_names:
             if verbose:
                 print("No specific transformers provided. Using all available transformers.")
-            transformers.extend([cls(verbose=verbose) for name, cls in TRANSFORMERS.items()])
+            for name, cls in TRANSFORMERS.items():
+                if name in STRING_TRANSFORMERS:
+                    string_transformers.append(name)
+                else:
+                    ast_transformers.append(cls(verbose=verbose))
+        
+        transformers = (ast_transformers, string_transformers)
     
     try:
         # Clean up the code
@@ -73,15 +90,23 @@ def transform_code(code, transformers=None, transformation_names=None, include_c
         
         # Parse the code
         tree = ast.parse(code)
-        
-        # Apply each transformation
-        for transformer in transformers:
+
+        # Unpack queues
+        if isinstance(transformers, tuple):
+            ast_transformers, string_transformers = transformers
+        else:
+            # Backward compatibility: previous callers may pass a flat list
+            ast_transformers = transformers
+            string_transformers = []
+
+        # Apply AST transformations
+        for transformer in ast_transformers:
             tree = transformer.visit(tree)
             ast.fix_missing_locations(tree)
-            if verbose:
+            if verbose and hasattr(transformer, 'report'):
                 print(transformer.report())
-        
-        # Convert back to code
+
+        # Convert AST back to code
         try:
             # Python 3.9+ has ast.unparse
             transformed_code = ast.unparse(tree)
@@ -89,7 +114,19 @@ def transform_code(code, transformers=None, transformation_names=None, include_c
             # Fallback for older Python versions
             import astor
             transformed_code = astor.to_source(tree)
-        
+
+        # Apply string-only transformers at the end (no reparse)
+        for name in string_transformers:
+            try:
+                transformer_class = TRANSFORMERS[name]
+                transformer = transformer_class(verbose=verbose)
+                transformed_code = transformer.transform(transformed_code)
+                if verbose and hasattr(transformer, 'report'):
+                    print(transformer.report())
+            except Exception as e:
+                if verbose:
+                    print(f"Error in string transformer '{name}': {e}")
+
         # Final cleanup
         transformed_code = clean_code(transformed_code)
         return transformed_code, None
